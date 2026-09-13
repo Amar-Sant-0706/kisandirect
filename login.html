@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanDirect AI - National Multi-Role Agri-Marketplace Gateway</title>
+  <meta name="description" content="Sign in to KisanDirect AI. 3 isolated portals: Farmer & FPO Hub, Buyer E-Commerce Marketplace, and Owner Admin Control Tower.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core, Auth & E-Commerce Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/ecommerce.css">
+
+  <style>
+    /* Multi-Role Portal Switcher */
+    .portal-role-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .portal-tab-btn {
+      padding: 10px 8px;
+      text-align: center;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all var(--transition-fast);
+    }
+
+    .portal-tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .portal-tab-btn.active {
+      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .portal-tab-btn.active.tab-admin {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    .portal-tab-btn.active.tab-buyer {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    }
+
+    /* Fast 1-Click Demo Pills */
+    .demo-accounts-card {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px dashed rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-accounts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .demo-chip {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .demo-chip:hover {
+      border-color: var(--emerald-400);
+      background: rgba(16, 185, 129, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .demo-chip-icon {
+      font-size: 1.2rem;
+    }
+
+    .demo-chip-text {
+      line-height: 1.2;
+    }
+
+    .demo-chip-text strong {
+      display: block;
+      font-size: 0.78rem;
+      color: #fff;
+    }
+
+    .demo-chip-text span {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    /* Active Session Banner */
+    .active-session-banner {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--emerald-500);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body class="auth-page-wrapper">
+
+  <!-- ==========================================================================
+       1. ANIMATED BRAND OPENING LOGO SPLASH
+       ========================================================================== -->
+  <div class="brand-intro-splash" id="brandIntroSplash">
+    <div class="splash-ambient-glow"></div>
+    <div class="splash-content">
+      <div class="splash-logo-container">
+        <div class="splash-logo-ring-outer"></div>
+        <div class="splash-logo-ring"></div>
+        <div class="splash-logo-icon">
+          <i data-lucide="sprout"></i>
+        </div>
+      </div>
+      <h1 class="splash-title">KisanDirect AI</h1>
+      <p class="splash-tagline">National Farm-to-Fork Direct Grid & Intelligent Supply Chain</p>
+      
+      <div class="splash-badges">
+        <span class="splash-badge"><i data-lucide="shield-check"></i> 0% Middlemen Cut</span>
+        <span class="splash-badge"><i data-lucide="lock"></i> 100% Escrow Protection</span>
+        <span class="splash-badge"><i data-lucide="truck"></i> IoT Reefer Cold-Chain</span>
+      </div>
+
+      <div class="splash-progress-bar">
+        <div class="splash-progress-fill"></div>
+      </div>
+
+      <button class="splash-skip-btn" id="skipSplashBtn" onclick="dismissBrandSplash()">
+        Enter Platform Now &rarr;
+      </button>
+    </div>
+  </div>
+
+  <!-- Top Government DOCA Advisory Banner -->
+  <header class="gov-banner">
+    <div class="gov-emblem-wrapper">
+      <span class="gov-emblem-badge">GOVT OF INDIA</span>
+      <span>Ministry of Consumer Affairs, Food & Public Distribution | Department of Consumer Affairs (DOCA)</span>
+    </div>
+    <div class="gov-live-ticker">
+      <span class="pulse-indicator">Multi-Role RBAC Gateway Active</span>
+      <span>National Farm-to-Fork Grid • Verified</span>
+    </div>
+  </header>
+
+  <main class="auth-main-container">
+    <div class="auth-card" style="max-width: 600px;">
+      <div style="margin-bottom: 0.75rem;">
+        <a href="/" style="display: inline-flex; align-items: center; gap: 6px; color: var(--emerald-400); font-size: 0.82rem; text-decoration: none; font-weight: 600;">
+          <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i> &larr; Back to Unified Main Web Platform
+        </a>
+      </div>
+
+      <!-- Logo & Heading -->
+      <div class="auth-header">
+        <div class="auth-logo-badge">
+          <i data-lucide="sprout" style="width: 32px; height: 32px;"></i>
+        </div>
+        <h2>KisanDirect AI Gateway</h2>
+        <p>Direct Agricultural Marketplace & Multi-Role Supply Chain Tower</p>
+      </div>
+
+      <!-- Active Session Notice -->
+      <div class="active-session-banner" id="activeSessionBanner">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Active Session Detected:</div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="activeSessionName">Ramesh Patil</div>
+            <div style="font-size: 0.75rem; color: var(--emerald-400);" id="activeSessionRole">FARMER (Nashik, Maharashtra)</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="continueToPortal()">
+              <i data-lucide="arrow-right"></i> Enter Portal
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="clearSessionAndReset()" style="color: var(--rose-400); border-color: var(--rose-500);">
+              <i data-lucide="log-out"></i> Switch
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portal Tabs Selector -->
+      <div class="portal-role-tabs">
+        <button type="button" class="portal-tab-btn active" id="portalTabFarmer" onclick="selectPortalRole('FARMER')">
+          <i data-lucide="tractor" style="width: 18px; height: 18px;"></i>
+          <span>Farmer Portal</span>
+        </button>
+        <button type="button" class="portal-tab-btn tab-buyer" id="portalTabBuyer" onclick="selectPortalRole('BUYER')">
+          <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+          <span>Buyer Market</span>
+        </button>
+        <button type="button" class="portal-tab-btn tab-admin" id="portalTabAdmin" onclick="selectPortalRole('ADMIN')">
+          <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i>
+          <span>Owner / Admin</span>
+        </button>
+      </div>
+
+      <!-- Alert Box -->
+      <div class="auth-alert" id="authAlert" style="display: none;"></div>
+
+      <!-- 1-Click Fast Demo Credentials -->
+      <div class="demo-accounts-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--emerald-400);">
+            <i data-lucide="zap" style="width: 13px; height: 13px; display: inline-block; vertical-align: middle;"></i> 1-Click Fast Demo Logins
+          </span>
+          <span style="font-size: 0.7rem; color: var(--text-muted);">Strict RBAC Testing</span>
+        </div>
+        <div class="demo-accounts-grid">
+          <button type="button" class="demo-chip" onclick="quickLogin('owner@kisandirect.com', 'ownerPass123', 'OWNER')">
+            <span class="demo-chip-icon">🛡️</span>
+            <div class="demo-chip-text">
+              <strong>Platform Owner</strong>
+              <span>owner@kisandirect.com</span>
+            </div>
+          </button>
+          <button type="button" class="demo-chip" onclick="quickLogin('farmer@test.com', 'farmerPass123', 'FARMER')">
+            <span class="demo-chip-icon">⏳</span>
+            <div class="demo-chip-text">
+              <strong>Test Farmer (Pending)</strong>
+              <span>farmer@test.com</span>
+            </div>
+          </button>
+          <button type="button" class="demo-chip" onclick="quickLogin('buyer@test.com', 'buyerPass123', 'BUYER')">
+            <span class="demo-chip-icon">⏳</span>
+            <div class="demo-chip-text">
+              <strong>Test Buyer (Pending)</strong>
+              <span>buyer@test.com</span>
+            </div>
+          </button>
+          <button type="button" class="demo-chip" onclick="quickLogin('farmer@kisandirect.com', 'farmer123', 'FARMER')">
+            <span class="demo-chip-icon">👨‍🌾</span>
+            <div class="demo-chip-text">
+              <strong>Approved Farmer</strong>
+              <span>farmer@kisandirect.com</span>
+            </div>
+          </button>
+          <button type="button" class="demo-chip" onclick="quickLogin('verified_buyer@kisandirect.com', 'buyer123', 'BUYER')">
+            <span class="demo-chip-icon">🏢</span>
+            <div class="demo-chip-text">
+              <strong>Approved Buyer</strong>
+              <span>verified_buyer@kisandirect.com</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sub Tabs: Sign In / Create Account -->
+      <div style="display: flex; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.25rem;">
+        <button type="button" class="auth-tab-btn active" id="subTabSignIn" onclick="switchAuthMode('signin')" style="flex: 1; border-radius: 0; border-bottom: 2px solid var(--emerald-500);">
+          Sign In to Portal
+        </button>
+        <button type="button" class="auth-tab-btn" id="subTabRegister" onclick="switchAuthMode('register')" style="flex: 1; border-radius: 0;">
+          Create New Account
+        </button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <div id="signinView">
+        <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-field-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" placeholder="e.g. farmer@kisandirect.com" required autocomplete="email">
+          </div>
+
+          <div class="form-field-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">
+            <i data-lucide="log-in"></i> Access Selected Portal
+          </button>
+        </form>
+      </div>
+
+      <!-- REGISTRATION FORM -->
+      <div id="registerView" style="display: none;">
+        <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-field-group">
+            <label for="regName">Full Legal / Contact Person Name *</label>
+            <input type="text" id="regName" placeholder="e.g. Ramesh Patil / Vikram Singhania" required autocomplete="name">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-field-group">
+              <label for="regEmail">Email Address *</label>
+              <input type="email" id="regEmail" placeholder="name@domain.com" required autocomplete="email">
+            </div>
+            <div class="form-field-group">
+              <label for="regPhone">Mobile Phone (10 digits) *</label>
+              <input type="tel" id="regPhone" placeholder="9876543210" pattern="[0-9]{10}" required autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-field-group">
+            <label for="regPassword">Create Password *</label>
+            <input type="password" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+          </div>
+
+          <!-- Role Selection -->
+          <div class="form-field-group">
+            <label>Select Your Platform Role *</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <label class="role-radio-card">
+                <input type="radio" name="regRole" value="FARMER" checked onchange="toggleKycFields(this.value)">
+                <div class="role-card-inner">
+                  <span class="role-card-icon">👨‍🌾</span>
+                  <div class="role-card-text">
+                    <strong>Farmer / FPO</strong>
+                    <small>Direct farmgate harvest listing</small>
+                  </div>
+                </div>
+              </label>
+
+              <label class="role-radio-card">
+                <input type="radio" name="regRole" value="BUYER" onchange="toggleKycFields(this.value)">
+                <div class="role-card-inner">
+                  <span class="role-card-icon">🏬</span>
+                  <div class="role-card-text">
+                    <strong>Buyer / Retailer</strong>
+                    <small>Wholesale & institutional procurement</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Farmer Details (shown if FARMER selected) -->
+          <div id="farmerDetailsFields" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #10b981; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
+              <i data-lucide="sprout" style="width: 14px; height: 14px;"></i> Farmer Land & Crop Verification Profile:
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="form-field-group">
+                <label for="regLandArea">Land Holding (Acres) *</label>
+                <input type="number" id="regLandArea" placeholder="e.g. 5.5" step="0.1" min="0.1" value="5.0" required>
+              </div>
+              <div class="form-field-group">
+                <label for="regCropSpeciality">Primary Crop Speciality *</label>
+                <input type="text" id="regCropSpeciality" placeholder="e.g. Red Onion, Tomato" value="Red Onion & Vegetables" required>
+              </div>
+            </div>
+            <div class="form-field-group" style="margin-top: 8px;">
+              <label for="regKisanId">Kisan ID / PM-KISAN Ref (Optional)</label>
+              <input type="text" id="regKisanId" placeholder="e.g. KISAN-MH-94821">
+            </div>
+          </div>
+
+          <!-- B2B / Buyer KYC Credentials (shown if BUYER selected) -->
+          <div id="buyerKycFields" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
+              <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Mandatory Buyer Verification & KYC Data:
+            </div>
+            <div class="form-field-group">
+              <label for="regBusinessName">Registered Business / Firm Name *</label>
+              <input type="text" id="regBusinessName" placeholder="e.g. Reliance Fresh Logistics Ltd">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="form-field-group">
+                <label for="regGstin">GSTIN Number (15 Digits) *</label>
+                <input type="text" id="regGstin" placeholder="27AAACR7188G1ZV" maxlength="15">
+              </div>
+              <div class="form-field-group">
+                <label for="regTradeType">Trade Type *</label>
+                <select id="regTradeType" style="width: 100%; background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px 10px;">
+                  <option value="Wholesale Mandi Trader">Wholesale Mandi Trader</option>
+                  <option value="Supermarket / Modern Retail">Supermarket / Modern Retail</option>
+                  <option value="Food Processing / Agro Exporter">Food Processing / Agro Exporter</option>
+                  <option value="HoReCa & Hospitality">HoReCa & Hospitality</option>
+                  <option value="Individual Bulk Consumer">Individual Bulk Consumer</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-field-group" style="margin-top: 8px;">
+              <label for="regFssai">FSSAI License (Optional)</label>
+              <input type="text" id="regFssai" placeholder="10012022000123" maxlength="14">
+            </div>
+          </div>
+
+          <div class="form-field-group">
+            <label for="regDistrict">District & State *</label>
+            <input type="text" id="regDistrict" placeholder="e.g. Nashik, Maharashtra" required>
+          </div>
+
+          <button type="submit" class="auth-submit-btn" id="regSubmitBtn">
+            <i data-lucide="check-circle"></i> Register Account & Proceed
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    let selectedRole = 'FARMER';
+
+    // 1. Splash Screen Lifecycle
+    const splashEl = document.getElementById('brandIntroSplash');
+    const splashAlreadySeen = sessionStorage.getItem('kd_splash_seen');
+    if (!splashAlreadySeen) {
+      // Auto dismiss smoothly after 1.8s
+      setTimeout(() => {
+        dismissBrandSplash(false);
+      }, 1800);
+    } else {
+      dismissBrandSplash(true);
+    }
+
+    function dismissBrandSplash(immediate = false) {
+      if (splashEl) {
+        sessionStorage.setItem('kd_splash_seen', 'true');
+        if (immediate) {
+          splashEl.style.display = 'none';
+        } else {
+          splashEl.classList.add('fade-out');
+          setTimeout(() => {
+            splashEl.style.display = 'none';
+          }, 500);
+        }
+      }
+    }
+
+    // 2. Select Portal Role
+    function selectPortalRole(role) {
+      selectedRole = role;
+      document.getElementById('portalTabFarmer').className = 'portal-tab-btn ' + (role === 'FARMER' ? 'active' : '');
+      document.getElementById('portalTabBuyer').className = 'portal-tab-btn tab-buyer ' + (role === 'BUYER' ? 'active' : '');
+      document.getElementById('portalTabAdmin').className = 'portal-tab-btn tab-admin ' + (role === 'ADMIN' || role === 'OWNER' ? 'active' : '');
+      
+      const emailInput = document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPassword');
+      if (role === 'FARMER') {
+        emailInput.value = 'farmer@test.com';
+        passInput.value = 'farmerPass123';
+      } else if (role === 'BUYER') {
+        emailInput.value = 'buyer@test.com';
+        passInput.value = 'buyerPass123';
+      } else if (role === 'ADMIN' || role === 'OWNER') {
+        emailInput.value = 'owner@kisandirect.com';
+        passInput.value = 'ownerPass123';
+      }
+    }
+
+    // 3. Toggle Buyer / Farmer Fields
+    function toggleKycFields(role) {
+      const farmerBox = document.getElementById('farmerDetailsFields');
+      const kycBox = document.getElementById('buyerKycFields');
+      const gstinInput = document.getElementById('regGstin');
+      const bizInput = document.getElementById('regBusinessName');
+      const landInput = document.getElementById('regLandArea');
+      const cropInput = document.getElementById('regCropSpeciality');
+
+      if (role === 'BUYER') {
+        if (farmerBox) farmerBox.style.display = 'none';
+        if (kycBox) kycBox.style.display = 'block';
+        if (gstinInput) gstinInput.required = true;
+        if (bizInput) bizInput.required = true;
+        if (landInput) landInput.required = false;
+        if (cropInput) cropInput.required = false;
+      } else {
+        if (farmerBox) farmerBox.style.display = 'block';
+        if (kycBox) kycBox.style.display = 'none';
+        if (gstinInput) gstinInput.required = false;
+        if (bizInput) bizInput.required = false;
+        if (landInput) landInput.required = true;
+        if (cropInput) cropInput.required = true;
+      }
+      lucide.createIcons();
+    }
+
+    // 4. Auth Mode (Sign in vs Register)
+    function switchAuthMode(mode) {
+      const signinView = document.getElementById('signinView');
+      const registerView = document.getElementById('registerView');
+      const tabIn = document.getElementById('subTabSignIn');
+      const tabReg = document.getElementById('subTabRegister');
+      const alertBox = document.getElementById('authAlert');
+      alertBox.style.display = 'none';
+
+      if (mode === 'signin') {
+        signinView.style.display = 'block';
+        registerView.style.display = 'none';
+        tabIn.style.borderBottom = '2px solid var(--emerald-500)';
+        tabIn.classList.add('active');
+        tabReg.style.borderBottom = 'none';
+        tabReg.classList.remove('active');
+      } else {
+        signinView.style.display = 'none';
+        registerView.style.display = 'block';
+        tabReg.style.borderBottom = '2px solid var(--emerald-500)';
+        tabReg.classList.add('active');
+        tabIn.style.borderBottom = 'none';
+        tabIn.classList.remove('active');
+      }
+      lucide.createIcons();
+    }
+
+    // Check existing session
+    checkExistingSession();
+
+    function checkExistingSession() {
+      const token = localStorage.getItem('kd_auth_token');
+      const userStr = localStorage.getItem('kd_user');
+      if (token && userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          document.getElementById('activeSessionName').textContent = user.name;
+          document.getElementById('activeSessionRole').textContent = `${user.role} • ${user.district_state || 'Verified'}`;
+          document.getElementById('activeSessionBanner').style.display = 'block';
+        } catch (e) {}
+      }
+    }
+
+    function continueToPortal() {
+      const userStr = localStorage.getItem('kd_user');
+      let role = 'BUYER';
+      try {
+        if (userStr) role = JSON.parse(userStr).role;
+      } catch (e) {}
+
+      const norm = (role || '').toUpperCase();
+      if (norm === 'OWNER' || norm === 'ADMIN') {
+        window.location.href = '/owner/dashboard';
+      } else if (norm === 'FARMER' || norm === 'FPO_MEMBER') {
+        window.location.href = '/farmer/dashboard';
+      } else {
+        window.location.href = '/buyer/dashboard';
+      }
+    }
+
+    function clearSessionAndReset() {
+      localStorage.removeItem('kd_auth_token');
+      localStorage.removeItem('kd_user');
+      document.getElementById('activeSessionBanner').style.display = 'none';
+      showAlert('Session cleared. Sign in with desired credentials.', 'success');
+    }
+
+    function showAlert(msg, type = 'error') {
+      const el = document.getElementById('authAlert');
+      el.className = `auth-alert ${type}`;
+      el.innerHTML = `
+        <i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}" style="width: 16px; height: 16px;"></i>
+        <span>${msg}</span>
+      `;
+      el.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    function quickLogin(email, password, role) {
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = password;
+      selectPortalRole(role);
+      showAlert(`Loaded ${role} demo credentials. Signing in...`, 'success');
+      handleLogin();
+    }
+
+    async function handleLogin(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginSubmitBtn');
+
+      if (!email || !password) {
+        showAlert('Please enter both email and password.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-sm"></span> Authenticating...`;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_user', JSON.stringify(data.user));
+          showAlert(`✓ Access Granted! Welcome, ${data.user.name} (${data.user.role}). Redirecting...`, 'success');
+
+          setTimeout(() => {
+            const role = (data.user.role || '').toUpperCase();
+            if (role === 'OWNER' || role === 'ADMIN') {
+              window.location.href = '/owner/dashboard';
+            } else if (role === 'FARMER' || role === 'FPO_MEMBER') {
+              window.location.href = '/farmer/dashboard';
+            } else {
+              window.location.href = '/buyer/dashboard';
+            }
+          }, 500);
+        } else {
+          showAlert(data.error || 'Invalid credentials.');
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="log-in"></i> Access Selected Portal`;
+          lucide.createIcons();
+        }
+      } catch (err) {
+        showAlert('Network or server error. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="log-in"></i> Access Selected Portal`;
+        lucide.createIcons();
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const district_state = document.getElementById('regDistrict').value.trim();
+      const role = document.querySelector('input[name="regRole"]:checked')?.value || 'FARMER';
+      const land_area_acres = parseFloat(document.getElementById('regLandArea')?.value) || 5.0;
+      const crop_speciality = document.getElementById('regCropSpeciality')?.value?.trim() || 'Mixed Crops';
+      const kisan_id = document.getElementById('regKisanId')?.value?.trim() || '';
+      const business_name = document.getElementById('regBusinessName')?.value?.trim() || '';
+      const gstin_number = document.getElementById('regGstin')?.value?.trim() || '';
+      const trade_type = document.getElementById('regTradeType')?.value || 'Wholesale Mandi Trader';
+      const fssai_license = document.getElementById('regFssai')?.value?.trim() || '';
+      const btn = document.getElementById('regSubmitBtn');
+
+      if (!name || !email || !password || !phone || !district_state) {
+        showAlert('Please fill in all mandatory fields.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-sm"></span> Registering...`;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name, email, phone, password, role, district_state, state_district: district_state,
+            land_area_acres, crop_speciality, kisan_id,
+            business_name, gstin_number, trade_type, fssai_license
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_user', JSON.stringify(data.user));
+          
+          const statusNotice = data.user.approval_status === 'PENDING_APPROVAL'
+            ? ' (Pending Owner Approval)'
+            : '';
+          showAlert(`✓ Account Registered! Directing to ${data.user.role} portal${statusNotice}...`, 'success');
+
+          setTimeout(() => {
+            const norm = (role || '').toUpperCase();
+            if (norm === 'OWNER' || norm === 'ADMIN') {
+              window.location.href = '/owner/dashboard';
+            } else if (norm === 'FARMER' || norm === 'FPO_MEMBER') {
+              window.location.href = '/farmer/dashboard';
+            } else {
+              window.location.href = '/buyer/dashboard';
+            }
+          }, 600);
+        } else {
+          showAlert(data.error || 'Registration failed.');
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check-circle"></i> Register Account & Proceed`;
+          lucide.createIcons();
+        }
+      } catch (err) {
+        showAlert('Registration network error. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check-circle"></i> Register Account & Proceed`;
+        lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>

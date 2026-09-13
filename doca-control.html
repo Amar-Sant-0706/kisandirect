@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOCA Control Room - KisanDirect AI</title>
+  <meta name="description" content="Department of Consumer Affairs (DOCA) Price Spread Surveillance and Anti-Hoarding Control Room.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <main class="content-wrapper">
+      <section id="view-doca" class="view-panel active">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="shield-alert" style="color: var(--rose-400);"></i> Department of Consumer Affairs (DOCA) Control Room</h3>
+            <p>Monitors farmgate-to-retail price spreads, tracks middleman elimination metrics, and oversees buffer stock interventions.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-accent btn-sm" id="triggerBufferReleaseBtn">
+              <i data-lucide="layers"></i> Trigger Strategic Buffer Release
+            </button>
+          </div>
+        </div>
+
+        <!-- Macro Stats for Ministry -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="user-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Farmer Income Increase</h4>
+              <div class="metric-value" id="docaImpactFarmers">+48.5% Net</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-up"></i> Across 18,400 participating farmers</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="shopping-cart"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Consumer Inflation Reduction</h4>
+              <div class="metric-value" id="docaImpactSavings">-24.2% Avg</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down"></i> TOP-3 Commodities (Tomato, Onion, Potato)</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="ban"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Intermediary Markups Cut</h4>
+              <div class="metric-value" id="docaImpactMiddlemen">₹142.8 Cr</div>
+              <div class="metric-meta positive"><i data-lucide="check-circle-2"></i> Retained by producers & consumers</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="activity"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Price Volatility Index</h4>
+              <div class="metric-value">Low (14.2)</div>
+              <div class="metric-meta positive"><i data-lucide="shield"></i> Controlled via AI direct procurement</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Essential Commodities Price Spread Monitor Table -->
+        <div class="doca-table-card">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h4 style="font-size: 1.1rem; font-weight: 700;">Essential Commodities Price Spread Surveillance (All Commodities)</h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Comparing Traditional APMC Market Spread vs KisanDirect AI Fair Price Spread</p>
+            </div>
+            <span class="badge badge-grade-a">Real-time Mandi Benchmark</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Commodity & State</th>
+                  <th>Farmgate Price</th>
+                  <th>Mandi Wholesale</th>
+                  <th>Retail Urban (Traditional)</th>
+                  <th>KisanDirect (Direct)</th>
+                  <th>Price Spread</th>
+                  <th>Farmer Gain</th>
+                  <th>Consumer Saving</th>
+                  <th>DOCA Risk Watch</th>
+                </tr>
+              </thead>
+              <tbody id="docaTableBody">
+                <!-- Populated by doca-monitor.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/doca-monitor.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      if (window.DOCAMonitorModule) {
+        await DOCAMonitorModule.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

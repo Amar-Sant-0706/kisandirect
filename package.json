@@ -1,0 +1,35 @@
+{
+  "name": "antigravity",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "start": "node backend/server.js",
+    "start:legacy": "node server/server.js",
+    "seed": "node server/seed.js",
+    "test": "node test/embedded_ai_multi_portal_test.js",
+    "test:ai": "node test/embedded_ai_multi_portal_test.js",
+    "test:portals": "node test/multi_portal_test.js",
+    "test:full": "node test/full_system_test.js",
+    "test:api": "node test/api_test.js",
+    "test:auth": "node test/auth_test.js",
+    "test:enterprise": "node test/enterprise_lifecycle_test.js",
+    "test:rbac": "node test/rbac_approval_lifecycle_test.js",
+    "test:routing": "node test/static_routing_test.js",
+    "test:e2e": "node test/e2e_unified_server_test.js",
+    "test:all": "node test/embedded_ai_multi_portal_test.js && node test/multi_portal_test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}

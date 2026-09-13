@@ -1,0 +1,5297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanDirect AI - Direct Farm-to-Fork Marketplace & AI Logistics</title>
+  <meta name="description"
+    content="AI-powered digital agricultural marketplace directly connecting Farmers/FPOs with consumers and bulk buyers, providing logistics support, demand forecasting, and route optimization. Ministry of Consumer Affairs (DOCA).">
+
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Leaflet GIS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <style>
+/* --- Core Design System & Global Styles --- */
+/* ==========================================================================
+   KisanDirect AI - Core Design System & Global Styles
+   Ministry of Consumer Affairs, Food & Public Distribution (DOCA)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Color Palette - Premium AgriTech Theme */
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f172a;
+  --bg-surface: #141e33;
+  --bg-surface-elevated: #1a2744;
+  --bg-glass: rgba(20, 30, 51, 0.72);
+  --bg-glass-card: rgba(26, 39, 68, 0.55);
+  
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-glow: rgba(16, 185, 129, 0.28);
+  --border-active: #10b981;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #04101e;
+
+  /* Brand Accents */
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+  
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+
+  --cyan-400: #22d3ee;
+  --cyan-500: #06b6d4;
+
+  --rose-500: #f43f5e;
+  --rose-600: #e11d48;
+
+  --indigo-500: #6366f1;
+
+  /* Shadows & Glass */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.2);
+  --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.2);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2.25rem; letter-spacing: -0.03em; }
+h2 { font-size: 1.75rem; letter-spacing: -0.02em; }
+h3 { font-size: 1.35rem; letter-spacing: -0.01em; }
+h4 { font-size: 1.1rem; }
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--emerald-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--emerald-500);
+}
+
+/* App Container Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Banner: DOCA Ministry Bar */
+.gov-banner {
+  background: linear-gradient(90deg, #09121f 0%, #0d1b2d 50%, #09121f 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  z-index: 100;
+}
+
+.gov-emblem-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gov-emblem-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-400);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+.gov-live-ticker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pulse-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--emerald-400);
+  font-weight: 600;
+}
+.pulse-indicator::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--emerald-500);
+  box-shadow: 0 0 8px var(--emerald-400);
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* Main Navigation Header */
+.main-nav {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10, 14, 23, 0.85);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.85rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
+  transition: all var(--transition-normal);
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #0284c7 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glow);
+  color: #fff;
+  font-size: 1.35rem;
+}
+
+.brand-text h1 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-text span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: block;
+  font-weight: 500;
+}
+
+/* Persona Switcher Buttons */
+.persona-switcher {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  gap: 4px;
+}
+
+.persona-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-normal);
+}
+
+.persona-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.persona-btn.active {
+  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Nav Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-pill {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--emerald-400);
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: var(--bg-surface-elevated);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cart-counter {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--rose-500);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.5);
+}
+
+/* Main Content Wrapper */
+.content-wrapper {
+  flex: 1;
+  padding: 1.75rem 2rem 3rem 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Tab Content Visibility */
+.view-panel {
+  display: none;
+  animation: fadeIn 300ms ease-in-out forwards;
+}
+
+.view-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Section inside tabs */
+.hero-banner {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid var(--border-subtle);
+  padding: 2.25rem 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100%;
+  background: radial-gradient(circle at 80% 30%, rgba(16, 185, 129, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--emerald-400);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.85rem;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Quick Metrics Row */
+.metric-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.metric-icon-box.emerald {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emerald-400);
+}
+
+.metric-icon-box.amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-400);
+}
+
+.metric-icon-box.cyan {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--cyan-400);
+}
+
+.metric-icon-box.rose {
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--rose-400);
+}
+
+.metric-body h4 {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-meta {
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.metric-meta.positive { color: var(--emerald-400); }
+.metric-meta.warning { color: var(--amber-400); }
+.metric-meta.negative { color: var(--rose-400); }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .persona-switcher {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .gov-banner {
+    padding: 6px 1rem;
+  }
+  .main-nav {
+    padding: 0.85rem 1rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .content-wrapper {
+    padding: 1.25rem 1rem;
+  }
+}
+
+
+/* --- Components & UI Elements --- */
+/* ==========================================================================
+   KisanDirect AI - Modular Components & UI Elements
+   ========================================================================== */
+
+/* 1. SECTION HEADERS & ACTION BARS */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-title-group h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title-group p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.action-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 2. BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--emerald-500), var(--emerald-400));
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--amber-600), var(--amber-500));
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+.btn-accent:hover {
+  background: linear-gradient(135deg, var(--amber-500), var(--amber-400));
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+/* 3. BADGES & CHIPS */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge-grade-a {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emerald-400);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-grade-b {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-organic {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-400);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-danger {
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--rose-400);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+/* 4. PRODUCT CARDS & MARKETPLACE GRID */
+.filters-toolbar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.search-input-box {
+  position: relative;
+  min-width: 280px;
+  flex: 1;
+}
+
+.search-input-box input {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.search-input-box input:focus {
+  border-color: var(--emerald-500);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.search-input-box .search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-pill:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-pill.active {
+  background: var(--emerald-600);
+  color: #fff;
+  border-color: var(--emerald-500);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: var(--shadow-glow);
+}
+
+.product-image-container {
+  height: 180px;
+  width: 100%;
+  position: relative;
+  background: #0f172a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
+.product-badge-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.harvest-timestamp-chip {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-origin {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.product-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.product-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+/* Price Breakdown Banner on Card */
+.price-comparison-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1.15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.direct-price {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--emerald-400);
+}
+.direct-price span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.mandi-comparison {
+  text-align: right;
+  font-size: 0.75rem;
+}
+.mandi-strike {
+  text-decoration: line-through;
+  color: var(--rose-400);
+}
+.savings-tag {
+  color: var(--emerald-400);
+  font-weight: 700;
+  display: block;
+}
+
+.product-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+}
+
+/* 5. TRANSPARENT MARGIN VISUALIZER (Elimination of 5 Middlemen) */
+.margin-visualizer-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.flow-channel {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.flow-channel.traditional {
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+.flow-channel.kisandirect {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-secondary) 100%);
+}
+
+.flow-channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.flow-channel-header h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Progress bar step breakdown */
+.flow-breakdown-bar {
+  height: 28px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bar-segment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  transition: width 0.6s ease;
+}
+
+.segment-farmer { background: #059669; }
+.segment-aggregator { background: #b45309; }
+.segment-commission { background: #be123c; }
+.segment-wholesaler { background: #6d28d9; }
+.segment-retailer { background: #c2410c; }
+.segment-logistics { background: #0284c7; }
+.segment-savings { background: #10b981; }
+
+.legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+.legend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.legend-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* 6. AI FORECASTING SUITE */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+.crop-forecast-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.crop-tab-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.crop-tab-btn.active {
+  background: var(--emerald-600);
+  color: #fff;
+  border-color: var(--emerald-500);
+}
+
+.ai-insight-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insight-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem;
+  position: relative;
+}
+
+.insight-card.alert-high {
+  border-left: 4px solid var(--rose-500);
+}
+
+.insight-card.alert-optimal {
+  border-left: 4px solid var(--emerald-500);
+}
+
+.insight-card.alert-warning {
+  border-left: 4px solid var(--amber-500);
+}
+
+.insight-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.insight-body {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 7. ROUTE OPTIMIZER & LEAFLET GIS MAP */
+.logistics-dashboard-grid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.map-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-header {
+  padding: 1rem 1.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#logisticsMap {
+  height: 480px;
+  width: 100%;
+  background: #0d1527;
+  z-index: 1;
+}
+
+.route-controls-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.waypoint-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.waypoint-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.waypoint-item {
+  position: relative;
+}
+
+.waypoint-dot {
+  position: absolute;
+  left: -1.5rem;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--emerald-500);
+}
+.waypoint-item.pickup .waypoint-dot { border-color: var(--amber-400); }
+.waypoint-item.hub .waypoint-dot { border-color: var(--cyan-400); }
+.waypoint-item.delivery .waypoint-dot { border-color: var(--emerald-400); }
+
+.waypoint-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.waypoint-meta {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* Telemetry Box */
+.telemetry-monitor {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.telemetry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.telemetry-row:last-child {
+  border-bottom: none;
+}
+
+/* 8. DOCA MONITORING ROOM */
+.doca-table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.custom-table th {
+  background: rgba(15, 23, 42, 0.8);
+  padding: 12px 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.custom-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+}
+
+.custom-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* 9. MODALS & DRAWERS */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 8, 16, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-dialog {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalScale 250ms ease-out forwards;
+}
+
+@keyframes modalScale {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+.modal-close-btn:hover { color: #fff; }
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.15rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.95rem;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  outline: none;
+}
+.form-control:focus {
+  border-color: var(--emerald-500);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Toast notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--emerald-500);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  color: #fff;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 250ms ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .flow-comparison-grid, .analytics-grid, .logistics-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   10. UNIQUE FEATURE: KISAN-VISION AI QUALITY SCANNER & DEFECT DETECTOR
+   ========================================================================== */
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.viewfinder-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scanner-display {
+  width: 100%;
+  height: 380px;
+  background: #090e17;
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.scanner-display img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  transition: opacity 0.3s ease;
+}
+
+/* Futuristic Scanning Line */
+.scanner-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #10b981, #22d3ee, transparent);
+  box-shadow: 0 0 15px #10b981, 0 0 25px #22d3ee;
+  animation: laserScan 2.5s ease-in-out infinite alternate;
+  z-index: 10;
+}
+
+@keyframes laserScan {
+  0% { top: 5%; opacity: 0.8; }
+  100% { top: 92%; opacity: 1; }
+}
+
+/* AI Detection Bounding Box */
+.ai-bbox {
+  position: absolute;
+  border: 2px dashed #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 5;
+  transition: all 0.4s ease;
+}
+
+.ai-bbox-label {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  background: #10b981;
+  color: #04101e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sample-selector-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sample-thumb-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.sample-thumb-btn:hover {
+  border-color: var(--emerald-400);
+  color: #fff;
+}
+
+.sample-thumb-btn.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--emerald-500);
+  color: var(--emerald-400);
+}
+
+/* QC Certificate Output Card */
+.qc-results-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.qc-grade-badge-huge {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.1));
+  border: 2px solid var(--emerald-500);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.qc-grade-letter {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--emerald-400);
+  line-height: 1;
+}
+
+.qc-meter-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.qc-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #22d3ee);
+  border-radius: var(--radius-full);
+  transition: width 0.8s ease;
+}
+
+/* ==========================================================================
+   11. UNIQUE FEATURE: KISAN VANI VOICE COPILOT
+   ========================================================================== */
+.voice-copilot-pill {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.15));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: var(--amber-400);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.voice-copilot-pill:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(16, 185, 129, 0.25));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+.audio-pulse-ring {
+  width: 8px;
+  height: 8px;
+  background: var(--amber-400);
+  border-radius: 50%;
+  animation: audioPulse 1.4s infinite;
+}
+
+@keyframes audioPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+
+/* --- Advanced Intro Splash, RBAC & Kisan Vani Voice Enhancements --- */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at center, #0f1c30 0%, #060a12 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.splash-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.splash-logo-glow {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.12);
+  border: 2px solid #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  font-size: 2.6rem;
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.35);
+  animation: splashPulseAnim 2s infinite ease-in-out;
+  margin-bottom: 1.2rem;
+}
+@keyframes splashPulseAnim {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(16, 185, 129, 0.3); }
+  50% { transform: scale(1.06); box-shadow: 0 0 55px rgba(16, 185, 129, 0.6); }
+}
+.splash-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.splash-title span {
+  color: #10b981;
+}
+.splash-sub {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.splash-loader {
+  width: 160px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.splash-loader-bar {
+  width: 40%;
+  height: 100%;
+  background: #10b981;
+  position: absolute;
+  animation: splashLoadAnim 1.4s infinite ease-in-out;
+}
+@keyframes splashLoadAnim {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* Auth Top Bar */
+.auth-top-bar {
+  background: rgba(10, 16, 28, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.auth-demo-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.demo-role-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.demo-role-btn:hover, .demo-role-btn.active {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+.demo-role-btn.owner:hover, .demo-role-btn.owner.active {
+  border-color: #c084fc;
+  background: rgba(192, 132, 252, 0.15);
+  color: #d8b4fe;
+}
+.demo-role-btn.buyer:hover, .demo-role-btn.buyer.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  color: #7dd3fc;
+}
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.role-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.role-pill.farmer { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.role-pill.buyer { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+.role-pill.owner { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+
+/* Double-Approval Escrow Queue & Verification Modal */
+.escrow-tx-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.escrow-tx-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.qc-badge-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.qc-hash-code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+/* Kisan Vani Waveform & Language Selector */
+.waveform-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 36px;
+  margin: 12px 0;
+}
+.wave-bar {
+  width: 4px;
+  height: 8px;
+  background: #f59e0b;
+  border-radius: 2px;
+  transition: height 0.15s ease;
+}
+.waveform-container.speaking .wave-bar {
+  animation: wavePulseAnim 0.75s infinite ease-in-out alternate;
+}
+.waveform-container.speaking .wave-bar:nth-child(2) { animation-delay: 0.12s; }
+.waveform-container.speaking .wave-bar:nth-child(3) { animation-delay: 0.24s; }
+.waveform-container.speaking .wave-bar:nth-child(4) { animation-delay: 0.36s; }
+.waveform-container.speaking .wave-bar:nth-child(5) { animation-delay: 0.48s; }
+.waveform-container.speaking .wave-bar:nth-child(6) { animation-delay: 0.3s; }
+.waveform-container.speaking .wave-bar:nth-child(7) { animation-delay: 0.18s; }
+.waveform-container.speaking .wave-bar:nth-child(8) { animation-delay: 0.42s; }
+@keyframes wavePulseAnim {
+  0% { height: 6px; }
+  100% { height: 32px; }
+}
+.lang-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.lang-chip {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.lang-chip.active, .lang-chip:hover {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+.vani-transcript-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #f1f5f9;
+  text-align: left;
+  max-height: 180px;
+  overflow-y: auto;
+  margin-bottom: 1.2rem;
+}
+
+</style>
+
+  <!-- Lucide Icons & Chart.js -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Leaflet GIS JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+
+  <!-- Animated Intro Splash Screen -->
+  <div class="splash-screen" id="appSplashScreen" onclick="document.getElementById('appSplashScreen').classList.add('fade-out')">
+    <div class="splash-logo-glow">
+      <i data-lucide="sprout"></i>
+    </div>
+    <div class="splash-title">KisanDirect <span>AI</span></div>
+    <div class="splash-sub">Ministry of Consumer Affairs (DOCA) • National Farm-to-Fork Grid</div>
+    <div class="splash-loader">
+      <div class="splash-loader-bar"></div>
+    </div>
+  </div>
+
+  <!-- Persistent Multi-Role Navigation & Demo Switcher Bar -->
+  <div class="auth-top-bar" id="authTopBar">
+    <div class="auth-demo-group">
+      <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+        Quick Role Switcher:
+      </span>
+      <button class="demo-role-btn active" id="btnDemoFarmer" onclick="AuthModule.loginAsDemo('farmer')">
+        <i data-lucide="tractor"></i> 👨‍🌾 Farmer Demo
+      </button>
+      <button class="demo-role-btn buyer" id="btnDemoBuyer" onclick="AuthModule.loginAsDemo('buyer')">
+        <i data-lucide="shopping-bag"></i> 🛒 Buyer Demo
+      </button>
+      <button class="demo-role-btn owner" id="btnDemoOwner" onclick="AuthModule.loginAsDemo('owner')">
+        <i data-lucide="shield-check"></i> 🛡️ Web Owner Demo
+      </button>
+      <button class="demo-role-btn" onclick="AuthModule.openAuthModal('login')">
+        <i data-lucide="key"></i> Custom Login
+      </button>
+    </div>
+
+    <div class="user-profile-badge">
+      <!-- Owner Controls -->
+      <button class="btn btn-sm btn-outline" id="ownerEscrowBtn" style="display: none; border-color: #c084fc; color: #d8b4fe;" onclick="OwnerModule.openEscrowQueueModal()">
+        <i data-lucide="alert-triangle"></i> Double-Approval Escrow Queue (<span id="pendingEscrowCount">1</span>)
+      </button>
+      <button class="btn btn-sm btn-outline" id="ownerUsersBtn" style="display: none; border-color: #c084fc; color: #d8b4fe;" onclick="OwnerModule.openUserModerationModal()">
+        <i data-lucide="users"></i> User Moderation
+      </button>
+
+      <!-- Buyer Controls -->
+      <button class="btn btn-sm btn-outline" id="buyerOrdersBtn" style="border-color: #38bdf8; color: #7dd3fc;" onclick="BuyerModule.openMyOrdersModal()">
+        <i data-lucide="package"></i> My Orders & GPS Telemetry (<span id="buyerOrdersCount">3</span>)
+      </button>
+
+      <!-- Active User Profile Indicator -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="role-pill farmer" id="currentRolePill">Farmer</span>
+        <span id="currentUserName" style="font-weight: 700; color: #f8fafc;">Ramesh Patil</span>
+        <button class="btn btn-sm" style="background: rgba(255,255,255,0.08); padding: 4px 8px; border-radius: 4px;" onclick="AuthModule.logout()" title="Sign Out">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="app-container">
+
+    <!-- Top Government DOCA Advisory Banner -->
+    <header class="gov-banner">
+      <div class="gov-emblem-wrapper">
+        <span class="gov-emblem-badge">GOVT OF INDIA</span>
+        <span>Ministry of Consumer Affairs, Food & Public Distribution | Department of Consumer Affairs (DOCA)</span>
+      </div>
+      <div class="gov-live-ticker">
+        <span class="pulse-indicator">Agmarknet AI Live Feeds Active</span>
+        <span>National Farm-to-Fork Grid • Verified</span>
+      </div>
+    </header>
+
+    <!-- Main Navigation Bar with Role Switcher -->
+    <nav class="main-nav">
+      <div class="brand-section">
+        <div class="brand-logo-icon">
+          <i data-lucide="sprout"></i>
+        </div>
+        <div class="brand-text">
+          <h1>KisanDirect <span>AI Supply Chain & Marketplace</span></h1>
+        </div>
+      </div>
+
+      <!-- Persona / Portal Navigation -->
+      <div class="persona-switcher">
+        <button class="persona-btn active" data-role="marketplace">
+          <i data-lucide="store"></i> Marketplace (B2C/B2B)
+        </button>
+        <button class="persona-btn" data-role="farmer">
+          <i data-lucide="tractor"></i> Farmer & FPO Hub
+        </button>
+        <button class="persona-btn" data-role="vision">
+          <i data-lucide="scan-line"></i> AI Quality Scanner
+        </button>
+        <button class="persona-btn" data-role="forecasting">
+          <i data-lucide="trending-up"></i> AI Demand Forecast
+        </button>
+        <button class="persona-btn" data-role="logistics">
+          <i data-lucide="navigation"></i> AI Route Optimizer
+        </button>
+        <button class="persona-btn" data-role="doca">
+          <i data-lucide="shield-alert"></i> DOCA Control Room
+        </button>
+      </div>
+
+      <!-- Action Utilities & Cart -->
+      <div class="nav-actions">
+        <!-- Unique Voice Copilot -->
+        <button class="voice-copilot-pill" onclick="KisanVaniModule.openVoiceModal()"
+          title="Listen to AI Voice Advisory in Hindi/English">
+          <span class="audio-pulse-ring"></span>
+          <i data-lucide="mic"></i>
+          <span id="voiceIndicatorText">Kisan Vani Voice</span>
+        </button>
+        <div class="stat-pill">
+          <i data-lucide="check-circle-2"></i> 0% Middleman Cut
+        </div>
+        <button class="btn-icon" id="cartNavBtn" title="View Direct Farm Basket">
+          <i data-lucide="shopping-basket"></i>
+          <span class="cart-counter" id="cartBadgeCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Content Workspace -->
+    <main class="content-wrapper">
+
+      <!-- ================================================================= -->
+      <!-- VIEW 1: DIRECT DIGITAL MARKETPLACE (B2C CONSUMERS & B2B BUYERS)   -->
+      <!-- ================================================================= -->
+      <section id="view-marketplace" class="view-panel active">
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+          <div class="hero-content">
+            <span class="hero-badge"><i data-lucide="sparkles"></i> Direct Farm-to-Fork Platform</span>
+            <h2 class="hero-title">Bypassing Middlemen. Enriching Farmers. Lowering Consumer Costs.</h2>
+            <p class="hero-subtitle">
+              Connect directly with verified Farmer Producer Organizations (FPOs). Benefit from transparent farmgate
+              prices, cold-chain logistics, and AI-optimized delivery straight to your doorstep or warehouse.
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="MarketplaceModule.openFarmerListingModal()">
+                <i data-lucide="plus-circle"></i> Farmer / FPO List Harvest
+              </button>
+              <button class="btn btn-outline" onclick="App.switchRole('forecasting')">
+                <i data-lucide="bar-chart-3"></i> View AI Crop Forecasts
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- High-Impact Platform Metrics -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="coins"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Farmer Share of Rupee</h4>
+              <div class="metric-value">72% <span style="font-size: 0.9rem; font-weight: 500;">(vs 28% APMC)</span>
+              </div>
+              <div class="metric-meta positive"><i data-lucide="arrow-up-right"></i> +44% higher farm realization</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="tag"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Consumer Price Reduction</h4>
+              <div class="metric-value">-23.8%</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down-right"></i> Savings passed to consumers</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Logistics Transit Waste</h4>
+              <div class="metric-value">3.2% <span style="font-size: 0.9rem; font-weight: 500;">(vs 22% Mandi)</span>
+              </div>
+              <div class="metric-meta positive"><i data-lucide="shield-check"></i> Reefer Cold-Chain protected</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="layers"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Intermediaries Bypassed</h4>
+              <div class="metric-value">5 Layers</div>
+              <div class="metric-meta warning"><i data-lucide="slash"></i> Zero Arhtiya commissions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Value Flow Visualizer: Where Your ₹100 Goes -->
+        <div class="margin-visualizer-card">
+          <div class="section-title-group">
+            <h3><i data-lucide="pie-chart" style="color: var(--emerald-400);"></i> The Value Flow: Traditional Mandi vs
+              KisanDirect AI</h3>
+            <p>Direct comparison showing the complete elimination of unorganized middleman markups.</p>
+          </div>
+
+          <div class="flow-comparison-grid">
+            <!-- Traditional Supply Chain -->
+            <div class="flow-channel traditional">
+              <div class="flow-channel-header">
+                <h4><i data-lucide="x-circle" style="color: var(--rose-400);"></i> Traditional Mandi Chain (5+
+                  Intermediaries)</h4>
+                <span class="badge badge-danger">Farmer Gets: ₹28 / ₹100</span>
+              </div>
+              <div class="flow-breakdown-bar">
+                <div class="bar-segment segment-farmer" style="width: 28%;" title="Farmer Share: 28%">28%</div>
+                <div class="bar-segment segment-aggregator" style="width: 12%;" title="Village Aggregator: 12%">12%
+                </div>
+                <div class="bar-segment segment-commission" style="width: 14%;" title="Arhtiya Commission: 14%">14%
+                </div>
+                <div class="bar-segment segment-wholesaler" style="width: 16%;" title="Mandi Wholesaler: 16%">16%</div>
+                <div class="bar-segment segment-retailer" style="width: 18%;" title="Urban Retailer: 18%">18%</div>
+                <div class="bar-segment" style="width: 12%; background: #475569;" title="Post-Harvest Spoilage: 12%">12%
+                </div>
+              </div>
+              <div class="legend-list">
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#059669;"></span>Farmer
+                    Net Return</span><strong>₹28.00</strong></div>
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#b45309;"></span>Village
+                    Aggregator Margin</span><strong>₹12.00</strong></div>
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#be123c;"></span>Arhtiya
+                    (Commission Agent) Fee</span><strong>₹14.00</strong></div>
+                <div class="legend-item"><span><span class="legend-color-dot"
+                      style="background:#6d28d9;"></span>Wholesalers & Sub-wholesalers</span><strong>₹16.00</strong>
+                </div>
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#c2410c;"></span>Local
+                    Retail Markup & Transport Spoilage</span><strong>₹30.00</strong></div>
+              </div>
+            </div>
+
+            <!-- KisanDirect AI Direct Flow -->
+            <div class="flow-channel kisandirect">
+              <div class="flow-channel-header">
+                <h4><i data-lucide="check-circle" style="color: var(--emerald-400);"></i> KisanDirect AI (Direct
+                  Disintermediation)</h4>
+                <span class="badge badge-grade-a">Farmer Gets: ₹72 / ₹100</span>
+              </div>
+              <div class="flow-breakdown-bar">
+                <div class="bar-segment segment-farmer" style="width: 72%;" title="Direct Farmer Share: 72%">72% Farmer
+                </div>
+                <div class="bar-segment segment-aggregator" style="width: 6%;" title="FPO Pre-cooling Hub: 6%">6% FPO
+                </div>
+                <div class="bar-segment segment-logistics" style="width: 8%;" title="AI Route Fleet & Cold Chain: 8%">8%
+                  Logistics</div>
+                <div class="bar-segment segment-savings" style="width: 14%;" title="Consumer Net Savings: 14%">14% Saved
+                </div>
+              </div>
+              <div class="legend-list">
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#059669;"></span>Farmer
+                    Net Realization</span><strong style="color: var(--emerald-400);">₹72.00 (+157% Increase)</strong>
+                </div>
+                <div class="legend-item"><span><span class="legend-color-dot" style="background:#b45309;"></span>FPO
+                    Sorting, QC & Aggregation</span><strong>₹6.00</strong></div>
+                <div class="legend-item"><span><span class="legend-color-dot"
+                      style="background:#0284c7;"></span>AI-Optimized Reefer Freight</span><strong>₹8.00</strong></div>
+                <div class="legend-item"><span><span class="legend-color-dot"
+                      style="background:#10b981;"></span>Consumer Direct Cash Savings</span><strong
+                    style="color: var(--amber-400);">₹14.00 (Lower Price)</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="filters-toolbar">
+          <div class="search-input-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="marketSearchInput"
+              placeholder="Search crops (e.g. Onion, Tomato, Potato, Basmati) or FPO location..." />
+          </div>
+
+          <div class="filter-pills">
+            <button class="filter-pill active" data-category="all">All Crops</button>
+            <button class="filter-pill" data-category="vegetables">Vegetables</button>
+            <button class="filter-pill" data-category="fruits">Fruits</button>
+            <button class="filter-pill" data-category="grains">Grains</button>
+            <button class="filter-pill" data-category="pulses">Pulses</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Products Grid -->
+        <div class="products-grid" id="productsGrid">
+          <!-- Populated by marketplace.js -->
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 2: FARMER & FPO DASHBOARD                                    -->
+      <!-- ================================================================= -->
+      <section id="view-farmer" class="view-panel">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="tractor" style="color: var(--emerald-400);"></i> Farmer & FPO Producer Portal</h3>
+            <p>Manage harvest batches, schedule farmgate reefer pickups, and compare APMC mandi cartels vs direct
+              payouts.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary" onclick="MarketplaceModule.openFarmerListingModal()">
+              <i data-lucide="plus"></i> List New Harvest Lot
+            </button>
+          </div>
+        </div>
+
+        <!-- Producer Metrics -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="wallet"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Direct Payouts Realized</h4>
+              <div class="metric-value">₹ 4,82,500</div>
+              <div class="metric-meta positive"><i data-lucide="check"></i> 100% Escrow Settled via T+1</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="package-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Active Batches Listed</h4>
+              <div class="metric-value">12 Lots</div>
+              <div class="metric-meta positive"><i data-lucide="award"></i> Grade A QC Certified</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Logistics Pickups Scheduled</h4>
+              <div class="metric-value">3 Trucks</div>
+              <div class="metric-meta warning"><i data-lucide="clock"></i> Reefer pickup at 08:10 AM</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Average Realization Premium</h4>
+              <div class="metric-value">+41.2%</div>
+              <div class="metric-meta positive"><i data-lucide="shield"></i> Above local APMC Mandi rate</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Farmer Batches Table -->
+        <div class="doca-table-card">
+          <div
+            style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="font-size: 1.1rem; font-weight: 700;">Live Farm Listings & Scheduled Dispatches</h4>
+            <span class="badge badge-grade-a">FPO: Sahyadri Farmers Co-op</span>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Batch ID & Crop</th>
+                  <th>Quantity</th>
+                  <th>Quality Grade</th>
+                  <th>Direct Farmgate Rate</th>
+                  <th>Mandi Comparison</th>
+                  <th>Scheduled Pickup</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>#LOT-901: Nashik Red Onion</strong><br /><span
+                      style="font-size:0.75rem; color:var(--text-muted);">Lasalgaon Farmgate</span></td>
+                  <td>450 Quintals</td>
+                  <td><span class="badge badge-grade-a">Grade A (QC 98%)</span></td>
+                  <td style="color: var(--emerald-400); font-weight: 700;">₹ 24.50 / kg</td>
+                  <td style="color: var(--rose-400); text-decoration: line-through;">APMC: ₹ 16.00 / kg</td>
+                  <td>Today, 08:10 AM (Reefer MH-15)</td>
+                  <td><span class="badge badge-warning">Loading</span></td>
+                </tr>
+                <tr>
+                  <td><strong>#LOT-884: Kolar Hybrid Tomatoes</strong><br /><span
+                      style="font-size:0.75rem; color:var(--text-muted);">Srinivaspur Orchard</span></td>
+                  <td>320 Crates</td>
+                  <td><span class="badge badge-grade-a">GlobalGAP</span></td>
+                  <td style="color: var(--emerald-400); font-weight: 700;">₹ 22.00 / kg</td>
+                  <td style="color: var(--rose-400); text-decoration: line-through;">APMC: ₹ 12.50 / kg</td>
+                  <td>Tomorrow, 06:00 AM</td>
+                  <td><span class="badge badge-grade-b">Scheduled</span></td>
+                </tr>
+                <tr>
+                  <td><strong>#LOT-871: Agra Chipsona Potato</strong><br /><span
+                      style="font-size:0.75rem; color:var(--text-muted);">Fatehabad Hub</span></td>
+                  <td>800 Quintals</td>
+                  <td><span class="badge badge-grade-b">Grade A Industrial</span></td>
+                  <td style="color: var(--emerald-400); font-weight: 700;">₹ 18.00 / kg</td>
+                  <td style="color: var(--rose-400); text-decoration: line-through;">APMC: ₹ 11.00 / kg</td>
+                  <td>Completed (Delivered)</td>
+                  <td><span class="badge badge-grade-a">Paid ₹14.4 Lakh</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- UNIQUE FEATURE: KISAN-VISION AI QUALITY & DEFECT SCANNER          -->
+      <!-- ================================================================= -->
+      <section id="view-vision" class="view-panel">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="scan-line" style="color: var(--emerald-400);"></i> Kisan-Vision: Computer Vision AI Crop
+              Quality Scanner</h3>
+            <p>Eliminating middleman grading fraud through automated neural defect detection, ripeness scoring, and
+              tamper-proof DOCA QC certificates.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary btn-sm" id="runVisionScanBtn">
+              <i data-lucide="refresh-cw"></i> Run Neural Inspection
+            </button>
+          </div>
+        </div>
+
+        <div class="vision-grid">
+          <!-- Left: AI Viewfinder Display -->
+          <div class="viewfinder-card">
+            <div class="scanner-display">
+              <div class="scanner-laser" id="scannerLaser"></div>
+              <img id="visionCropImage"
+                src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=700&q=80"
+                alt="Produce Under Inspection" />
+
+              <!-- Dynamic Bounding Box Overlay -->
+              <div class="ai-bbox" id="aiBoundingBox" style="top: 15%; left: 20%; width: 60%; height: 70%;">
+                <span class="ai-bbox-label"><i data-lucide="crosshair"></i> AI DETECT: <span id="visionCropTitle">Kolar
+                    Hybrid Tomato</span></span>
+              </div>
+            </div>
+
+            <!-- Sample Crop Test Selector -->
+            <div class="sample-selector-row">
+              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Select Test Harvest
+                Sample:</span>
+              <button class="sample-thumb-btn active" data-crop="tomato">🍅 Hybrid Tomato</button>
+              <button class="sample-thumb-btn" data-crop="onion">🧅 Nashik Red Onion</button>
+              <button class="sample-thumb-btn" data-crop="potato">🥔 Agra Chipsona</button>
+              <button class="sample-thumb-btn" data-crop="apple">🍎 Kinnaur Apple</button>
+            </div>
+          </div>
+
+          <!-- Right: Inspection Results & Cryptographic QC Certificate -->
+          <div class="qc-results-card">
+            <div class="qc-grade-badge-huge">
+              <div>
+                <span
+                  style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">AI
+                  Verified Quality Grade</span>
+                <div class="qc-grade-letter" id="visionGradeLetter">Grade A+</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 0.8rem; color: var(--emerald-400); font-weight: 700;">Freshness Index</span>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #fff;" id="visionOverallScore">96.4%</div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 2px;">
+                <span>Color & Ripeness Index</span>
+                <strong style="color: var(--emerald-400);" id="visionRipeness">94% (Optimal Harvest Red)</strong>
+              </div>
+              <div class="qc-meter-bar">
+                <div class="qc-meter-fill" id="visionMeterFill" style="width: 96%;"></div>
+              </div>
+            </div>
+
+            <div
+              style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Surface Blemish Rate:</span>
+                <strong style="color: var(--emerald-400);" id="visionBlemish">1.2% (Negligible)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Calibrated Diameter:</span>
+                <strong id="visionDiameter">62 mm (Uniformity 98%)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Firmness & Transit Life:</span>
+                <strong style="color: var(--cyan-400);" id="visionFirmness">4.8 kg/cm² (10-Day Safe)</strong>
+              </div>
+              <div
+                style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+                <span style="color: var(--text-muted);">Fair Farmgate Premium:</span>
+                <strong style="color: var(--emerald-400);" id="visionAdjustment">+14% Above APMC Base</strong>
+              </div>
+            </div>
+
+            <div
+              style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald-500); border-radius: var(--radius-md); padding: 0.85rem; font-size: 0.78rem;">
+              <div
+                style="display: flex; align-items: center; gap: 6px; color: var(--emerald-400); font-weight: 700; margin-bottom: 2px;">
+                <i data-lucide="shield-check"></i> DOCA Anti-Fraud Digital QC Hash
+              </div>
+              <code style="font-size: 0.72rem; color: var(--text-muted); word-break: break-all;" id="visionHash">
+                SHA256: 7f8a91c2b4d90e8a7f6c5b4a3d2e1f0a
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 3: AI DEMAND FORECASTING & EARLY GLUT WARNING               -->
+      <!-- ================================================================= -->
+      <section id="view-forecasting" class="view-panel">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="trending-up" style="color: var(--emerald-400);"></i> AI Demand Forecasting & Price
+              Volatility Engine</h3>
+            <p>Predicts consumption demand across Tier-1 urban clusters, anticipates festival surges, and prevents
+              post-harvest gluts.</p>
+          </div>
+          <div class="action-btn-group">
+            <div class="crop-forecast-selector">
+              <button class="crop-tab-btn active" data-crop="onion">Nashik Onion</button>
+              <button class="crop-tab-btn" data-crop="tomato">Kolar Tomato</button>
+              <button class="crop-tab-btn" data-crop="potato">Agra Potato</button>
+            </div>
+            <button class="btn btn-accent btn-sm" id="simulateSurgeBtn">
+              <i data-lucide="zap"></i> Simulate Festival Demand Surge
+            </button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <!-- Time Series Chart Card -->
+          <div class="chart-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h4 id="forecastCropName" style="font-size: 1.15rem; font-weight: 700;">Nashik Red Onion</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Historical Mandi APMC Price vs 15-Day AI Direct
+                  Price Prediction Band</p>
+              </div>
+              <span id="forecastVolatilityBadge" class="badge badge-warning">Moderate Volatility</span>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="demandForecastChart"></canvas>
+            </div>
+          </div>
+
+          <!-- AI Intelligence & Advisory Panel -->
+          <div class="ai-insight-panel">
+            <div class="insight-card alert-optimal">
+              <div class="insight-header" style="color: var(--emerald-400);">
+                <i data-lucide="bot"></i> AI Harvest & Dispatch Recommendation
+              </div>
+              <div class="insight-body" id="forecastAdvisoryText">
+                Navratri festival surge anticipated within 10 days. FPOs are advised to stage release 35% of inventory
+                in week 2 to capture peak retail demand without triggering DOCA buffer interventions.
+              </div>
+            </div>
+
+            <div class="insight-card alert-warning">
+              <div class="insight-header" style="color: var(--amber-400);">
+                <i data-lucide="alert-triangle"></i> Early Glut Warning Signal
+              </div>
+              <div class="insight-body">
+                Tomato arrivals across southern states expected to surge +28% due to favorable late monsoon harvests.
+                Direct forward contracts with Mumbai and Delhi institutional bulk buyers are locked in to protect
+                against price crash.
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-header" style="color: var(--cyan-400);">
+                <i data-lucide="thermometer-snowflake"></i> Recommended Cold Storage Holding
+              </div>
+              <div class="insight-body">
+                Holding 40% stock in Sahyadri Pre-cooling Hub for 7 days yields an estimated +18.4% price realization
+                improvement compared to spot farmgate offloading.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 4: AI ROUTE OPTIMIZATION & REEFER TELEMETRY (VRP)           -->
+      <!-- ================================================================= -->
+      <section id="view-logistics" class="view-panel">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="navigation" style="color: var(--emerald-400);"></i> AI Route Optimization & Fleet
+              Telemetry (VRP)</h3>
+            <p>Clusters smallholder farmgate pickups, optimizes multi-drop urban delivery corridors, and monitors cold
+              chain integrity.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary btn-sm" onclick="RouteOptimizerModule.reOptimizeRoute()">
+              <i data-lucide="refresh-cw"></i> Re-Calculate Dynamic VRP
+            </button>
+            <button class="btn btn-accent btn-sm" onclick="RouteOptimizerModule.triggerEmergencyReRoute()">
+              <i data-lucide="alert-triangle"></i> Simulate Spoilage & Auto-Reroute
+            </button>
+          </div>
+        </div>
+
+        <!-- Route Savings Metrics -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="map-pin"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Distance Saved per Run</h4>
+              <div class="metric-value" id="routeKmSaved">74 km</div>
+              <div class="metric-meta positive"><i data-lucide="check"></i> 268 km vs 342 km uncoordinated</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="clock"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Transit Time Reduced</h4>
+              <div class="metric-value" id="routeTimeSaved">2.7 hrs</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down-right"></i> Direct bypass of mandi queues
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="fuel"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Fuel & Toll Savings</h4>
+              <div class="metric-value" id="routeFuelSaved">₹4,250</div>
+              <div class="metric-meta positive"><i data-lucide="leaf"></i> -86.4 kg CO2 emissions</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Produce Spoilage Reduction</h4>
+              <div class="metric-value" id="routeSpoilageReduced">-18.5%</div>
+              <div class="metric-meta positive"><i data-lucide="thermometer"></i> 4°C continuous cold chain</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive GIS Map & Route Details -->
+        <div class="logistics-dashboard-grid">
+          <div class="map-card">
+            <div class="map-header">
+              <div>
+                <strong>Corridor: Western Agri-Express (Nashik Cluster ➔ Greater Mumbai Hubs)</strong>
+                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">Multi-Stop Farm Pickups ➔
+                  FPO Pre-Cooling Hub ➔ Urban B2C/B2B Depots</span>
+              </div>
+              <span class="badge badge-grade-a"><i data-lucide="radio"></i> Live GPS Telemetry Active</span>
+            </div>
+            <div id="logisticsMap"></div>
+          </div>
+
+          <div class="route-controls-card">
+            <h4 style="font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="milestone" style="color: var(--amber-400);"></i> Route Waypoints & Pickups
+            </h4>
+
+            <div class="waypoint-timeline" id="waypointsTimeline">
+              <!-- Populated by route-optimizer.js -->
+            </div>
+
+            <!-- IoT Cold Chain Telemetry Monitor -->
+            <h4
+              style="font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 0.5rem;">
+              <i data-lucide="activity" style="color: var(--cyan-400);"></i> Cold-Chain Reefer Sensor Data
+            </h4>
+            <div class="telemetry-monitor" id="telemetryBox">
+              <!-- Populated by route-optimizer.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 5: DOCA REGULATORY & PRICE STABILIZATION DASHBOARD           -->
+      <!-- ================================================================= -->
+      <section id="view-doca" class="view-panel">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="shield-alert" style="color: var(--rose-400);"></i> Department of Consumer Affairs (DOCA)
+              Control Room</h3>
+            <p>Monitors farmgate-to-retail price spreads, tracks middleman elimination metrics, and oversees buffer
+              stock interventions.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-accent btn-sm" id="triggerBufferReleaseBtn">
+              <i data-lucide="layers"></i> Trigger Strategic Buffer Release
+            </button>
+          </div>
+        </div>
+
+        <!-- Macro Stats for Ministry -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="user-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Farmer Income Increase</h4>
+              <div class="metric-value" id="docaImpactFarmers">+48.5% Net</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-up"></i> Across 18,400 participating farmers</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="shopping-cart"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Consumer Inflation Reduction</h4>
+              <div class="metric-value" id="docaImpactSavings">-24.2% Avg</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down"></i> TOP-3 Commodities (Tomato, Onion,
+                Potato)</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="ban"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Intermediary Markups Cut</h4>
+              <div class="metric-value" id="docaImpactMiddlemen">₹142.8 Cr</div>
+              <div class="metric-meta positive"><i data-lucide="check-circle-2"></i> Retained by producers & consumers
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="activity"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Price Volatility Index</h4>
+              <div class="metric-value">Low (14.2)</div>
+              <div class="metric-meta positive"><i data-lucide="shield"></i> Controlled via AI direct procurement</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Essential Commodities Price Spread Monitor Table -->
+        <div class="doca-table-card">
+          <div
+            style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h4 style="font-size: 1.1rem; font-weight: 700;">Essential Commodities Price Spread Surveillance (TOP
+                Commodities)</h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Comparing Traditional APMC Market Spread vs
+                KisanDirect AI Fair Price Spread</p>
+            </div>
+            <span class="badge badge-grade-a">Real-time Mandi Benchmark</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Commodity & State</th>
+                  <th>Farmgate Price</th>
+                  <th>Mandi Wholesale</th>
+                  <th>Retail Urban (Traditional)</th>
+                  <th>KisanDirect (Direct)</th>
+                  <th>Price Spread</th>
+                  <th>Farmer Gain</th>
+                  <th>Consumer Saving</th>
+                  <th>DOCA Risk Watch</th>
+                </tr>
+              </thead>
+              <tbody id="docaTableBody">
+                <!-- Populated by doca-monitor.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================================================================= -->
+  <!-- MODALS                                                            -->
+  <!-- ================================================================= -->
+
+  <!-- 1. CART / DIRECT CHECKOUT MODAL -->
+  <div class="modal-backdrop" id="cartModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i data-lucide="shopping-bag" style="color: var(--emerald-400);"></i> Your Direct Farm Produce Basket</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('cartModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="cartModalBody">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. FARMER HARVEST LISTING WIZARD MODAL -->
+  <div class="modal-backdrop" id="farmerListingModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i data-lucide="sprout" style="color: var(--emerald-400);"></i> List Harvest Batch on KisanDirect AI</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('farmerListingModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="farmerListingForm">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Commodity & Variety</label>
+              <input type="text" id="newCropName" class="form-control" required placeholder="e.g. Pune Red Onions"
+                value="Pune Red Onions" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="newCropCategory" class="form-control">
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Grains">Grains</option>
+                <option value="Pulses">Pulses</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">FPO Name / Co-operative</label>
+              <input type="text" id="newCropFpo" class="form-control" required placeholder="e.g. Pune Krishi Vikas FPC"
+                value="Pune Krishi Vikas FPC" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Farm Location & District</label>
+              <input type="text" id="newCropLocation" class="form-control" required
+                placeholder="e.g. Junnar, Pune, Maharashtra" value="Junnar, Pune, Maharashtra" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Your Direct Farmgate Price (₹ / kg)</label>
+              <input type="number" id="newCropPrice" class="form-control" step="0.5" required value="25.00" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Harvest Lot Size (e.g. Quintals / Crates)</label>
+              <input type="text" id="newCropQuantity" class="form-control" required value="250 Quintals" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Quality Grade Certification</label>
+            <select id="newCropGrade" class="form-control">
+              <option value="Grade A (Export Quality)">Grade A (Export Quality)</option>
+              <option value="Grade B (Commercial Table)">Grade B (Commercial Table)</option>
+              <option value="Certified Organic (NPOP)">Certified Organic (NPOP)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Payout Preview Box -->
+          <div id="farmerProfitPreview"
+            style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald-500); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+            <!-- Calculated dynamically -->
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i data-lucide="check-circle"></i> Publish Farm Batch & Request Reefer Pickup
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. B2B BULK PROCUREMENT MODAL -->
+  <div class="modal-backdrop" id="b2bProcurementModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i data-lucide="truck" style="color: var(--amber-400);"></i> Institutional Bulk Procurement (B2B)</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('b2bProcurementModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="b2bModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TRACEABILITY QR PASSPORT MODAL -->
+  <div class="modal-backdrop" id="traceabilityModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i data-lucide="qr-code" style="color: var(--emerald-400);"></i> Digital Farm Passport & Traceability</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('traceabilityModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="traceabilityModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. UNIQUE FEATURE: KISAN VANI MULTILINGUAL VOICE COPILOT MODAL -->
+  <div class="modal-backdrop" id="kisanVaniModal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><i data-lucide="mic" style="color: var(--amber-400);"></i> Kisan Vani - Multilingual Daily Mandi Voice Copilot</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('kisanVaniModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <h4 style="font-size: 1.15rem; font-weight: 700; color: #f8fafc;">Daily Agmarknet Government Voice Bulletin</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+            Live APMC benchmarks vs direct farmgate arbitrage read aloud in regional Indian languages.
+          </p>
+        </div>
+
+        <!-- Regional Script Chips (9 Indian Languages) -->
+        <div class="lang-chips-grid">
+          <button class="lang-chip active" onclick="KisanVaniModule.setLanguage('mr', this)">मराठी</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('hi', this)">हिन्दी</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('en', this)">English</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('te', this)">తెలుగు</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('ta', this)">தமிழ்</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('kn', this)">ಕನ್ನಡ</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('gu', this)">ગુજરાતી</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('bn', this)">বাংলা</button>
+          <button class="lang-chip" onclick="KisanVaniModule.setLanguage('pa', this)">ਪੰਜਾਬੀ</button>
+        </div>
+
+        <!-- Animated Waveform Visualizer -->
+        <div class="waveform-container" id="vaniWaveform">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+
+        <!-- Side-by-Side Large Accessible Transcript Box -->
+        <div class="vani-transcript-box" id="vaniTranscript">
+          लोड होत आहे... (Loading Daily Mandi Bulletin...)
+        </div>
+
+        <!-- Audio Player Controls -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 1.5rem;">
+          <button class="btn btn-accent" style="padding: 10px 24px; font-size: 0.95rem;" onclick="KisanVaniModule.play()">
+            <i data-lucide="play"></i> Play Voice
+          </button>
+          <button class="btn btn-outline" style="padding: 10px 18px;" onclick="KisanVaniModule.pause()">
+            <i data-lucide="pause"></i> Pause
+          </button>
+          <button class="btn btn-outline" style="padding: 10px 18px;" onclick="KisanVaniModule.stop()">
+            <i data-lucide="square"></i> Stop
+          </button>
+          <button class="btn btn-outline" style="padding: 10px 18px;" onclick="KisanVaniModule.replay()">
+            <i data-lucide="rotate-ccw"></i> Replay
+          </button>
+        </div>
+
+        <div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 0.85rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; display: flex; align-items: center; justify-content: space-between;">
+          <span><strong>Dual-Tier Audio:</strong> Web Speech API (Rate 0.95) with automated Server PCM Audio stream fallback.</span>
+          <span class="qc-badge-pill" id="vaniLangBadge">mr-IN Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  
+  <!-- DOUBLE-APPROVAL ESCROW QUEUE MODAL (OWNER MODERATION) -->
+  <div class="modal-backdrop" id="ownerEscrowModal">
+    <div class="modal-dialog" style="max-width: 820px;">
+      <div class="modal-header">
+        <h3><i data-lucide="shield-alert" style="color: #c084fc;"></i> Double-Approval Escrow Moderation Queue</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('ownerEscrowModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Verify farmer digital passport, tamper-proof QC hash, and buyer business license before approving escrow fund lock and dispatching cold-chain reefer fleet.
+        </p>
+
+        <div id="escrowQueueContainer">
+          <!-- Populated dynamically by OwnerModule -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER MODERATION MODAL (OWNER MODERATION) -->
+  <div class="modal-backdrop" id="ownerUsersModal">
+    <div class="modal-dialog" style="max-width: 900px;">
+      <div class="modal-header">
+        <h3><i data-lucide="users" style="color: #c084fc;"></i> Platform User & Listing Moderation</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('ownerUsersModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          One-click action to dismiss and ban fake buyers or sellers. Dismissing a profile immediately revokes tokens and unpublishes active lots.
+        </p>
+
+        <div style="overflow-x: auto;">
+          <table class="table" style="width: 100%; font-size: 0.84rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-muted);">
+                <th style="padding: 10px; text-align: left;">User / Entity</th>
+                <th style="padding: 10px; text-align: left;">Role</th>
+                <th style="padding: 10px; text-align: left;">KYC Status</th>
+                <th style="padding: 10px; text-align: left;">Account Status</th>
+                <th style="padding: 10px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="userModerationTableBody">
+              <!-- Populated dynamically by OwnerModule -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUYER MY ORDERS & COLD-CHAIN TELEMETRY MODAL -->
+  <div class="modal-backdrop" id="buyerOrdersModal">
+    <div class="modal-dialog" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3><i data-lucide="truck" style="color: #38bdf8;"></i> My Orders & Live Reefer GPS Telemetry</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('buyerOrdersModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Track your farmgate produce orders, escrow verification status, and real-time reefer cold-chain telemetry.
+        </p>
+
+        <div id="buyerOrdersContainer">
+          <!-- Populated dynamically by BuyerModule -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM AUTH MODAL (LOGIN & REGISTER WITH 3 ROLES) -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 id="authModalTitle"><i data-lucide="lock" style="color: #10b981;"></i> KisanDirect AI Authentication</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('authModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+          <button class="btn btn-sm btn-primary" id="tabAuthLogin" onclick="AuthModule.switchTab('login')">Sign In</button>
+          <button class="btn btn-sm btn-outline" id="tabAuthRegister" onclick="AuthModule.switchTab('register')">Register New Profile</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="authLoginForm" onsubmit="AuthModule.submitLogin(event)">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="authLoginEmail" class="form-control" required placeholder="farmer@kisandirect.gov.in" />
+          </div>
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label">Password</label>
+            <input type="password" id="authLoginPassword" class="form-control" required placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 11px;">
+            <i data-lucide="log-in"></i> Sign In to National Agri-Grid
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="authRegisterForm" style="display: none;" onsubmit="AuthModule.submitRegister(event)">
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Select Your Role</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <label style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.78rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);">
+                <input type="radio" name="regRoleRadio" value="farmer" checked /> 👨‍🌾 Farmer
+              </label>
+              <label style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.78rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);">
+                <input type="radio" name="regRoleRadio" value="buyer" /> 🛒 Buyer
+              </label>
+              <label style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; font-size: 0.78rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);">
+                <input type="radio" name="regRoleRadio" value="owner" /> 🛡️ Owner
+              </label>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Full Name / Organization</label>
+            <input type="text" id="authRegName" class="form-control" required placeholder="e.g. Ramesh Patil / Reliance Fresh" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="authRegEmail" class="form-control" required placeholder="name@kisandirect.gov.in" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label class="form-label">Password (Min 6 chars)</label>
+            <input type="password" id="authRegPassword" class="form-control" required minlength="6" placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn btn-accent" style="width: 100%; padding: 11px; margin-top: 0.5rem;">
+            <i data-lucide="user-plus"></i> Complete Onboarding & Enter Grid
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+  <script>
+/* ======================================================== */
+/* 1. MOCK COMMODITIES & AGMARKNET DATASETS                 */
+/* ======================================================== */
+/**
+ * KisanDirect AI - Core Mock Datasets & Domain Models
+ * Ministry of Consumer Affairs, Food & Public Distribution (DOCA)
+ */
+
+window.KisanData = {
+  // 1. COMMODITY LISTINGS
+  commodities: [
+    {
+      id: "CROP-101",
+      name: "Nashik Red Onion (Garwa)",
+      category: "Vegetables",
+      fpo: "Sahyadri Farmers Producer Co.",
+      location: "Lasalgaon, Nashik, Maharashtra",
+      geo: { lat: 20.1472, lng: 74.2301 },
+      variety: "Garwa Premium Pink",
+      grade: "Grade A",
+      harvestDate: "2026-09-04",
+      batchSize: "450 Quintals",
+      minOrderKg: 10,
+      farmerDirectPrice: 24.50, // ₹ per kg
+      mandiBenchmarkPrice: 16.00, // what farmer gets in traditional APMC after cuts
+      retailMandiPrice: 38.00, // what consumer pays at traditional retail
+      consumerDirectPrice: 29.00, // consumer price on KisanDirect
+      image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=600&q=80",
+      description: "Sun-cured medium to large bulbs with 4-month shelf life. High pungency, zero chemical sprout suppressants.",
+      certifications: ["NPOP Organic", "Traceable Origin QR"],
+      b2bAvailable: true,
+      b2bMinQuintal: 50,
+      b2bPricePerQuintal: 2350
+    },
+    {
+      id: "CROP-102",
+      name: "Kolar Vine-Ripe Tomatoes (Hybrid)",
+      category: "Vegetables",
+      fpo: "Kolar Horticulture Farmers Federation",
+      location: "Srinivaspur, Kolar, Karnataka",
+      geo: { lat: 13.1367, lng: 78.1292 },
+      variety: "Abhinav Seminis",
+      grade: "Grade A",
+      harvestDate: "2026-09-06",
+      batchSize: "320 Crates",
+      minOrderKg: 5,
+      farmerDirectPrice: 22.00,
+      mandiBenchmarkPrice: 12.50,
+      retailMandiPrice: 36.00,
+      consumerDirectPrice: 26.00,
+      image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=600&q=80",
+      description: "Thick-walled, high lycopene tomatoes optimal for culinary and institutional table use. 10-day transport life.",
+      certifications: ["GlobalGAP Certified", "Pesticide Residue Free"],
+      b2bAvailable: true,
+      b2bMinQuintal: 40,
+      b2bPricePerQuintal: 2100
+    },
+    {
+      id: "CROP-103",
+      name: "Agra Chipsona White Potatoes",
+      category: "Vegetables",
+      fpo: "Brajbhoomi Agro Producer Co-op",
+      location: "Fatehabad, Agra, Uttar Pradesh",
+      geo: { lat: 27.0984, lng: 78.3101 },
+      variety: "Chipsona-3",
+      grade: "Grade A",
+      harvestDate: "2026-08-28",
+      batchSize: "800 Quintals",
+      minOrderKg: 20,
+      farmerDirectPrice: 18.00,
+      mandiBenchmarkPrice: 11.00,
+      retailMandiPrice: 28.00,
+      consumerDirectPrice: 21.00,
+      image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=600&q=80",
+      description: "Low-sugar, high dry-matter tuber preferred for culinary baking, frying, and institutional mess kitchens.",
+      certifications: ["Cold-Storage Monitored", "DOCA Verified"],
+      b2bAvailable: true,
+      b2bMinQuintal: 100,
+      b2bPricePerQuintal: 1750
+    },
+    {
+      id: "CROP-104",
+      name: "Dehradun Traditional Basmati Rice",
+      category: "Grains",
+      fpo: "Doon Valley Heritage Farmers Society",
+      location: "Vikasnagar, Dehradun, Uttarakhand",
+      geo: { lat: 30.4900, lng: 77.7700 },
+      variety: "Type 3 (Himalayan)",
+      grade: "Export Grade",
+      harvestDate: "2026-08-15",
+      batchSize: "250 Quintals",
+      minOrderKg: 10,
+      farmerDirectPrice: 88.00,
+      mandiBenchmarkPrice: 62.00,
+      retailMandiPrice: 135.00,
+      consumerDirectPrice: 105.00,
+      image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80",
+      description: "Aged 18 months, 8.2mm grain length with distinct floral aroma irrigated by glacier snowmelt.",
+      certifications: ["GI Tag Registered", "100% Single Estate"],
+      b2bAvailable: true,
+      b2bMinQuintal: 25,
+      b2bPricePerQuintal: 8500
+    },
+    {
+      id: "CROP-105",
+      name: "Latur Organic Desi Chana (Bengal Gram)",
+      category: "Pulses",
+      fpo: "Marathwada Organic Pulses Cluster",
+      location: "Ausa, Latur, Maharashtra",
+      geo: { lat: 18.2500, lng: 76.5000 },
+      variety: "Vijay Bold",
+      grade: "Grade A",
+      harvestDate: "2026-08-20",
+      batchSize: "180 Quintals",
+      minOrderKg: 5,
+      farmerDirectPrice: 72.00,
+      mandiBenchmarkPrice: 54.00,
+      retailMandiPrice: 104.00,
+      consumerDirectPrice: 84.00,
+      image: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format&fit=crop&w=600&q=80",
+      description: "High protein, machine-cleaned, unpolished brown chickpea. Directly bagged from farmgate.",
+      certifications: ["Jaivik Bharat", "NPOP Organic"],
+      b2bAvailable: true,
+      b2bMinQuintal: 30,
+      b2bPricePerQuintal: 7000
+    },
+    {
+      id: "CROP-106",
+      name: "Kinnaur Royal Crisp Apples",
+      category: "Fruits",
+      fpo: "Himachal Highlands Fruit Growers Assn",
+      location: "Kalpa, Kinnaur, Himachal Pradesh",
+      geo: { lat: 31.5372, lng: 78.2562 },
+      variety: "Royal Delicious",
+      grade: "Premium Export",
+      harvestDate: "2026-09-02",
+      batchSize: "500 Boxes",
+      minOrderKg: 10,
+      farmerDirectPrice: 110.00,
+      mandiBenchmarkPrice: 70.00,
+      retailMandiPrice: 175.00,
+      consumerDirectPrice: 135.00,
+      image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80",
+      description: "High-altitude mountain apples harvested at 9,000 ft. Crisp texture, deep natural blush without wax polishing.",
+      certifications: ["Mountain Grown", "Traceable Origin"],
+      b2bAvailable: true,
+      b2bMinQuintal: 50,
+      b2bPricePerQuintal: 10800
+    }
+  ],
+
+  // 2. RUPEE FLOW COMPARISON DATA (Traditional vs KisanDirect AI)
+  rupeeBreakdown: {
+    traditional: {
+      farmerShare: 30,
+      aggregatorMargin: 12,
+      commissionAgentArhtiya: 10,
+      mandiWholesaler: 15,
+      subWholesaler: 10,
+      retailerMargin: 15,
+      logisticsWastage: 8
+    },
+    kisanDirect: {
+      farmerShare: 72,
+      fpoAggregation: 6,
+      aiLogisticsColdChain: 8,
+      platformFeeDOCA: 2,
+      consumerSavings: 12
+    }
+  },
+
+  // 3. AI DEMAND FORECASTING TIME SERIES
+  forecastData: {
+    "onion": {
+      crop: "Nashik Red Onion",
+      historicalDays: ["Aug 24", "Aug 26", "Aug 28", "Aug 30", "Sep 01", "Sep 03", "Sep 05", "Sep 07"],
+      historicalMandiPrice: [15.2, 15.8, 16.0, 16.5, 17.1, 16.8, 17.5, 17.8],
+      forecastDays: ["Sep 09", "Sep 11", "Sep 13", "Sep 15", "Sep 17", "Sep 19", "Sep 21"],
+      predictedDemandMetric: [1120, 1280, 1450, 1680, 1920, 2100, 1850], // Tons
+      predictedPriceMin: [25.0, 26.5, 27.8, 29.0, 31.0, 32.5, 30.0],
+      predictedPriceMax: [28.5, 30.0, 31.5, 33.5, 35.5, 37.0, 34.0],
+      volatilityIndex: "Moderate (Festival Spike Imminent)",
+      advisory: "Navratri festival surge anticipated within 10 days. FPOs are advised to stage release 35% of inventory in week 2 to capture peak retail demand without triggering DOCA buffer interventions."
+    },
+    "tomato": {
+      crop: "Kolar Hybrid Tomato",
+      historicalDays: ["Aug 24", "Aug 26", "Aug 28", "Aug 30", "Sep 01", "Sep 03", "Sep 05", "Sep 07"],
+      historicalMandiPrice: [18.0, 16.5, 14.2, 13.0, 12.8, 13.5, 13.0, 12.5],
+      forecastDays: ["Sep 09", "Sep 11", "Sep 13", "Sep 15", "Sep 17", "Sep 19", "Sep 21"],
+      predictedDemandMetric: [850, 910, 940, 970, 990, 1020, 960],
+      predictedPriceMin: [22.0, 23.0, 24.5, 26.0, 27.5, 29.0, 27.0],
+      predictedPriceMax: [25.0, 26.5, 28.0, 29.5, 31.0, 32.0, 30.0],
+      volatilityIndex: "High Risk of Glut in Mandis, Direct Pre-Orders Optimal",
+      advisory: "Local mandi arrivals in South India projected to surge +28%. To prevent distress sales below ₹14/kg, route 60% of Kolar harvest via consolidated refrigerated freight to Mumbai & Hyderabad bulk buyers."
+    },
+    "potato": {
+      crop: "Agra Chipsona Potato",
+      historicalDays: ["Aug 24", "Aug 26", "Aug 28", "Aug 30", "Sep 01", "Sep 03", "Sep 05", "Sep 07"],
+      historicalMandiPrice: [11.5, 11.8, 12.0, 12.2, 12.0, 12.5, 12.8, 12.7],
+      forecastDays: ["Sep 09", "Sep 11", "Sep 13", "Sep 15", "Sep 17", "Sep 19", "Sep 21"],
+      predictedDemandMetric: [2100, 2150, 2200, 2280, 2350, 2400, 2380],
+      predictedPriceMin: [19.0, 19.5, 20.0, 20.8, 21.5, 22.0, 21.8],
+      predictedPriceMax: [22.0, 22.5, 23.0, 23.8, 24.5, 25.0, 24.5],
+      volatilityIndex: "Low (Stable Cold Chain Inventory)",
+      advisory: "Demand steady across food processors and institutional kitchens. Contract forward commitments at ₹21.50/kg farmgate."
+    }
+  },
+
+  // 4. ROUTE OPTIMIZATION (VRP) SCENARIO: NASHIK ONION CLUSTER TO MUMBAI URBAN HUBS
+  logisticsCorridor: {
+    corridorName: "Western Agri-Express: Nashik Cluster to Greater Mumbai Hubs",
+    vehicle: {
+      regNumber: "MH-15-EG-4921",
+      driverName: "Dnyaneshwar Shinde",
+      vehicleType: "14-Ft Reefer Van (4.5 Ton Capacity)",
+      currentStatus: "En-Route Aggregation",
+      temperatureTarget: "4.0°C",
+      temperatureCurrent: "4.2°C",
+      humidity: "86%",
+      etaRemaining: "2h 45m"
+    },
+    waypoints: [
+      {
+        id: "W-01",
+        name: "Farm 1: Dindori Agro Orchard",
+        type: "farm-pickup",
+        lat: 20.2012,
+        lng: 73.8340,
+        cargo: "12 Quintals Red Onion",
+        pickupTime: "05:30 AM",
+        status: "Completed"
+      },
+      {
+        id: "W-02",
+        name: "Farm 2: Niphad Krishi Farm",
+        type: "farm-pickup",
+        lat: 20.0784,
+        lng: 74.1082,
+        cargo: "15 Quintals Red Onion",
+        pickupTime: "06:45 AM",
+        status: "Completed"
+      },
+      {
+        id: "W-03",
+        name: "Farm 3: Lasalgaon Smallholders Pool",
+        type: "farm-pickup",
+        lat: 20.1472,
+        lng: 74.2301,
+        cargo: "18 Quintals Red Onion",
+        pickupTime: "08:10 AM",
+        status: "Loading"
+      },
+      {
+        id: "W-04",
+        name: "Sahyadri FPO Pre-Cooling Hub",
+        type: "hub",
+        lat: 20.0334,
+        lng: 73.9100,
+        cargo: "Quality QC & Cold Staging",
+        pickupTime: "10:30 AM",
+        status: "Scheduled"
+      },
+      {
+        id: "W-05",
+        name: "Mumbai B2C Micro-Fulfillment Center (Kurla)",
+        type: "delivery",
+        lat: 19.0726,
+        lng: 72.8797,
+        cargo: "Consumer Farm-Box Distribution",
+        pickupTime: "02:15 PM",
+        status: "Scheduled"
+      },
+      {
+        id: "W-06",
+        name: "Navi Mumbai B2B Institutional Depot (Vashi)",
+        type: "delivery",
+        lat: 19.0771,
+        lng: 72.9986,
+        cargo: "Bulk Restaurant & Supermarket Dispatch",
+        pickupTime: "03:45 PM",
+        status: "Scheduled"
+      }
+    ],
+    traditionalVsAIOptimized: {
+      traditionalDistanceKm: 342,
+      optimizedDistanceKm: 268,
+      kmSaved: 74,
+      traditionalTimeHours: 9.5,
+      optimizedTimeHours: 6.8,
+      timeSavedHours: 2.7,
+      fuelCostSavedINR: 4250,
+      carbonReductionKg: 86.4,
+      spoilageReductionPct: 18.5
+    }
+  },
+
+  // 5. DOCA ESSENTIAL COMMODITIES PRICE SPREAD MONITOR
+  docaPriceWatch: [
+    {
+      commodity: "Red Onion",
+      state: "Maharashtra",
+      keyMandi: "Lasalgaon APMC",
+      farmgateAvgPrice: "₹ 16.50 / kg",
+      mandiWholesalePrice: "₹ 24.00 / kg",
+      retailUrbanPrice: "₹ 38.00 / kg",
+      kisanDirectPrice: "₹ 29.00 / kg",
+      priceSpreadPct: "+130.3%", // Retail vs Farmgate in traditional
+      kisanDirectSpreadPct: "+28.8%",
+      farmerGainPct: "+48.5%",
+      consumerSavingPct: "-23.7%",
+      riskLevel: "Moderate Risk"
+    },
+    {
+      commodity: "Hybrid Tomato",
+      state: "Karnataka",
+      keyMandi: "Kolar APMC",
+      farmgateAvgPrice: "₹ 12.50 / kg",
+      mandiWholesalePrice: "₹ 19.00 / kg",
+      retailUrbanPrice: "₹ 36.00 / kg",
+      kisanDirectPrice: "₹ 26.00 / kg",
+      priceSpreadPct: "+188.0%",
+      kisanDirectSpreadPct: "+44.4%",
+      farmerGainPct: "+76.0%",
+      consumerSavingPct: "-27.8%",
+      riskLevel: "High Price Spread"
+    },
+    {
+      commodity: "Chipsona Potato",
+      state: "Uttar Pradesh",
+      keyMandi: "Agra APMC",
+      farmgateAvgPrice: "₹ 11.00 / kg",
+      mandiWholesalePrice: "₹ 16.50 / kg",
+      retailUrbanPrice: "₹ 28.00 / kg",
+      kisanDirectPrice: "₹ 21.00 / kg",
+      priceSpreadPct: "+154.5%",
+      kisanDirectSpreadPct: "+36.4%",
+      farmerGainPct: "+63.6%",
+      consumerSavingPct: "-25.0%",
+      riskLevel: "Stable"
+    },
+    {
+      commodity: "Desi Chana (Gram)",
+      state: "Madhya Pradesh",
+      keyMandi: "Indore APMC",
+      farmgateAvgPrice: "₹ 54.00 / kg",
+      mandiWholesalePrice: "₹ 66.00 / kg",
+      retailUrbanPrice: "₹ 104.00 / kg",
+      kisanDirectPrice: "₹ 84.00 / kg",
+      priceSpreadPct: "+92.6%",
+      kisanDirectSpreadPct: "+27.3%",
+      farmerGainPct: "+33.3%",
+      consumerSavingPct: "-19.2%",
+      riskLevel: "Normal"
+    }
+  ]
+};
+
+
+/* ======================================================== */
+/* 2. MARKETPLACE ENGINE (B2C & B2B)                        */
+/* ======================================================== */
+/**
+ * KisanDirect AI - Marketplace Logic (B2C Consumers & B2B Bulk Procurement)
+ */
+
+window.MarketplaceModule = {
+  activeFilter: 'all',
+  searchQuery: '',
+  cart: [],
+
+  init() {
+    this.renderProducts();
+    this.bindEvents();
+    this.updateCartCount();
+  },
+
+  bindEvents() {
+    // Search filter
+    const searchInput = document.getElementById('marketSearchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchQuery = e.target.value.toLowerCase().trim();
+        this.renderProducts();
+      });
+    }
+
+    // Category pills
+    const filterPills = document.querySelectorAll('.filter-pill');
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        filterPills.forEach(p => p.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        this.activeFilter = e.currentTarget.getAttribute('data-category');
+        this.renderProducts();
+      });
+    });
+
+    // Farmer Listing Form submission
+    const listingForm = document.getElementById('farmerListingForm');
+    if (listingForm) {
+      listingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleFarmerListingSubmit();
+      });
+    }
+
+    // Farmer Price Calculator dynamic preview
+    const farmgateInput = document.getElementById('newCropPrice');
+    if (farmgateInput) {
+      farmgateInput.addEventListener('input', () => this.updateListingProfitPreview());
+    }
+  },
+
+  renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    if (!grid) return;
+
+    let items = KisanData.commodities;
+
+    // Apply category filter
+    if (this.activeFilter !== 'all') {
+      items = items.filter(item => item.category.toLowerCase() === this.activeFilter.toLowerCase());
+    }
+
+    // Apply search
+    if (this.searchQuery) {
+      items = items.filter(item => 
+        item.name.toLowerCase().includes(this.searchQuery) ||
+        item.fpo.toLowerCase().includes(this.searchQuery) ||
+        item.location.toLowerCase().includes(this.searchQuery)
+      );
+    }
+
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌾</div>
+          <h4>No farm listings match your search</h4>
+          <p>Try clearing filters or search terms</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = items.map(item => {
+      const savingsPerKg = (item.retailMandiPrice - item.consumerDirectPrice).toFixed(1);
+      const savingsPct = Math.round(((item.retailMandiPrice - item.consumerDirectPrice) / item.retailMandiPrice) * 100);
+      const farmerExtra = (item.farmerDirectPrice - item.mandiBenchmarkPrice).toFixed(1);
+      const farmerExtraPct = Math.round(((item.farmerDirectPrice - item.mandiBenchmarkPrice) / item.mandiBenchmarkPrice) * 100);
+
+      const gradeClass = item.grade.includes('Grade A') ? 'badge-grade-a' : 'badge-organic';
+
+      return `
+        <div class="product-card" id="card-${item.id}">
+          <div class="product-image-container">
+            <img src="${item.image}" alt="${item.name}" class="product-img" loading="lazy" />
+            <div class="product-badge-overlay">
+              <span class="badge ${gradeClass}">${item.grade}</span>
+              ${item.certifications.map(c => `<span class="badge badge-grade-b">${c}</span>`).join('')}
+            </div>
+            <div class="harvest-timestamp-chip">
+              <i data-lucide="calendar"></i> Harvested: ${item.harvestDate}
+            </div>
+          </div>
+
+          <div class="product-body">
+            <div class="product-origin">
+              <i data-lucide="map-pin"></i> ${item.location}
+            </div>
+            <h4 class="product-title">${item.name}</h4>
+            <div class="product-meta-row">
+              <span><strong>FPO:</strong> ${item.fpo}</span>
+              <span class="badge badge-warning">Available: ${item.batchSize}</span>
+            </div>
+
+            <!-- Price & Middleman Elimination Comparison -->
+            <div class="price-comparison-box">
+              <div>
+                <div class="direct-price">₹${item.consumerDirectPrice.toFixed(2)} <span>/ kg</span></div>
+                <div style="font-size: 0.72rem; color: var(--emerald-400);">Farmer gets: ₹${item.farmerDirectPrice.toFixed(2)}/kg (+${farmerExtraPct}%)</div>
+              </div>
+              <div class="mandi-comparison">
+                <span class="mandi-strike">Mandi: ₹${item.retailMandiPrice.toFixed(2)}/kg</span>
+                <span class="savings-tag">You Save ${savingsPct}%</span>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="btn btn-outline btn-sm" onclick="MarketplaceModule.viewTraceability('${item.id}')" title="Scan origin and farm certificate">
+                <i data-lucide="qr-code"></i> Trace Farm
+              </button>
+              <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="MarketplaceModule.addToCart('${item.id}')">
+                <i data-lucide="shopping-bag"></i> Order Direct
+              </button>
+              <button class="btn btn-accent btn-sm" onclick="MarketplaceModule.openB2BModal('${item.id}')" title="Bulk wholesale procurement">
+                <i data-lucide="truck"></i> B2B Bulk
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (window.lucide && lucide.createIcons) {
+      lucide.createIcons();
+    }
+  },
+
+  addToCart(commodityId) {
+    const item = KisanData.commodities.find(c => c.id === commodityId);
+    if (!item) return;
+
+    const existing = this.cart.find(c => c.id === commodityId);
+    if (existing) {
+      existing.qty += item.minOrderKg;
+    } else {
+      this.cart.push({
+        id: item.id,
+        name: item.name,
+        price: item.consumerDirectPrice,
+        farmerShare: item.farmerDirectPrice,
+        mandiPrice: item.retailMandiPrice,
+        qty: item.minOrderKg,
+        fpo: item.fpo,
+        image: item.image
+      });
+    }
+
+    this.updateCartCount();
+    this.showToast(`Added ${item.minOrderKg}kg of ${item.name} directly from ${item.fpo}!`, 'success');
+  },
+
+  updateCartCount() {
+    const countEl = document.getElementById('cartBadgeCount');
+    if (countEl) {
+      const totalItems = this.cart.reduce((sum, item) => sum + item.qty, 0);
+      countEl.textContent = totalItems > 0 ? `${totalItems}kg` : '0';
+    }
+  },
+
+  openCartModal() {
+    const modal = document.getElementById('cartModal');
+    const content = document.getElementById('cartModalBody');
+    if (!modal || !content) return;
+
+    if (this.cart.length === 0) {
+      content.innerHTML = `
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🛒</div>
+          <h4>Your direct farm basket is empty</h4>
+          <p>Add fresh produce directly from verified FPOs to cut out the middlemen!</p>
+        </div>
+      `;
+    } else {
+      let subtotal = 0;
+      let traditionalMandiSubtotal = 0;
+      let totalFarmerPayout = 0;
+
+      const itemsHtml = this.cart.map((c, idx) => {
+        const itemCost = c.price * c.qty;
+        const mandiCost = c.mandiPrice * c.qty;
+        const farmerEarnings = c.farmerShare * c.qty;
+
+        subtotal += itemCost;
+        traditionalMandiSubtotal += mandiCost;
+        totalFarmerPayout += farmerEarnings;
+
+        return `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <div>
+              <div style="font-weight: 700; color: #fff;">${c.name}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">${c.qty} kg @ ₹${c.price}/kg (FPO: ${c.fpo})</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 700; color: var(--emerald-400);">₹${itemCost.toFixed(2)}</div>
+              <div style="font-size: 0.72rem; color: var(--rose-400); text-decoration: line-through;">Mandi: ₹${mandiCost.toFixed(2)}</div>
+              <button onclick="MarketplaceModule.removeFromCart(${idx})" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.72rem; text-decoration: underline;">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const totalSavings = traditionalMandiSubtotal - subtotal;
+      const savingsPct = Math.round((totalSavings / traditionalMandiSubtotal) * 100);
+
+      content.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">${itemsHtml}</div>
+
+        <!-- Transparent Middleman Elimination Receipt -->
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald-500); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+          <h4 style="color: var(--emerald-400); margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="check-circle"></i> Impact Transparency Breakdown
+          </h4>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+            <span>Consumer Direct Total:</span>
+            <strong style="color: #fff;">₹${subtotal.toFixed(2)}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--emerald-400);">
+            <span>Direct Payout to Farmer/FPO:</span>
+            <strong>₹${totalFarmerPayout.toFixed(2)} (72% of total)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--amber-400);">
+            <span>Consumer Direct Savings:</span>
+            <strong>₹${totalSavings.toFixed(2)} (${savingsPct}% saved)</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+            <span>Traditional APMC Middlemen Cut Avoided:</span>
+            <strong style="color: var(--rose-400);">₹${(totalSavings * 1.3).toFixed(2)} eliminated</strong>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%;" onclick="MarketplaceModule.checkout()">
+          <i data-lucide="shield-check"></i> Place Direct Farm Order (₹${subtotal.toFixed(2)})
+        </button>
+      `;
+    }
+
+    modal.classList.add('open');
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  },
+
+  removeFromCart(index) {
+    this.cart.splice(index, 1);
+    this.updateCartCount();
+    this.openCartModal();
+  },
+
+  checkout() {
+    this.cart = [];
+    this.updateCartCount();
+    this.closeModal('cartModal');
+    this.showToast("Order Placed Successfully! Reefer vehicle aggregation scheduled with FPO.", 'success');
+  },
+
+  viewTraceability(commodityId) {
+    const item = KisanData.commodities.find(c => c.id === commodityId);
+    if (!item) return;
+
+    const modal = document.getElementById('traceabilityModal');
+    const content = document.getElementById('traceabilityModalBody');
+    if (!modal || !content) return;
+
+    content.innerHTML = `
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="background: #fff; padding: 14px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+          <!-- Dynamic QR representation -->
+          <svg width="150" height="150" viewBox="0 0 100 100" style="display: block;">
+            <rect width="100" height="100" fill="#ffffff" />
+            <rect x="10" y="10" width="25" height="25" fill="#0f172a" />
+            <rect x="15" y="15" width="15" height="15" fill="#ffffff" />
+            <rect x="18" y="18" width="9" height="9" fill="#0f172a" />
+            <rect x="65" y="10" width="25" height="25" fill="#0f172a" />
+            <rect x="70" y="15" width="15" height="15" fill="#ffffff" />
+            <rect x="73" y="18" width="9" height="9" fill="#0f172a" />
+            <rect x="10" y="65" width="25" height="25" fill="#0f172a" />
+            <rect x="15" y="70" width="15" height="15" fill="#ffffff" />
+            <rect x="18" y="73" width="9" height="9" fill="#0f172a" />
+            <rect x="42" y="42" width="16" height="16" fill="#10b981" />
+            <circle cx="50" cy="50" r="4" fill="#ffffff" />
+            <rect x="40" y="15" width="10" height="10" fill="#0f172a" />
+            <rect x="15" y="40" width="10" height="10" fill="#0f172a" />
+            <rect x="65" y="45" width="20" height="8" fill="#0f172a" />
+            <rect x="45" y="65" width="12" height="20" fill="#0f172a" />
+            <rect x="70" y="75" width="15" height="10" fill="#0f172a" />
+          </svg>
+        </div>
+        <h4 style="margin-top: 1rem; color: var(--emerald-400);">${item.name}</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">DOCA Digital Farm Passport ID: #DOCA-IND-${item.id}</p>
+      </div>
+
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1.25rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Origin FPO:</span>
+          <strong>${item.fpo}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Farm GPS Coordinates:</span>
+          <code>${item.geo.lat.toFixed(4)}° N, ${item.geo.lng.toFixed(4)}° E</code>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Harvest Batch Date:</span>
+          <strong>${item.harvestDate}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Quality & Grade:</span>
+          <span class="badge badge-grade-a">${item.grade}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Cold Storage Pre-Cooling:</span>
+          <span style="color: var(--cyan-400);">Yes (4°C Controlled)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Pesticide Residue Level:</span>
+          <strong style="color: var(--emerald-400);">Zero Residue (Safe)</strong>
+        </div>
+      </div>
+    `;
+
+    modal.classList.add('open');
+  },
+
+  openB2BModal(commodityId) {
+    const item = KisanData.commodities.find(c => c.id === commodityId);
+    if (!item) return;
+
+    const modal = document.getElementById('b2bProcurementModal');
+    const content = document.getElementById('b2bModalBody');
+    if (!modal || !content) return;
+
+    content.innerHTML = `
+      <div style="margin-bottom: 1.25rem;">
+        <h4>Bulk Institutional Procurement Request (RFQ)</h4>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Direct contract farming & pallet-level orders for food processors, supermarkets, and restaurants.</p>
+      </div>
+
+      <div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>Selected Crop:</span> <strong>${item.name}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span>Producer FPO:</span> <strong>${item.fpo}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--emerald-400);">
+          <span>Direct Farmgate Rate:</span> <strong>₹${item.b2bPricePerQuintal} / Quintal</strong>
+        </div>
+      </div>
+
+      <form id="b2bRfqForm" onsubmit="MarketplaceModule.submitB2BRFQ(event, '${item.id}')">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Procuring Organization</label>
+            <input type="text" class="form-control" required placeholder="e.g. Reliance Fresh / ITC Hotel Chain" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Required Quantity (Quintals)</label>
+            <input type="number" class="form-control" min="${item.b2bMinQuintal}" value="${item.b2bMinQuintal}" required />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Destination Urban Fulfillment Center</label>
+            <select class="form-control">
+              <option>Mumbai - Vashi Distribution Depot</option>
+              <option>Delhi NCR - Kundli Agro Logistics Hub</option>
+              <option>Bengaluru - Electronic City Cold Depot</option>
+              <option>Hyderabad - Shamshabad Food Logistics Hub</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Logistics Fleet</label>
+            <select class="form-control">
+              <option>Reefer Cold-Chain Express (2°C - 6°C)</option>
+              <option>Ventilated High-Capacity 10-Ton Truck</option>
+              <option>Standard Aggregated Dry Carrier</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Contract Delivery Frequency</label>
+          <select class="form-control">
+            <option>One-Time Spot Dispatch</option>
+            <option>Bi-Weekly Scheduled Harvest Drop (30 Days)</option>
+            <option>Quarterly Long-Term Supply Agreement</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-accent" style="width: 100%; margin-top: 0.5rem;">
+          <i data-lucide="send"></i> Submit Direct B2B Procurement Contract
+        </button>
+      </form>
+    `;
+
+    modal.classList.add('open');
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  },
+
+  submitB2BRFQ(event, commodityId) {
+    event.preventDefault();
+    this.closeModal('b2bProcurementModal');
+    this.showToast("B2B Procurement Request Sent! FPO management notified to accept digital smart contract.", "success");
+  },
+
+  openFarmerListingModal() {
+    const modal = document.getElementById('farmerListingModal');
+    if (modal) {
+      modal.classList.add('open');
+      this.updateListingProfitPreview();
+    }
+  },
+
+  updateListingProfitPreview() {
+    const priceInput = document.getElementById('newCropPrice');
+    const previewBox = document.getElementById('farmerProfitPreview');
+    if (!priceInput || !previewBox) return;
+
+    const farmerRate = parseFloat(priceInput.value) || 20;
+    const traditionalAPMCRate = farmerRate * 0.65; // middleman usually gives 35% less
+    const extraProfitPct = Math.round(((farmerRate - traditionalAPMCRate) / traditionalAPMCRate) * 100);
+
+    previewBox.innerHTML = `
+      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Direct vs Mandi Realization Comparison:</div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: var(--emerald-400); font-weight: 700;">Your Direct Price: ₹${farmerRate.toFixed(2)}/kg</span>
+        <span style="color: var(--rose-400); font-size: 0.75rem;">Middleman APMC offer: ~₹${traditionalAPMCRate.toFixed(2)}/kg</span>
+      </div>
+      <div style="font-size: 0.75rem; color: var(--amber-400); margin-top: 4px;">
+        ★ You earn <strong>+${extraProfitPct}% more</strong> by cutting out middlemen commission & cess.
+      </div>
+    `;
+  },
+
+  handleFarmerListingSubmit() {
+    const name = document.getElementById('newCropName').value;
+    const category = document.getElementById('newCropCategory').value;
+    const fpo = document.getElementById('newCropFpo').value;
+    const location = document.getElementById('newCropLocation').value;
+    const price = parseFloat(document.getElementById('newCropPrice').value);
+    const quantity = document.getElementById('newCropQuantity').value;
+    const grade = document.getElementById('newCropGrade').value;
+
+    const newCrop = {
+      id: `CROP-${Date.now().toString().slice(-4)}`,
+      name,
+      category,
+      fpo,
+      location,
+      geo: { lat: 19.8762, lng: 75.3433 },
+      variety: "Certified Cultivar",
+      grade,
+      harvestDate: new Date().toISOString().split('T')[0],
+      batchSize: quantity,
+      minOrderKg: 5,
+      farmerDirectPrice: price,
+      mandiBenchmarkPrice: +(price * 0.68).toFixed(2),
+      retailMandiPrice: +(price * 1.5).toFixed(2),
+      consumerDirectPrice: +(price * 1.2).toFixed(2),
+      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
+      description: "Direct farm-gate harvest listed through KisanDirect AI verified FPO aggregation gateway.",
+      certifications: ["DOCA Verified", "Zero Middlemen Certified"],
+      b2bAvailable: true,
+      b2bMinQuintal: 20,
+      b2bPricePerQuintal: Math.round(price * 95)
+    };
+
+    KisanData.commodities.unshift(newCrop);
+    this.renderProducts();
+    this.closeModal('farmerListingModal');
+    this.showToast(`Listing Created! ${name} is now live with aggregated logistics pickup enabled.`, 'success');
+  },
+
+  closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.classList.remove('open');
+  },
+
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+      <i data-lucide="check-circle" style="color: var(--emerald-400);"></i>
+      <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+};
+
+
+/* ======================================================== */
+/* 3. KISAN-VISION QC SCANNER & KISAN-VANI VOICE COPILOT   */
+/* ======================================================== */
+/**
+ * KisanDirect AI - Unique Innovation Modules:
+ * 1. Kisan-Vision: Computer Vision AI Crop Quality & Defect Scanner (Stops Middleman Grading Fraud)
+ * 2. Kisan-Vani: Multilingual Voice & Audio Assistant (Hindi & English via Web Speech API)
+ */
+
+window.AIVisionModule = {
+  currentCrop: 'tomato',
+
+  samples: {
+    tomato: {
+      name: "Kolar Hybrid Vine-Ripe Tomato",
+      img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=700&q=80",
+      grade: "Grade A+",
+      overallScore: "96.4%",
+      ripeness: "94% (Optimal Harvest Red)",
+      blemishRate: "1.2% (Negligible)",
+      diameter: "62 mm (Uniformity 98%)",
+      firmness: "4.8 kg/cm² (10-Day Transit Safe)",
+      fairValueAdjustment: "+14% Above APMC Base",
+      recommendedMarket: "Tier-1 Mumbai Retail & Export",
+      hash: "SHA256: 7f8a91c2b4d90e8a7f6c5b4a3d2e1f0a"
+    },
+    onion: {
+      name: "Nashik Garwa Red Onion",
+      img: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=700&q=80",
+      grade: "Grade A Export",
+      overallScore: "95.1%",
+      ripeness: "100% Sun-Cured Neck Tight",
+      blemishRate: "0.8% (Zero Sprout Defect)",
+      diameter: "55 mm - 65 mm (Premium Sort)",
+      firmness: "High Dry Matter (4-Month Shelf Life)",
+      fairValueAdjustment: "+18% Direct Realization",
+      recommendedMarket: "Bulk Urban Institutional Chains",
+      hash: "SHA256: 3c5e89a1f2b4d6e80a7c9e1b3d5f7a9c"
+    },
+    potato: {
+      name: "Agra Chipsona White Potato",
+      img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=700&q=80",
+      grade: "Grade A Industrial",
+      overallScore: "94.8%",
+      ripeness: "Low Sugar / High Starch 21.5%",
+      blemishRate: "1.5% (Skin Intact)",
+      diameter: "70 mm - 85 mm (Jumbo Culinary)",
+      firmness: "Cold Storage Staged 4°C",
+      fairValueAdjustment: "+12% Processing Premium",
+      recommendedMarket: "Food Processors & Commercial Kitchens",
+      hash: "SHA256: 9b2d4f6a8c0e1a3b5c7d9e1f3a5b7c9e"
+    },
+    apple: {
+      name: "Kinnaur Mountain Crisp Apple",
+      img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=700&q=80",
+      grade: "Premium Export Royal",
+      overallScore: "98.2%",
+      ripeness: "92% Natural Blush (Wax-Free)",
+      blemishRate: "0.4% (Pristine High-Altitude)",
+      diameter: "75 mm (Select Table Grade)",
+      firmness: "Crisp High Brix (14.2°)",
+      fairValueAdjustment: "+28% Direct Farmgate Return",
+      recommendedMarket: "Premium B2C Farm-to-Fork Bundles",
+      hash: "SHA256: 4a6c8e0b2d4f6a8c0e1b3d5f7a9c1e3b"
+    }
+  },
+
+  init() {
+    this.renderCrop(this.currentCrop);
+    this.bindEvents();
+  },
+
+  bindEvents() {
+    const cropButtons = document.querySelectorAll('.sample-thumb-btn');
+    cropButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        cropButtons.forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        this.currentCrop = e.currentTarget.getAttribute('data-crop');
+        this.triggerScanAnimation();
+      });
+    });
+
+    const rescanBtn = document.getElementById('runVisionScanBtn');
+    if (rescanBtn) {
+      rescanBtn.addEventListener('click', () => {
+        this.triggerScanAnimation();
+      });
+    }
+  },
+
+  triggerScanAnimation() {
+    const laser = document.getElementById('scannerLaser');
+    const bbox = document.getElementById('aiBoundingBox');
+    if (laser) laser.style.display = 'block';
+    if (bbox) bbox.style.opacity = '0.3';
+
+    MarketplaceModule.showToast("Kisan-Vision: Running neural defect inspection & ripeness neural analysis...", "info");
+
+    setTimeout(() => {
+      this.renderCrop(this.currentCrop);
+      if (bbox) bbox.style.opacity = '1';
+      MarketplaceModule.showToast("Inspection Complete! DOCA Digital QC Certificate generated with tamper-proof hash.", "success");
+    }, 1200);
+  },
+
+  renderCrop(key) {
+    const data = this.samples[key];
+    if (!data) return;
+
+    // Viewfinder updates
+    const imgEl = document.getElementById('visionCropImage');
+    const cropTitleEl = document.getElementById('visionCropTitle');
+    const overallScoreEl = document.getElementById('visionOverallScore');
+    const gradeLetterEl = document.getElementById('visionGradeLetter');
+    const ripenessEl = document.getElementById('visionRipeness');
+    const blemishEl = document.getElementById('visionBlemish');
+    const diameterEl = document.getElementById('visionDiameter');
+    const firmnessEl = document.getElementById('visionFirmness');
+    const fairAdjustmentEl = document.getElementById('visionAdjustment');
+    const hashEl = document.getElementById('visionHash');
+    const meterEl = document.getElementById('visionMeterFill');
+
+    if (imgEl) imgEl.src = data.img;
+    if (cropTitleEl) cropTitleEl.textContent = data.name;
+    if (overallScoreEl) overallScoreEl.textContent = data.overallScore;
+    if (gradeLetterEl) gradeLetterEl.textContent = data.grade;
+    if (ripenessEl) ripenessEl.textContent = data.ripeness;
+    if (blemishEl) blemishEl.textContent = data.blemishRate;
+    if (diameterEl) diameterEl.textContent = data.diameter;
+    if (firmnessEl) firmnessEl.textContent = data.firmness;
+    if (fairAdjustmentEl) fairAdjustmentEl.textContent = data.fairValueAdjustment;
+    if (hashEl) hashEl.textContent = data.hash;
+    if (meterEl) meterEl.style.width = data.overallScore;
+  }
+};
+
+/**
+ * 2. KISAN VANI MULTILINGUAL VOICE COPILOT
+ */
+window.KisanVaniModule = {
+  isSpeaking: false,
+  isPaused: false,
+  currentLang: 'mr',
+  currentBulletinText: '',
+  audioElement: null,
+
+  async init() {
+    await this.fetchBulletin(this.currentLang);
+  },
+
+  async setLanguage(lang, chipBtn) {
+    this.currentLang = lang;
+    document.querySelectorAll('.lang-chip').forEach(c => c.classList.remove('active'));
+    if (chipBtn) chipBtn.classList.add('active');
+
+    const badge = document.getElementById('vaniLangBadge');
+    if (badge) badge.textContent = `${lang.toUpperCase()} Active`;
+
+    await this.fetchBulletin(lang);
+  },
+
+  async fetchBulletin(lang = 'mr') {
+    const transcriptEl = document.getElementById('vaniTranscript');
+    if (transcriptEl) transcriptEl.innerHTML = '<div style="color: var(--text-muted);">लोड होत आहे... (Fetching daily Agmarknet bulletin...)</div>';
+
+    try {
+      const res = await fetch(`/api/v1/kisan-vani/bulletin?lang=${lang}`);
+      const data = await res.json();
+      if (data.success && data.bulletin) {
+        this.currentBulletinText = data.bulletin;
+        if (transcriptEl) {
+          transcriptEl.innerHTML = `
+            <div style="font-size: 0.78rem; color: var(--emerald-400); font-weight: 700; margin-bottom: 6px;">
+              📡 ${data.date} • ${data.languageName} (${data.nativeName}) Bulletin:
+            </div>
+            <div>${data.bulletin}</div>
+          `;
+        }
+      }
+    } catch (e) {
+      console.warn('Fallback to local bulletin:', e);
+      this.currentBulletinText = "किसान डायरेक्ट आजचे दैनिक बाजार भाव: लासलगाव कांदा सरासरी दर ₹24 प्रति किलो. थेट विक्रीने शेतकऱ्यांना 32% अधिक नफा.";
+      if (transcriptEl) transcriptEl.textContent = this.currentBulletinText;
+    }
+  },
+
+  play() {
+    if (!this.currentBulletinText) {
+      this.fetchBulletin(this.currentLang).then(() => this.play());
+      return;
+    }
+
+    if (this.isPaused && window.speechSynthesis.paused) {
+      this.resume();
+      return;
+    }
+
+    this.stop(); // Stop any currently playing audio
+
+    // Tier 1: Web Speech API
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(this.currentBulletinText);
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      // Select matching voice if available
+      const langCodes = {
+        mr: 'mr-IN', hi: 'hi-IN', en: 'en-IN', te: 'te-IN',
+        ta: 'ta-IN', kn: 'kn-IN', gu: 'gu-IN', bn: 'bn-IN', pa: 'pa-IN'
+      };
+      const code = langCodes[this.currentLang] || 'hi-IN';
+      utterance.lang = code;
+
+      const voices = window.speechSynthesis.getVoices();
+      const matched = voices.find(v => v.lang && v.lang.toLowerCase().includes(this.currentLang));
+      if (matched) utterance.voice = matched;
+
+      utterance.onstart = () => {
+        this.isSpeaking = true;
+        this.isPaused = false;
+        this.setVisualizer(true);
+        const indicator = document.getElementById('voiceIndicatorText');
+        if (indicator) indicator.textContent = "Kisan Vani Speaking...";
+        MarketplaceModule.showToast(`🔊 Playing Daily Mandi Bulletin in ${this.currentLang.toUpperCase()}`, "info");
+      };
+
+      utterance.onend = () => {
+        this.isSpeaking = false;
+        this.isPaused = false;
+        this.setVisualizer(false);
+        const indicator = document.getElementById('voiceIndicatorText');
+        if (indicator) indicator.textContent = "Kisan Vani Voice";
+      };
+
+      utterance.onerror = (err) => {
+        console.warn("Web Speech API error, falling back to server PCM stream:", err);
+        this.fallbackServerAudio();
+      };
+
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        this.fallbackServerAudio();
+      }
+    } else {
+      this.fallbackServerAudio();
+    }
+  },
+
+  fallbackServerAudio() {
+    this.stop();
+    this.audioElement = new Audio(`/api/v1/kisan-vani/tts-stream?lang=${this.currentLang}`);
+    this.audioElement.onplay = () => {
+      this.isSpeaking = true;
+      this.setVisualizer(true);
+      MarketplaceModule.showToast("🔊 Streaming acoustic advisory chime from KisanDirect server...", "info");
+    };
+    this.audioElement.onended = () => {
+      this.isSpeaking = false;
+      this.setVisualizer(false);
+    };
+    this.audioElement.play().catch(e => console.warn('Audio element play blocked:', e));
+  },
+
+  pause() {
+    if (this.isSpeaking && !this.isPaused) {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+      }
+      if (this.audioElement) this.audioElement.pause();
+      this.isPaused = true;
+      this.setVisualizer(false);
+      MarketplaceModule.showToast("⏸️ Kisan Vani Audio Paused", "info");
+    }
+  },
+
+  resume() {
+    if (this.isPaused) {
+      if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+      if (this.audioElement) this.audioElement.play();
+      this.isPaused = false;
+      this.setVisualizer(true);
+      MarketplaceModule.showToast("▶️ Resumed Bulletin Playback", "info");
+    }
+  },
+
+  stop() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement.currentTime = 0;
+      this.audioElement = null;
+    }
+    this.isSpeaking = false;
+    this.isPaused = false;
+    this.setVisualizer(false);
+    const indicator = document.getElementById('voiceIndicatorText');
+    if (indicator) indicator.textContent = "Kisan Vani Voice";
+  },
+
+  replay() {
+    this.stop();
+    setTimeout(() => this.play(), 200);
+  },
+
+  setVisualizer(isActive) {
+    const wf = document.getElementById('vaniWaveform');
+    if (wf) {
+      if (isActive) wf.classList.add('speaking');
+      else wf.classList.remove('speaking');
+    }
+  },
+
+  openVoiceModal() {
+    const modal = document.getElementById('kisanVaniModal');
+    if (modal) {
+      modal.classList.add('open');
+      if (!this.currentBulletinText) this.fetchBulletin(this.currentLang);
+    }
+  }
+};
+
+
+/* ======================================================== */
+/* 4. AI DEMAND & PRICE FORECASTING                         */
+/* ======================================================== */
+/**
+ * KisanDirect AI - AI Demand Forecasting & Price Volatility Engine
+ */
+
+window.AIForecastingModule = {
+  currentCropKey: 'onion',
+  chartInstance: null,
+
+  init() {
+    this.renderForecastUI(this.currentCropKey);
+    this.bindEvents();
+  },
+
+  bindEvents() {
+    const cropButtons = document.querySelectorAll('.crop-tab-btn');
+    cropButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        cropButtons.forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        this.currentCropKey = e.currentTarget.getAttribute('data-crop');
+        this.renderForecastUI(this.currentCropKey);
+      });
+    });
+
+    const simulateEventBtn = document.getElementById('simulateSurgeBtn');
+    if (simulateEventBtn) {
+      simulateEventBtn.addEventListener('click', () => {
+        this.simulateDemandSpike();
+      });
+    }
+  },
+
+  renderForecastUI(cropKey) {
+    const data = KisanData.forecastData[cropKey];
+    if (!data) return;
+
+    // Render advisory info
+    const advisoryEl = document.getElementById('forecastAdvisoryText');
+    const volatilityEl = document.getElementById('forecastVolatilityBadge');
+    const cropNameEl = document.getElementById('forecastCropName');
+
+    if (advisoryEl) advisoryEl.textContent = data.advisory;
+    if (volatilityEl) {
+      volatilityEl.textContent = data.volatilityIndex;
+      if (data.volatilityIndex.includes('High')) {
+        volatilityEl.className = 'badge badge-danger';
+      } else if (data.volatilityIndex.includes('Moderate')) {
+        volatilityEl.className = 'badge badge-warning';
+      } else {
+        volatilityEl.className = 'badge badge-grade-a';
+      }
+    }
+    if (cropNameEl) cropNameEl.textContent = data.crop;
+
+    this.renderChart(data);
+  },
+
+  renderChart(data) {
+    const canvas = document.getElementById('demandForecastChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+
+    const labels = [...data.historicalDays, ...data.forecastDays];
+    
+    // Fill historical series with nulls for forecast period
+    const histMandiData = [...data.historicalMandiPrice, ...new Array(data.forecastDays.length).fill(null)];
+    
+    // Connect forecast line from the last historical point
+    const lastHistVal = data.historicalMandiPrice[data.historicalMandiPrice.length - 1];
+    const forecastPrefix = new Array(data.historicalDays.length - 1).fill(null);
+    forecastPrefix.push(lastHistVal);
+
+    const forecastMinData = [...forecastPrefix, ...data.predictedPriceMin];
+    const forecastMaxData = [...forecastPrefix, ...data.predictedPriceMax];
+
+    this.chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Historical APMC Mandi Rate (₹/kg)',
+            data: histMandiData,
+            borderColor: '#94a3b8',
+            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointBackgroundColor: '#94a3b8',
+            tension: 0.3
+          },
+          {
+            label: 'AI Forecast: Direct Farmer Price Max (₹/kg)',
+            data: forecastMaxData,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            borderWidth: 3,
+            borderDash: [5, 5],
+            pointRadius: 5,
+            pointBackgroundColor: '#10b981',
+            fill: '+1', // Fill down to min price for confidence band
+            tension: 0.3
+          },
+          {
+            label: 'AI Forecast: Direct Farmer Price Min (₹/kg)',
+            data: forecastMinData,
+            borderColor: '#059669',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            pointRadius: 4,
+            pointBackgroundColor: '#059669',
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#94a3b8',
+              font: { family: 'Plus Jakarta Sans', size: 12 },
+              usePointStyle: true,
+              boxWidth: 8
+            }
+          },
+          tooltip: {
+            backgroundColor: '#1e293b',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              label: function(context) {
+                if (context.parsed.y !== null) {
+                  return `${context.dataset.label}: ₹${context.parsed.y.toFixed(2)}/kg`;
+                }
+                return null;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans' } }
+          },
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: {
+              color: '#64748b',
+              font: { family: 'Plus Jakarta Sans' },
+              callback: (val) => `₹${val}`
+            }
+          }
+        }
+      }
+    });
+  },
+
+  simulateDemandSpike() {
+    const data = KisanData.forecastData[this.currentCropKey];
+    if (!data) return;
+
+    // Simulate a 20% festival or rain surge
+    data.predictedPriceMax = data.predictedPriceMax.map(p => +(p * 1.15).toFixed(1));
+    data.predictedPriceMin = data.predictedPriceMin.map(p => +(p * 1.12).toFixed(1));
+    data.volatilityIndex = "Festival & Logistics Surge Activated (+18% Demand)";
+    data.advisory = "⚡ Demand Surge Injected: Urban bulk buyers placing advance forward contracts. Recommended action: Lock in 50% capacity at elevated rates immediately!";
+
+    this.renderForecastUI(this.currentCropKey);
+    MarketplaceModule.showToast("Simulated Market Event: Urban consumption spike incorporated into AI prediction model!", "info");
+  }
+};
+
+
+/* ======================================================== */
+/* 5. AI ROUTE OPTIMIZATION & EMERGENCY RE-ROUTING (VRP)    */
+/* ======================================================== */
+/**
+ * KisanDirect AI - Route Optimization (VRP) & GIS Telemetry Module
+ */
+
+window.RouteOptimizerModule = {
+  map: null,
+  markersLayer: null,
+  routePolyline: null,
+  optimizedPolyline: null,
+
+  init() {
+    this.renderMetrics();
+    this.renderWaypointsTimeline();
+    this.renderTelemetry();
+    this.initLeafletMap();
+  },
+
+  renderMetrics() {
+    const data = KisanData.logisticsCorridor.traditionalVsAIOptimized;
+    const kmEl = document.getElementById('routeKmSaved');
+    const timeEl = document.getElementById('routeTimeSaved');
+    const fuelEl = document.getElementById('routeFuelSaved');
+    const spoilageEl = document.getElementById('routeSpoilageReduced');
+
+    if (kmEl) kmEl.textContent = `${data.kmSaved} km`;
+    if (timeEl) timeEl.textContent = `${data.timeSavedHours} hrs`;
+    if (fuelEl) fuelEl.textContent = `₹${data.fuelCostSavedINR}`;
+    if (spoilageEl) spoilageEl.textContent = `-${data.spoilageReductionPct}%`;
+  },
+
+  renderWaypointsTimeline() {
+    const container = document.getElementById('waypointsTimeline');
+    if (!container) return;
+
+    const waypoints = KisanData.logisticsCorridor.waypoints;
+    container.innerHTML = waypoints.map(wp => {
+      let statusBadge = 'badge-grade-a';
+      if (wp.status === 'Loading') statusBadge = 'badge-warning';
+      if (wp.status === 'Scheduled') statusBadge = 'badge-grade-b';
+
+      return `
+        <div class="waypoint-item ${wp.type}">
+          <div class="waypoint-dot"></div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+              <div class="waypoint-title">${wp.name}</div>
+              <div class="waypoint-meta">${wp.cargo} • ETA: ${wp.pickupTime}</div>
+            </div>
+            <span class="badge ${statusBadge}">${wp.status}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  renderTelemetry() {
+    const v = KisanData.logisticsCorridor.vehicle;
+    const container = document.getElementById('telemetryBox');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Fleet Vehicle:</span>
+        <strong>${v.regNumber} (${v.vehicleType})</strong>
+      </div>
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Assigned Driver:</span>
+        <span>${v.driverName}</span>
+      </div>
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Reefer Temperature:</span>
+        <strong style="color: var(--cyan-400);">${v.temperatureCurrent} (Target: ${v.temperatureTarget})</strong>
+      </div>
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Cargo Humidity:</span>
+        <span>${v.humidity} RH</span>
+      </div>
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Spoilage Index:</span>
+        <strong style="color: var(--emerald-400);">99.2% Freshness Retained</strong>
+      </div>
+      <div class="telemetry-row">
+        <span style="color: var(--text-muted);">Time to Next Depot:</span>
+        <span class="badge badge-warning">${v.etaRemaining}</span>
+      </div>
+    `;
+  },
+
+  initLeafletMap() {
+    const mapElement = document.getElementById('logisticsMap');
+    if (!mapElement || typeof L === 'undefined') return;
+
+    // Center between Nashik (20.0°N) and Mumbai (19.07°N)
+    if (this.map) {
+      this.map.remove();
+    }
+
+    this.map = L.map('logisticsMap', {
+      zoomControl: true,
+      scrollWheelZoom: false
+    }).setView([19.65, 73.5], 8);
+
+    // Dark-themed tile layer (CartoDB Dark Matter)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 18
+    }).addTo(this.map);
+
+    this.markersLayer = L.layerGroup().addTo(this.map);
+
+    const waypoints = KisanData.logisticsCorridor.waypoints;
+    const latlngs = [];
+
+    // Custom Icon Generator
+    const createCustomIcon = (color, symbol) => {
+      return L.divIcon({
+        className: 'custom-leaflet-marker',
+        html: `<div style="background:${color}; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; box-shadow:0 0 10px ${color}; border:2px solid #fff;">${symbol}</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+    };
+
+    waypoints.forEach((wp, idx) => {
+      latlngs.push([wp.lat, wp.lng]);
+      let color = '#f59e0b';
+      let symbol = `${idx + 1}`;
+      if (wp.type === 'hub') { color = '#06b6d4'; symbol = 'H'; }
+      if (wp.type === 'delivery') { color = '#10b981'; symbol = 'D'; }
+
+      const marker = L.marker([wp.lat, wp.lng], {
+        icon: createCustomIcon(color, symbol)
+      });
+
+      marker.bindPopup(`
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; padding: 4px; color: #0f172a;">
+          <strong style="font-size: 13px;">${wp.name}</strong><br/>
+          <span style="font-size: 11px; color: #475569;">${wp.cargo}</span><br/>
+          <span style="font-size: 11px; font-weight: 600; color: #059669;">Status: ${wp.status} (${wp.pickupTime})</span>
+        </div>
+      `);
+
+      this.markersLayer.addLayer(marker);
+    });
+
+    // Draw optimized AI route corridor polyline
+    this.optimizedPolyline = L.polyline(latlngs, {
+      color: '#10b981',
+      weight: 4,
+      opacity: 0.85,
+      dashArray: '8, 6'
+    }).addTo(this.map);
+
+    // Fit map bounds to waypoints
+    this.map.fitBounds(this.optimizedPolyline.getBounds(), { padding: [40, 40] });
+  },
+
+  reOptimizeRoute() {
+    MarketplaceModule.showToast("AI Routing Engine: Recalculated dynamic traffic & cluster pickups. Route efficiency +12%!", "success");
+    
+    // Animate map view briefly
+    if (this.map) {
+      this.map.flyTo([19.65, 73.5], 9, {
+        duration: 1.5
+      });
+    }
+  },
+
+  triggerEmergencyReRoute() {
+    // Simulate Highway Blockage & Temperature Rise
+    const v = KisanData.logisticsCorridor.vehicle;
+    v.temperatureCurrent = "8.4°C (Alert: Rising)";
+    v.etaRemaining = "4h 15m (Traffic Stalled)";
+    this.renderTelemetry();
+
+    MarketplaceModule.showToast("⚠️ IOT SENSOR ALERT: Reefer temp spiked to 8.4°C! AI re-routing to Thane Processing Hub to prevent spoilage.", "warning");
+
+    // Draw emergency alternate route on map
+    if (this.map) {
+      const emergencyLatLngs = [
+        [20.0334, 73.9100], // Sahyadri Hub
+        [19.2183, 72.9781]  // Thane Mega Agro Food Processing Depot
+      ];
+
+      L.polyline(emergencyLatLngs, {
+        color: '#f59e0b',
+        weight: 5,
+        dashArray: '5, 5'
+      }).addTo(this.map);
+
+      L.marker([19.2183, 72.9781], {
+        icon: L.divIcon({
+          className: 'emergency-hub-marker',
+          html: '<div style="background:#ef4444; color:#fff; padding:3px 8px; border-radius:4px; font-weight:800; font-size:11px; border:1px solid #fff; white-space:nowrap; box-shadow:0 0 12px #ef4444;">🚨 REROUTED: Thane Food Park</div>'
+        })
+      }).addTo(this.map);
+
+      this.map.flyTo([19.2183, 72.9781], 10, { duration: 1.5 });
+    }
+  }
+};
+
+
+
+/* ======================================================== */
+/* 6. DOCA ESSENTIAL COMMODITIES PRICE SURVEILLANCE         */
+/* ======================================================== */
+/**
+ * KisanDirect AI - DOCA Ministry Price Monitoring & Fair Margin Index
+ * Department of Consumer Affairs (DOCA)
+ */
+
+window.DOCAMonitorModule = {
+  init() {
+    this.renderPriceSpreadTable();
+    this.renderMacroMetrics();
+    this.bindEvents();
+  },
+
+  bindEvents() {
+    const bufferBtn = document.getElementById('triggerBufferReleaseBtn');
+    if (bufferBtn) {
+      bufferBtn.addEventListener('click', () => {
+        this.simulateBufferIntervention();
+      });
+    }
+  },
+
+  renderPriceSpreadTable() {
+    const tbody = document.getElementById('docaTableBody');
+    if (!tbody) return;
+
+    const data = KisanData.docaPriceWatch;
+    tbody.innerHTML = data.map(row => {
+      let riskBadge = 'badge-grade-a';
+      if (row.riskLevel.includes('Moderate')) riskBadge = 'badge-warning';
+      if (row.riskLevel.includes('High')) riskBadge = 'badge-danger';
+
+      return `
+        <tr>
+          <td>
+            <strong>${row.commodity}</strong><br/>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">${row.state} (${row.keyMandi})</span>
+          </td>
+          <td>${row.farmgateAvgPrice}</td>
+          <td>${row.mandiWholesalePrice}</td>
+          <td style="color: var(--rose-400); font-weight: 700;">${row.retailUrbanPrice}</td>
+          <td style="color: var(--emerald-400); font-weight: 700;">${row.kisanDirectPrice}</td>
+          <td>
+            <span style="color: var(--rose-400); font-size: 0.8rem; font-weight: 600;">Mandi: ${row.priceSpreadPct}</span><br/>
+            <span style="color: var(--emerald-400); font-size: 0.75rem;">KisanDirect: ${row.kisanDirectSpreadPct}</span>
+          </td>
+          <td>
+            <span style="color: var(--emerald-400); font-weight: 700;">${row.farmerGainPct}</span>
+          </td>
+          <td>
+            <span style="color: var(--amber-400); font-weight: 700;">${row.consumerSavingPct}</span>
+          </td>
+          <td>
+            <span class="badge ${riskBadge}">${row.riskLevel}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  renderMacroMetrics() {
+    // Renders overall high-level metrics for DOCA dashboard
+    const impactFarmers = document.getElementById('docaImpactFarmers');
+    const impactSavings = document.getElementById('docaImpactSavings');
+    const impactMiddlemenEliminated = document.getElementById('docaImpactMiddlemen');
+
+    if (impactFarmers) impactFarmers.textContent = "+48.5% Net";
+    if (impactSavings) impactSavings.textContent = "-24.2% Avg";
+    if (impactMiddlemenEliminated) impactMiddlemenEliminated.textContent = "₹142.8 Cr";
+  },
+
+  simulateBufferIntervention() {
+    MarketplaceModule.showToast("DOCA Price Stabilization Alert: 5,000 MT Onion buffer released via KisanDirect FPO logistics corridor. Retail price stabilized at ₹26/kg!", "info");
+    
+    const onionRow = KisanData.docaPriceWatch.find(r => r.commodity === "Red Onion");
+    if (onionRow) {
+      onionRow.retailUrbanPrice = "₹ 28.00 / kg (Stabilized)";
+      onionRow.riskLevel = "Intervened / Normal";
+      this.renderPriceSpreadTable();
+    }
+  }
+};
+
+
+/* ======================================================== */
+/* 7. APP COORDINATOR & EVENT BINDINGS                     */
+/* ======================================================== */
+/**
+ * KisanDirect AI - Main Application Coordinator & Role Switcher
+ */
+
+
+/* ======================================================== */
+/* 8. RBAC AUTHENTICATION & MULTI-ROLE GOVERNANCE           */
+/* ======================================================== */
+
+window.AuthModule = {
+  currentUser: null,
+  token: null,
+
+  init() {
+    const savedToken = localStorage.getItem('kd_auth_token');
+    const savedUser = localStorage.getItem('kd_auth_user');
+
+    if (savedToken && savedUser) {
+      try {
+        this.token = savedToken;
+        this.currentUser = JSON.parse(savedUser);
+      } catch (e) {
+        this.token = null;
+        this.currentUser = null;
+      }
+    }
+
+    if (!this.currentUser) {
+      // Default to Verified Farmer for smooth interactive initial view
+      this.loginAsDemo('farmer', false);
+    } else {
+      this.applyRoleUI(this.currentUser.role);
+    }
+  },
+
+  async loginAsDemo(role, notify = true) {
+    let email = 'farmer@kisandirect.gov.in';
+    let password = 'farmer123';
+
+    if (role === 'buyer') {
+      email = 'procurement@reliancefresh.com';
+      password = 'buyer123';
+    } else if (role === 'owner') {
+      email = 'owner@kisandirect.com';
+      password = 'owner123';
+    }
+
+    try {
+      const res = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (data.success && data.token) {
+        this.token = data.token;
+        this.currentUser = data.user;
+        localStorage.setItem('kd_auth_token', data.token);
+        localStorage.setItem('kd_auth_user', JSON.stringify(data.user));
+
+        this.applyRoleUI(role);
+        if (notify) {
+          MarketplaceModule.showToast(`Switched to ${data.user.name} (${role.toUpperCase()} Persona)`, "success");
+        }
+      }
+    } catch (err) {
+      console.warn('Demo login failed, using local mock state:', err);
+      this.currentUser = { name: role === 'owner' ? 'DOCA Platform Owner' : role === 'buyer' ? 'Reliance Fresh B2B' : 'Ramesh Patil', role };
+      this.applyRoleUI(role);
+    }
+  },
+
+  applyRoleUI(role) {
+    const normRole = (role || 'buyer').toLowerCase();
+
+    // Update Topbar buttons
+    document.querySelectorAll('.demo-role-btn').forEach(b => b.classList.remove('active'));
+    const roleBtn = document.getElementById(normRole === 'farmer' ? 'btnDemoFarmer' : normRole === 'buyer' ? 'btnDemoBuyer' : 'btnDemoOwner');
+    if (roleBtn) roleBtn.classList.add('active');
+
+    // Update Profile badge
+    const rolePill = document.getElementById('currentRolePill');
+    const nameEl = document.getElementById('currentUserName');
+    if (rolePill) {
+      rolePill.className = `role-pill ${normRole}`;
+      rolePill.textContent = normRole.toUpperCase();
+    }
+    if (nameEl && this.currentUser) {
+      nameEl.textContent = this.currentUser.name;
+    }
+
+    // Role-specific button visibility
+    const ownerEscrowBtn = document.getElementById('ownerEscrowBtn');
+    const ownerUsersBtn = document.getElementById('ownerUsersBtn');
+    const buyerOrdersBtn = document.getElementById('buyerOrdersBtn');
+    const cartNavBtn = document.getElementById('cartNavBtn');
+
+    if (normRole === 'owner') {
+      if (ownerEscrowBtn) ownerEscrowBtn.style.display = 'inline-flex';
+      if (ownerUsersBtn) ownerUsersBtn.style.display = 'inline-flex';
+      if (buyerOrdersBtn) buyerOrdersBtn.style.display = 'none';
+      if (cartNavBtn) cartNavBtn.style.display = 'none';
+      
+      // Auto open DOCA control room
+      App.switchRole('doca');
+      OwnerModule.refreshPendingCount();
+    } else if (normRole === 'buyer') {
+      if (ownerEscrowBtn) ownerEscrowBtn.style.display = 'none';
+      if (ownerUsersBtn) ownerUsersBtn.style.display = 'none';
+      if (buyerOrdersBtn) buyerOrdersBtn.style.display = 'inline-flex';
+      if (cartNavBtn) cartNavBtn.style.display = 'inline-flex';
+
+      App.switchRole('marketplace');
+      BuyerModule.refreshOrdersCount();
+    } else { // Farmer
+      if (ownerEscrowBtn) ownerEscrowBtn.style.display = 'none';
+      if (ownerUsersBtn) ownerUsersBtn.style.display = 'none';
+      if (buyerOrdersBtn) buyerOrdersBtn.style.display = 'none';
+      if (cartNavBtn) cartNavBtn.style.display = 'none';
+
+      App.switchRole('farmer');
+    }
+  },
+
+  openAuthModal(tab = 'login') {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+      modal.classList.add('open');
+      this.switchTab(tab);
+    }
+  },
+
+  switchTab(tab) {
+    const loginForm = document.getElementById('authLoginForm');
+    const regForm = document.getElementById('authRegisterForm');
+    const tabLogin = document.getElementById('tabAuthLogin');
+    const tabReg = document.getElementById('tabAuthRegister');
+
+    if (tab === 'login') {
+      if (loginForm) loginForm.style.display = 'block';
+      if (regForm) regForm.style.display = 'none';
+      if (tabLogin) { tabLogin.className = 'btn btn-sm btn-primary'; }
+      if (tabReg) { tabReg.className = 'btn btn-sm btn-outline'; }
+    } else {
+      if (loginForm) loginForm.style.display = 'none';
+      if (regForm) regForm.style.display = 'block';
+      if (tabLogin) { tabLogin.className = 'btn btn-sm btn-outline'; }
+      if (tabReg) { tabReg.className = 'btn btn-sm btn-primary'; }
+    }
+  },
+
+  async submitLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('authLoginEmail').value;
+    const password = document.getElementById('authLoginPassword').value;
+
+    try {
+      const res = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (data.success && data.token) {
+        this.token = data.token;
+        this.currentUser = data.user;
+        localStorage.setItem('kd_auth_token', data.token);
+        localStorage.setItem('kd_auth_user', JSON.stringify(data.user));
+        this.applyRoleUI(data.user.role);
+        MarketplaceModule.closeModal('authModal');
+        MarketplaceModule.showToast(`Welcome back, ${data.user.name}!`, "success");
+      } else {
+        MarketplaceModule.showToast(data.message || data.error || "Authentication failed", "danger");
+      }
+    } catch (err) {
+      MarketplaceModule.showToast("Network error during login", "danger");
+    }
+  },
+
+  async submitRegister(e) {
+    e.preventDefault();
+    const roleRadio = document.querySelector('input[name="regRoleRadio"]:checked');
+    const role = roleRadio ? roleRadio.value : 'farmer';
+    const name = document.getElementById('authRegName').value;
+    const email = document.getElementById('authRegEmail').value;
+    const password = document.getElementById('authRegPassword').value;
+
+    try {
+      const res = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role })
+      });
+      const data = await res.json();
+      if (data.success && data.token) {
+        this.token = data.token;
+        this.currentUser = data.user;
+        localStorage.setItem('kd_auth_token', data.token);
+        localStorage.setItem('kd_auth_user', JSON.stringify(data.user));
+        this.applyRoleUI(data.user.role);
+        MarketplaceModule.closeModal('authModal');
+        MarketplaceModule.showToast(`Account registered! Welcome to KisanDirect, ${data.user.name}!`, "success");
+      } else {
+        MarketplaceModule.showToast(data.error || "Registration failed", "danger");
+      }
+    } catch (err) {
+      MarketplaceModule.showToast("Network error during registration", "danger");
+    }
+  },
+
+  async logout() {
+    if (this.token) {
+      try {
+        await fetch('/api/v1/auth/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${this.token}` }
+        });
+      } catch (e) {}
+    }
+    localStorage.removeItem('kd_auth_token');
+    localStorage.removeItem('kd_auth_user');
+    this.token = null;
+    this.currentUser = null;
+    MarketplaceModule.showToast("Logged out successfully", "info");
+    this.loginAsDemo('farmer', false);
+  }
+};
+
+window.OwnerModule = {
+  async openEscrowQueueModal() {
+    const modal = document.getElementById('ownerEscrowModal');
+    if (modal) modal.classList.add('open');
+    await this.fetchPendingTransactions();
+  },
+
+  async fetchPendingTransactions() {
+    const container = document.getElementById('escrowQueueContainer');
+    if (!container) return;
+
+    container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 2rem;">Loading Pending Escrow Transactions...</div>';
+
+    try {
+      const res = await fetch('/api/v1/admin/transactions/pending', {
+        headers: { 'Authorization': `Bearer ${AuthModule.token}` }
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        const countSpan = document.getElementById('pendingEscrowCount');
+        if (countSpan) countSpan.textContent = data.transactions.length;
+
+        if (data.transactions.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+              <i data-lucide="check-circle-2" style="font-size: 2.5rem; color: var(--emerald-400); margin-bottom: 10px;"></i>
+              <h4 style="color: #fff; margin-bottom: 4px;">Zero Pending Transactions</h4>
+              <p style="font-size: 0.85rem;">All placed produce orders have undergone Double-Approval Escrow verification!</p>
+            </div>
+          `;
+          if (window.lucide && lucide.createIcons) lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = data.transactions.map(t => `
+          <div class="escrow-tx-card">
+            <div class="escrow-tx-header">
+              <div>
+                <span style="font-weight: 800; color: #fff; font-size: 0.95rem;">Order #${t.order_number}</span>
+                <span style="font-size: 0.75rem; color: var(--amber-400); margin-left: 8px;">• ESCROW HELD: ₹${Number(t.total_amount).toLocaleString('en-IN')}</span>
+              </div>
+              <span class="qc-badge-pill"><i data-lucide="shield-check"></i> DOCA Verified</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.84rem;">
+              <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 0.72rem; color: var(--emerald-400); font-weight: 700; margin-bottom: 4px;">🌾 PRODUCER / FARMER LEGITIMACY:</div>
+                <div style="font-weight: 700; color: #fff;">${t.farmer.name}</div>
+                <div style="color: var(--text-muted); font-size: 0.78rem;">${t.farmer.location}</div>
+                <div style="margin-top: 6px;">
+                  <span class="qc-badge-pill">${t.produce.qc_grade}</span>
+                  <span style="font-size: 0.72rem; color: #94a3b8; margin-left: 6px;">${t.produce.crop_name} (${t.quantity} kg)</span>
+                </div>
+                <div class="qc-hash-code" style="margin-top: 6px;">${t.produce.qc_hash}</div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px;">
+                <div style="font-size: 0.72rem; color: var(--sky-400); font-weight: 700; margin-bottom: 4px;">🛒 BUYER VERIFICATION:</div>
+                <div style="font-weight: 700; color: #fff;">${t.buyer.name}</div>
+                <div style="color: var(--text-muted); font-size: 0.78rem;">${t.buyer.business_name}</div>
+                <div style="margin-top: 6px; font-size: 0.78rem; color: var(--emerald-400);">
+                  <i data-lucide="check"></i> KYC Status: ${t.buyer.kyc_status}
+                </div>
+                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 6px;">
+                  Delivery Hub: ${t.delivery_address || 'Vashi APMC Sector 19'}
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 8px;">
+              <button class="btn btn-sm btn-primary" style="flex: 1;" onclick="OwnerModule.verifyTransaction('${t.id}', 'approve')">
+                <i data-lucide="check"></i> [APPROVE TRANSACTION] (Lock Escrow & Dispatch Fleet)
+              </button>
+              <button class="btn btn-sm btn-outline" style="border-color: var(--rose-500); color: var(--rose-400);" onclick="OwnerModule.verifyTransaction('${t.id}', 'reject')">
+                <i data-lucide="shield-x"></i> [REJECT / FRAUD ALERT]
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+      }
+    } catch (err) {
+      container.innerHTML = '<div style="color: var(--rose-400); padding: 1rem;">Failed to load escrow queue.</div>';
+    }
+  },
+
+  async verifyTransaction(orderId, action) {
+    let reason = '';
+    if (action === 'reject') {
+      reason = prompt("Enter reason for rejection / fraud alert:", "Failed KYC check or suspicious origin");
+      if (!reason) return;
+    }
+
+    try {
+      const res = await fetch(`/api/v1/admin/transactions/${orderId}/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${AuthModule.token}`
+        },
+        body: JSON.stringify({ action, reason, flag_fraud: action === 'reject' })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        MarketplaceModule.showToast(data.message, action === 'approve' ? "success" : "warning");
+        await this.fetchPendingTransactions();
+      } else {
+        MarketplaceModule.showToast(data.error || "Action failed", "danger");
+      }
+    } catch (e) {
+      MarketplaceModule.showToast("Network error during escrow verification", "danger");
+    }
+  },
+
+  async refreshPendingCount() {
+    try {
+      const res = await fetch('/api/v1/admin/transactions/pending', {
+        headers: { 'Authorization': `Bearer ${AuthModule.token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        const countSpan = document.getElementById('pendingEscrowCount');
+        if (countSpan) countSpan.textContent = data.transactions.length;
+      }
+    } catch (e) {}
+  },
+
+  async openUserModerationModal() {
+    const modal = document.getElementById('ownerUsersModal');
+    if (modal) modal.classList.add('open');
+    await this.fetchUsers();
+  },
+
+  async fetchUsers() {
+    const tbody = document.getElementById('userModerationTableBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">Loading platform users...</td></tr>';
+
+    try {
+      const res = await fetch('/api/v1/admin/users', {
+        headers: { 'Authorization': `Bearer ${AuthModule.token}` }
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        tbody.innerHTML = data.users.map(u => {
+          const isOwner = u.role.toUpperCase() === 'OWNER' || u.role.toUpperCase() === 'ADMIN';
+          const isBanned = u.is_banned === 1;
+
+          return `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+              <td style="padding: 10px;">
+                <div style="font-weight: 700; color: #fff;">${u.name}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">${u.email}</div>
+              </td>
+              <td style="padding: 10px;">
+                <span class="role-pill ${u.role.toLowerCase()}">${u.role.toUpperCase()}</span>
+              </td>
+              <td style="padding: 10px;">
+                <span style="color: ${u.kyc_status === 'APPROVED' ? 'var(--emerald-400)' : 'var(--amber-400)'}; font-weight: 600;">
+                  ${u.kyc_status}
+                </span>
+              </td>
+              <td style="padding: 10px;">
+                <span style="color: ${isBanned ? 'var(--rose-400)' : 'var(--emerald-400)'}; font-weight: 600;">
+                  ${isBanned ? 'BANNED' : 'Active Grid Member'}
+                </span>
+              </td>
+              <td style="padding: 10px; text-align: right;">
+                ${isOwner ? '<span style="color: var(--text-muted); font-size: 0.75rem;">System Master</span>' :
+                  isBanned ? '<span style="color: var(--rose-400); font-size: 0.75rem;">Dismissed</span>' :
+                  `<button class="btn btn-sm btn-outline" style="border-color: var(--rose-500); color: var(--rose-400); padding: 3px 8px; font-size: 0.72rem;" onclick="OwnerModule.dismissUser('${u.id}')">
+                    <i data-lucide="user-x"></i> [Dismiss / Ban]
+                  </button>`
+                }
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+      }
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color: var(--rose-400); text-align: center; padding: 20px;">Failed to load users.</td></tr>';
+    }
+  },
+
+  async dismissUser(userId) {
+    const reason = prompt("Enter reason for dismissing and banning this user:", "Policy violation / Fake profile verification");
+    if (!reason) return;
+
+    try {
+      const res = await fetch(`/api/v1/admin/users/${userId}/dismiss`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${AuthModule.token}`
+        },
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        MarketplaceModule.showToast(data.message, "warning");
+        await this.fetchUsers();
+      } else {
+        MarketplaceModule.showToast(data.error || "Dismissal failed", "danger");
+      }
+    } catch (e) {
+      MarketplaceModule.showToast("Network error during dismissal", "danger");
+    }
+  }
+};
+
+window.BuyerModule = {
+  async openMyOrdersModal() {
+    const modal = document.getElementById('buyerOrdersModal');
+    if (modal) modal.classList.add('open');
+    await this.fetchMyOrders();
+  },
+
+  async fetchMyOrders() {
+    const container = document.getElementById('buyerOrdersContainer');
+    if (!container) return;
+
+    container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 2rem;">Loading Your Direct Farm Orders...</div>';
+
+    try {
+      const res = await fetch('/api/v1/orders/my-orders', {
+        headers: { 'Authorization': `Bearer ${AuthModule.token}` }
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        const countSpan = document.getElementById('buyerOrdersCount');
+        if (countSpan) countSpan.textContent = data.orders.length;
+
+        if (data.orders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              <h4>No orders placed yet</h4>
+              <p style="font-size: 0.85rem;">Browse the farm marketplace to place direct verified orders!</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = data.orders.map(o => {
+          const isPending = o.verification_status === 'pending_owner';
+          const isApproved = o.verification_status === 'approved';
+
+          return `
+            <div class="escrow-tx-card">
+              <div class="escrow-tx-header">
+                <div>
+                  <span style="font-weight: 800; color: #fff;">Order #${o.order_number}</span>
+                  <span style="font-size: 0.78rem; color: ${isPending ? 'var(--amber-400)' : 'var(--emerald-400)'}; margin-left: 8px;">
+                    • ${isPending ? 'PENDING OWNER ESCROW APPROVAL' : 'ESCROW LOCKED & DISPATCH CONFIRMED'}
+                  </span>
+                </div>
+                <span class="qc-badge-pill">${o.qc_grade}</span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                <div>
+                  <div style="font-weight: 700; color: #fff;">${o.crop_name} (${o.quantity} kg)</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Farmer: ${o.farmer_name}</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 800; color: var(--emerald-400);">₹${Number(o.total_amount).toLocaleString('en-IN')}</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Escrow Status: ${o.escrow_status}</div>
+                </div>
+              </div>
+
+              <!-- Cold-Chain Telemetry Box -->
+              <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 10px; font-size: 0.8rem;">
+                <div style="color: #38bdf8; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i data-lucide="navigation"></i> Cold-Chain GPS Telemetry: ${o.telemetry.status}
+                </div>
+                <div style="display: flex; gap: 16px; color: var(--text-secondary); font-size: 0.75rem;">
+                  <span>Reefer Temp: <strong style="color: #fff;">${o.telemetry.reefer_temp_celsius}°C</strong></span>
+                  <span>Humidity: <strong style="color: #fff;">${o.telemetry.humidity_rh}% RH</strong></span>
+                  <span>Speed: <strong style="color: #fff;">${o.telemetry.speed_kmh} km/h</strong></span>
+                </div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 4px;">
+                  Location: ${o.telemetry.gps.location_name}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (window.lucide && lucide.createIcons) lucide.createIcons();
+      }
+    } catch (e) {
+      container.innerHTML = '<div style="color: var(--rose-400); padding: 1rem;">Failed to load your orders.</div>';
+    }
+  },
+
+  async refreshOrdersCount() {
+    try {
+      const res = await fetch('/api/v1/orders/my-orders', {
+        headers: { 'Authorization': `Bearer ${AuthModule.token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        const countSpan = document.getElementById('buyerOrdersCount');
+        if (countSpan) countSpan.textContent = data.orders.length;
+      }
+    } catch (e) {}
+  }
+};
+
+window.App = {
+  currentRole: 'marketplace',
+
+  init() {
+    console.log("Initializing KisanDirect AI platform...");
+    this.bindNavigation();
+
+    // Auto fade-out splash screen after 1.2s
+    setTimeout(() => {
+      const splash = document.getElementById('appSplashScreen');
+      if (splash) splash.classList.add('fade-out');
+    }, 1200);
+
+    if (window.AuthModule) window.AuthModule.init();
+    
+    // Initialize child modules
+    if (window.MarketplaceModule) window.MarketplaceModule.init();
+    if (window.AIVisionModule) window.AIVisionModule.init();
+    if (window.AIForecastingModule) window.AIForecastingModule.init();
+    if (window.RouteOptimizerModule) window.RouteOptimizerModule.init();
+    if (window.DOCAMonitorModule) window.DOCAMonitorModule.init();
+
+    this.initLucideIcons();
+  },
+
+  bindNavigation() {
+    const personaBtns = document.querySelectorAll('.persona-btn');
+    personaBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const role = e.currentTarget.getAttribute('data-role');
+        this.switchRole(role);
+      });
+    });
+
+    // Cart button in nav
+    const cartBtn = document.getElementById('cartNavBtn');
+    if (cartBtn) {
+      cartBtn.addEventListener('click', () => {
+        MarketplaceModule.openCartModal();
+      });
+    }
+
+    // Modal background click to close
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          backdrop.classList.remove('open');
+        }
+      });
+    });
+  },
+
+  switchRole(role) {
+    this.currentRole = role;
+
+    // Update nav buttons
+    document.querySelectorAll('.persona-btn').forEach(btn => {
+      if (btn.getAttribute('data-role') === role) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update visible view panels
+    document.querySelectorAll('.view-panel').forEach(panel => {
+      if (panel.id === `view-${role}`) {
+        panel.classList.add('active');
+      } else {
+        panel.classList.remove('active');
+      }
+    });
+
+    // Invalidate Leaflet map size if switching to logistics tab
+    if (role === 'logistics' && window.RouteOptimizerModule && window.RouteOptimizerModule.map) {
+      setTimeout(() => {
+        window.RouteOptimizerModule.map.invalidateSize();
+      }, 200);
+    }
+
+    // Resize chart if switching to forecasting tab
+    if (role === 'forecasting' && window.AIForecastingModule && window.AIForecastingModule.chartInstance) {
+      setTimeout(() => {
+        window.AIForecastingModule.chartInstance.resize();
+      }, 200);
+    }
+
+    this.initLucideIcons();
+  },
+
+  initLucideIcons() {
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.App.init();
+});
+
+</script>
+
+</body>
+
+</html>

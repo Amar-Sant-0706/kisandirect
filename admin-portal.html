@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Owner Control Room - KisanDirect AI</title>
+  <meta name="description" content="Platform Owner Central Governance Tower. Review and approve pending farmers and enterprise buyers, oversee GMV and cold-chain logistics.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core & Portal Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/ecommerce.css">
+
+  <style>
+    .admin-header-bar {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .owner-badge {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .desk-card {
+      background: var(--bg-surface, #131b26);
+      border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .desk-card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-approve-farmer {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .btn-approve-farmer:hover {
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-verify-buyer {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .btn-verify-buyer:hover {
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-reject-user {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-reject-user:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+  </style>
+</head>
+<body class="auth-page-wrapper" style="background: #090e15;">
+
+  <!-- Owner Header Bar -->
+  <header class="admin-header-bar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/owner/dashboard" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+        <div class="brand-logo-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #fff; margin: 0;">
+            KisanDirect AI <span class="owner-badge"><i data-lucide="shield"></i> PLATFORM OWNER CONTROL ROOM</span>
+          </h2>
+          <div style="font-size: 0.72rem; color: #94a3b8;">Farmer & Buyer Approval Governance Desk & Master Escrow Surveillance</div>
+        </div>
+      </a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <a href="/buyer/dashboard" class="btn btn-outline btn-sm" style="text-decoration: none;">
+        <i data-lucide="store"></i> Buyer Catalog Oversight
+      </a>
+      <a href="/farmer/dashboard" class="btn btn-outline btn-sm" style="text-decoration: none;">
+        <i data-lucide="tractor"></i> Farmer Hub Oversight
+      </a>
+      <div id="adminUserPill" style="display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 9999px; padding: 4px 12px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: #fff;" id="adminUserName">Platform Owner</span>
+        <button class="btn btn-ghost btn-sm" onclick="signout()" title="Sign Out" style="color: #ef4444; padding: 2px 4px; cursor: pointer;">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content-wrapper" style="max-width: 1320px; margin: 0 auto; padding: 2rem 1.5rem;">
+    
+    <!-- Toast Alert Container -->
+    <div id="ownerToast" style="display: none; padding: 12px 16px; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.88rem; font-weight: 600;"></div>
+
+    <!-- Analytics Cards Grid -->
+    <div class="metric-cards-grid" style="margin-bottom: 2rem;">
+      <div class="metric-card">
+        <div class="metric-icon-box emerald">
+          <i data-lucide="tractor"></i>
+        </div>
+        <div class="metric-body">
+          <h4>Total Farmers Approved</h4>
+          <div class="metric-value" id="statFarmersApproved">--</div>
+          <div class="metric-meta positive"><i data-lucide="check-circle-2"></i> Verified Farm Producers</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box cyan">
+          <i data-lucide="shopping-bag"></i>
+        </div>
+        <div class="metric-body">
+          <h4>Total Buyers Approved</h4>
+          <div class="metric-value" id="statBuyersApproved">--</div>
+          <div class="metric-meta positive"><i data-lucide="check-circle-2"></i> GSTIN Verified B2B Accounts</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box amber">
+          <i data-lucide="clock"></i>
+        </div>
+        <div class="metric-body">
+          <h4>Pending Approval Desk</h4>
+          <div class="metric-value" id="statPendingCount" style="color: #f59e0b;">--</div>
+          <div class="metric-meta warning"><i data-lucide="alert-circle"></i> Awaiting Owner Authorization</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box rose">
+          <i data-lucide="indian-rupee"></i>
+        </div>
+        <div class="metric-body">
+          <h4>Platform Gross Merchandise (GMV)</h4>
+          <div class="metric-value" id="statGmv">₹ --</div>
+          <div class="metric-meta positive"><i data-lucide="shield-check"></i> 100% Escrow Secured</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE 1: FARMER APPROVAL DESK -->
+    <div class="desk-card">
+      <div class="desk-card-header">
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="tractor" style="color: #10b981;"></i> Farmer Approval Desk
+          </h3>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+            Review new farmer registrations, land holding records, and crop specialities before unlocking farmgate harvest lot creation.
+          </p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadPendingUsers()">
+          <i data-lucide="refresh-cw"></i> Refresh Desk
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Farmer Name</th>
+              <th>Contact Phone</th>
+              <th>District & State</th>
+              <th>Land Area (Acres)</th>
+              <th>Crop Speciality</th>
+              <th>Kisan ID</th>
+              <th>Registered On</th>
+              <th>Owner Governance Action</th>
+            </tr>
+          </thead>
+          <tbody id="farmerApprovalTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading pending farmers...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLE 2: BUYER VERIFICATION DESK -->
+    <div class="desk-card">
+      <div class="desk-card-header">
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="shield-alert" style="color: #0284c7;"></i> Buyer Verification Desk
+          </h3>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+            Verify enterprise buyer GSTIN tax credentials before unlocking direct cart checkout and unmasked farmer contact numbers.
+          </p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadPendingUsers()">
+          <i data-lucide="refresh-cw"></i> Refresh Desk
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Business / Firm Name</th>
+              <th>GSTIN Number</th>
+              <th>Contact Person & Email</th>
+              <th>Phone</th>
+              <th>Trade Type</th>
+              <th>District & State</th>
+              <th>Registered On</th>
+              <th>Owner Governance Action</th>
+            </tr>
+          </thead>
+          <tbody id="buyerVerificationTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading pending buyers...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TABLE 3: MASTER LOGISTICS & ESCROW SURVEILLANCE -->
+    <div class="desk-card">
+      <div class="desk-card-header">
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="truck" style="color: #6366f1;"></i> Master Cold-Chain Delivery & Escrow Surveillance
+          </h3>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+            Real-time oversight of all nationwide transactions. Advance logistics states to release escrow to farmers.
+          </p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadAllOrders()">
+          <i data-lucide="refresh-cw"></i> Refresh Orders
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Buyer Account</th>
+              <th>Farmer / FPO</th>
+              <th>Produce Details</th>
+              <th>Amount</th>
+              <th>Escrow State</th>
+              <th>Fulfillment Stage</th>
+              <th>Owner Authority Action</th>
+            </tr>
+          </thead>
+          <tbody id="allOrdersTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading system orders...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    const token = localStorage.getItem('kd_auth_token');
+    const userStr = localStorage.getItem('kd_user');
+
+    // Security Gate: Ensure user is logged in and role is OWNER or ADMIN
+    (function enforceOwnerAuth() {
+      if (!token || !userStr) {
+        window.location.href = '/login.html?redirect=/owner/dashboard';
+        return;
+      }
+      try {
+        const user = JSON.parse(userStr);
+        const normRole = (user.role || '').toUpperCase();
+        if (normRole !== 'OWNER' && normRole !== 'ADMIN') {
+          alert('Access Denied: Platform Owner Control Room requires OWNER credentials.');
+          window.location.href = normRole === 'FARMER' ? '/farmer/dashboard' : '/buyer/dashboard';
+          return;
+        }
+        document.getElementById('adminUserName').textContent = `${user.name} (Platform Owner)`;
+      } catch (e) {
+        window.location.href = '/login.html';
+      }
+    })();
+
+    function signout() {
+      localStorage.removeItem('kd_auth_token');
+      localStorage.removeItem('kd_user');
+      window.location.href = '/login.html?logged_out=1';
+    }
+
+    function showToast(msg, type = 'success') {
+      const el = document.getElementById('ownerToast');
+      el.textContent = msg;
+      el.style.display = 'block';
+      if (type === 'success') {
+        el.style.background = 'rgba(16, 185, 129, 0.2)';
+        el.style.border = '1px solid #10b981';
+        el.style.color = '#a7f3d0';
+      } else {
+        el.style.background = 'rgba(239, 68, 68, 0.2)';
+        el.style.border = '1px solid #ef4444';
+        el.style.color = '#fca5a5';
+      }
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    // Load Metrics
+    async function loadMetrics() {
+      try {
+        const res = await fetch('/api/owner/dashboard-metrics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success && data.metrics) {
+          document.getElementById('statFarmersApproved').textContent = `${data.metrics.totalFarmersApproved} Farmers`;
+          document.getElementById('statBuyersApproved').textContent = `${data.metrics.totalBuyersApproved} Buyers`;
+          document.getElementById('statPendingCount').textContent = `${data.metrics.pendingApprovals.total} Pending`;
+          document.getElementById('statGmv').textContent = `₹ ${Number(data.metrics.totalGmv).toLocaleString('en-IN')}`;
+        }
+      } catch (err) {
+        console.error('Error loading metrics:', err);
+      }
+    }
+
+    // Load Pending Users (Farmers & Buyers)
+    async function loadPendingUsers() {
+      const farmerBody = document.getElementById('farmerApprovalTableBody');
+      const buyerBody = document.getElementById('buyerVerificationTableBody');
+
+      try {
+        const res = await fetch('/api/owner/pending-users', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // 1. Render Farmers
+          if (data.farmers && data.farmers.length > 0) {
+            farmerBody.innerHTML = data.farmers.map(f => {
+              const details = f.farmer_details || {};
+              const acres = details.land_area_acres || '10.0';
+              const crops = details.crop_speciality || 'Vegetables & Fruits';
+              const kisanId = details.kisan_id || 'MH-KISAN-9801';
+
+              return `
+                <tr>
+                  <td>
+                    <div style="font-weight: 700; color: #fff;">${f.name}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">${f.email}</div>
+                  </td>
+                  <td><strong>${f.phone || 'N/A'}</strong></td>
+                  <td>${f.state_district || f.district_state || 'Maharashtra'}</td>
+                  <td><span class="badge badge-grade-b">${acres} Acres</span></td>
+                  <td>${crops}</td>
+                  <td><span style="font-family: monospace; color: #10b981;">${kisanId}</span></td>
+                  <td style="font-size: 0.78rem; color: #94a3b8;">${new Date(f.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <div style="display: flex; gap: 6px;">
+                      <button class="btn-approve-farmer" onclick="approveUser('${f.id}', '${f.name.replace(/'/g, "\\'")}', 'FARMER')">
+                        <i data-lucide="check"></i> Approve Farmer
+                      </button>
+                      <button class="btn-reject-user" onclick="rejectUser('${f.id}', '${f.name.replace(/'/g, "\\'")}', 'FARMER')">
+                        <i data-lucide="x"></i> Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          } else {
+            farmerBody.innerHTML = `
+              <tr>
+                <td colspan="8" style="text-align: center; padding: 2.5rem; color: #10b981;">
+                  <i data-lucide="check-circle" style="width: 28px; height: 28px; margin-bottom: 4px;"></i>
+                  <div>All registered farmers approved! No pending applications.</div>
+                </td>
+              </tr>
+            `;
+          }
+
+          // 2. Render Buyers
+          if (data.buyers && data.buyers.length > 0) {
+            buyerBody.innerHTML = data.buyers.map(b => {
+              const details = b.buyer_details || {};
+              const bizName = details.business_name || b.business_name || b.name;
+              const gstin = details.gstin || b.gstin_number || '27AABCA1234F1ZP';
+              const tradeType = details.trade_type || 'B2B Supermarket Retail';
+
+              return `
+                <tr>
+                  <td>
+                    <strong style="color: #cbd5e1; font-size: 0.95rem;">${bizName}</strong>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">Legal Entity</div>
+                  </td>
+                  <td>
+                    <span style="font-family: monospace; color: #f59e0b; background: rgba(245, 158, 11, 0.15); padding: 3px 8px; border-radius: 4px; font-weight: 700;">
+                      ${gstin}
+                    </span>
+                  </td>
+                  <td>
+                    <div style="font-weight: 600; color: #fff;">${b.name}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">${b.email}</div>
+                  </td>
+                  <td>${b.phone || 'N/A'}</td>
+                  <td><span class="badge badge-grade-b">${tradeType}</span></td>
+                  <td>${b.state_district || b.district_state || 'India'}</td>
+                  <td style="font-size: 0.78rem; color: #94a3b8;">${new Date(b.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <div style="display: flex; gap: 6px;">
+                      <button class="btn-verify-buyer" onclick="approveUser('${b.id}', '${b.name.replace(/'/g, "\\'")}', 'BUYER')">
+                        <i data-lucide="shield-check"></i> Verify & Approve Buyer
+                      </button>
+                      <button class="btn-reject-user" onclick="rejectUser('${b.id}', '${b.name.replace(/'/g, "\\'")}', 'BUYER')">
+                        <i data-lucide="x"></i> Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          } else {
+            buyerBody.innerHTML = `
+              <tr>
+                <td colspan="8" style="text-align: center; padding: 2.5rem; color: #10b981;">
+                  <i data-lucide="check-circle" style="width: 28px; height: 28px; margin-bottom: 4px;"></i>
+                  <div>All registered buyers verified! No pending applications.</div>
+                </td>
+              </tr>
+            `;
+          }
+        }
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Error loading pending users:', err);
+      }
+    }
+
+    // Approve User
+    async function approveUser(id, name, role) {
+      try {
+        const res = await fetch(`/api/owner/approve-user/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✓ ${name} (${role}) has been APPROVED! Permissions immediately unlocked.`, 'success');
+          loadPendingUsers();
+          loadMetrics();
+        } else {
+          showToast(data.error || 'Failed to approve user', 'error');
+        }
+      } catch (err) {
+        showToast('Network error during approval', 'error');
+      }
+    }
+
+    // Reject User
+    async function rejectUser(id, name, role) {
+      if (!confirm(`Are you sure you want to REJECT ${name} (${role})?`)) return;
+
+      try {
+        const res = await fetch(`/api/owner/reject-user/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`User ${name} has been REJECTED.`, 'error');
+          loadPendingUsers();
+          loadMetrics();
+        } else {
+          showToast(data.error || 'Failed to reject user', 'error');
+        }
+      } catch (err) {
+        showToast('Network error during rejection', 'error');
+      }
+    }
+
+    // Load All Orders
+    async function loadAllOrders() {
+      const tbody = document.getElementById('allOrdersTableBody');
+      try {
+        const res = await fetch('/api/admin/all-orders', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.orders && data.orders.length > 0) {
+          tbody.innerHTML = data.orders.map(o => {
+            let stageBadge = 'badge-grade-b';
+            let actionBtn = '';
+
+            if (o.order_status === 'ORDER_PLACED') {
+              stageBadge = 'badge-warning';
+              actionBtn = `<span style="font-size: 0.75rem; color: #94a3b8;">Awaiting Farmer Packing</span>`;
+            } else if (o.order_status === 'FARMER_PACKING') {
+              stageBadge = 'badge-warning';
+              actionBtn = `<span style="font-size: 0.75rem; color: #94a3b8;">Farmer Packing In Progress</span>`;
+            } else if (o.order_status === 'REEFER_PICKED_UP') {
+              stageBadge = 'badge-organic';
+              actionBtn = `
+                <button class="btn btn-primary btn-sm" onclick="advanceOrderStatus('${o.id}', 'IN_TRANSIT')">
+                  <i data-lucide="truck"></i> Set IN_TRANSIT
+                </button>
+              `;
+            } else if (o.order_status === 'IN_TRANSIT') {
+              stageBadge = 'badge-grade-a';
+              actionBtn = `
+                <button class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #10b981, #047857);" onclick="advanceOrderStatus('${o.id}', 'DELIVERED')">
+                  <i data-lucide="check-check"></i> Mark DELIVERED & Settle
+                </button>
+              `;
+            } else if (o.order_status === 'DELIVERED') {
+              stageBadge = 'badge-grade-a';
+              actionBtn = `<span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">✓ Delivered & Escrow Released</span>`;
+            }
+
+            const escrowBadge = o.escrow_status === 'ESCROW_RELEASED' 
+              ? `<span class="badge badge-grade-a">ESCROW_RELEASED</span>`
+              : `<span class="badge badge-warning">ESCROW_HELD</span>`;
+
+            const prodName = o.produce_name || o.commodity_name || 'Produce';
+            const totalAmt = Number(o.total_amount || o.total_price || 0);
+
+            return `
+              <tr>
+                <td><strong style="color: #10b981;">#${o.order_number}</strong></td>
+                <td>
+                  <div style="font-weight: 600; color: #fff;">${o.buyer_name || 'Buyer'}</div>
+                  <div style="font-size: 0.75rem; color: #94a3b8;">${o.buyer_business || ''}</div>
+                </td>
+                <td>${o.farmer_name || 'Farmer FPO'}</td>
+                <td>${prodName} (${o.quantity} ${o.unit || 'kg'})</td>
+                <td><strong>₹ ${totalAmt.toLocaleString('en-IN')}</strong></td>
+                <td>${escrowBadge}</td>
+                <td><span class="badge ${stageBadge}">${o.order_status}</span></td>
+                <td>${actionBtn}</td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: #94a3b8;">No orders recorded in system.</td></tr>`;
+        }
+        lucide.createIcons();
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="color: #ef4444; text-align: center;">Failed to load system orders.</td></tr>`;
+      }
+    }
+
+    async function advanceOrderStatus(id, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/orders/${id}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ order_status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`✓ Order status transitioned to ${newStatus}. Escrow updated.`, 'success');
+          loadAllOrders();
+          loadMetrics();
+        } else {
+          showToast(data.error || 'Failed to update order status', 'error');
+        }
+      } catch (err) {
+        showToast('Server communication error', 'error');
+      }
+    }
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadMetrics();
+      loadPendingUsers();
+      loadAllOrders();
+    });
+  </script>
+</body>
+</html>

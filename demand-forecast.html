@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Demand Forecast - KisanDirect AI</title>
+  <meta name="description" content="AI Demand Forecasting & Price Volatility Engine predicting consumption curves, festival surges, and post-harvest glut mitigation.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <main class="content-wrapper">
+      <section id="view-forecasting" class="view-panel active">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="trending-up" style="color: var(--emerald-400);"></i> AI Demand Forecasting & Price Volatility Engine</h3>
+            <p>Predicts consumption demand across Tier-1 urban clusters, anticipates festival surges, and prevents post-harvest gluts.</p>
+          </div>
+          <div class="action-btn-group" style="align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap;"><i data-lucide="sprout"></i> Commodity:</label>
+              <select id="forecastCommoditySelect" class="form-control" style="min-width: 220px; background: var(--bg-surface); color: #fff; border: 1px solid var(--border-glow); border-radius: var(--radius-md); padding: 7px 12px; font-weight: 600;">
+                <!-- Populated dynamically from /api/commodities -->
+              </select>
+            </div>
+            <button class="btn btn-accent btn-sm" id="simulateSurgeBtn">
+              <i data-lucide="zap"></i> Simulate Festival Demand Surge
+            </button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <!-- Time Series Chart Card -->
+          <div class="chart-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h4 id="forecastCropName" style="font-size: 1.15rem; font-weight: 700;">Nashik Red Onion</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Historical Mandi APMC Price vs 15-Day AI Direct Price Prediction Band</p>
+              </div>
+              <span id="forecastVolatilityBadge" class="badge badge-warning">Moderate Volatility</span>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="demandForecastChart"></canvas>
+            </div>
+          </div>
+
+          <!-- AI Intelligence & Advisory Panel -->
+          <div class="ai-insight-panel">
+            <div class="insight-card alert-optimal">
+              <div class="insight-header" style="color: var(--emerald-400);">
+                <i data-lucide="bot"></i> AI Harvest & Dispatch Recommendation
+              </div>
+              <div class="insight-body" id="forecastAdvisoryText">
+                Navratri festival surge anticipated within 10 days. FPOs are advised to stage release 35% of inventory in week 2 to capture peak retail demand without triggering DOCA buffer interventions.
+              </div>
+            </div>
+
+            <div class="insight-card alert-warning">
+              <div class="insight-header" style="color: var(--amber-400);">
+                <i data-lucide="alert-triangle"></i> Early Glut Warning Signal
+              </div>
+              <div class="insight-body">
+                Tomato arrivals across southern states expected to surge +28% due to favorable late monsoon harvests. Direct forward contracts with Mumbai and Delhi institutional bulk buyers are locked in to protect against price crash.
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-header" style="color: var(--cyan-400);">
+                <i data-lucide="thermometer-snowflake"></i> Recommended Cold Storage Holding
+              </div>
+              <div class="insight-body">
+                Holding 40% stock in Sahyadri Pre-cooling Hub for 7 days yields an estimated +18.4% price realization improvement compared to spot farmgate offloading.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/ai-forecasting.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      if (window.AIForecastingModule) {
+        window.AIForecastingModule.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

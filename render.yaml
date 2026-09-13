@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: kisandirect-ai-portal
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    plan: starter
+    region: oregon
+    branch: main
+    healthCheckPath: /api/health
+    disk:
+      name: kisandirect-db-disk
+      mountPath: /app/backend/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_PATH
+        value: /app/backend/data/multi_portal.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: owner@kisandirect.com
+      - key: ADMIN_PASSWORD
+        sync: false

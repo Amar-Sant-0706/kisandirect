@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanDirect AI - E-Commerce Direct Agri-Marketplace</title>
+  <meta name="description" content="Direct farmgate agri-marketplace. Browse fresh harvests, buy with zero middlemen markups, full cart and 5-stage order tracking.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core & E-Commerce Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/ecommerce.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <!-- Main Marketplace Content -->
+    <main class="content-wrapper">
+      <section id="view-marketplace" class="view-panel active">
+        
+        <!-- Buyer KYC Status Banner (Dynamically injected based on KYC state) -->
+        <div id="buyerKycBannerContainer"></div>
+
+        <!-- Myntra-Style Marketplace Hero Banner -->
+        <div class="hero-banner" style="margin-bottom: 1.5rem;">
+          <div class="hero-content">
+            <span class="hero-badge"><i data-lucide="sparkles"></i> Direct Farmgate E-Commerce Grid</span>
+            <h2 class="hero-title">Direct From Farms. Zero Middlemen. 100% Escrow Protected.</h2>
+            <p class="hero-subtitle">
+              Sourcing fresh produce directly from verified farmers & FPOs across India. Compare APMC mandi cartel rates, enjoy cold-chain doorstep delivery, and track live harvest-to-fork journeys in 5 stages.
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="MarketplaceModule.openCartDrawer()">
+                <i data-lucide="shopping-cart"></i> View Farm Cart (<span id="heroCartCount">0</span>)
+              </button>
+              <button class="btn btn-outline" onclick="MarketplaceModule.openOrdersModal()">
+                <i data-lucide="package-check"></i> Track My Orders
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Platform Impact Metrics Strip -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="coins"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Farmer Share of Rupee</h4>
+              <div class="metric-value">72% <span style="font-size: 0.9rem; font-weight: 500;">(vs 28% APMC)</span></div>
+              <div class="metric-meta positive"><i data-lucide="arrow-up-right"></i> Direct farmgate realization</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="tag"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Consumer Price Reduction</h4>
+              <div class="metric-value">-23.8%</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down-right"></i> Passed directly to buyers</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Cold-Chain Reefer Waste</h4>
+              <div class="metric-value">3.2% <span style="font-size: 0.9rem; font-weight: 500;">(vs 22% Mandi)</span></div>
+              <div class="metric-meta positive"><i data-lucide="shield-check"></i> IoT Temperature monitored</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="layers"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Intermediaries Bypassed</h4>
+              <div class="metric-value">5 Layers</div>
+              <div class="metric-meta warning"><i data-lucide="slash"></i> Zero Arhtiya commissions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter, Category & Search Toolbar -->
+        <div class="filters-toolbar" style="margin-top: 2rem;">
+          <div class="search-input-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="marketSearchInput" placeholder="Search crops (e.g. Alphonso Mango, Onion, Tomato, Potato, Basmati) or state..." />
+          </div>
+
+          <div class="filter-pills">
+            <button class="filter-pill active" data-category="all">All Produce</button>
+            <button class="filter-pill" data-category="fruits">Fruits</button>
+            <button class="filter-pill" data-category="vegetables">Vegetables</button>
+            <button class="filter-pill" data-category="grains">Grains & Pulses</button>
+            <button class="filter-pill" data-category="exotics">Exotics</button>
+          </div>
+        </div>
+
+        <!-- Myntra-Style Produce Cards Grid -->
+        <div class="ecommerce-grid" id="productsGrid">
+          <!-- Populated dynamically by marketplace.js -->
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       SLIDING CART DRAWER (Myntra-style slide out)
+       ========================================================================== -->
+  <div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="MarketplaceModule.closeCartDrawer()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">
+        <i data-lucide="shopping-bag" style="color: #10b981;"></i>
+        <span>Direct Farm Cart</span>
+        <span class="badge badge-grade-a" id="drawerCartBadge" style="font-size: 0.72rem;">0 Items</span>
+      </div>
+      <button class="cart-drawer-close" onclick="MarketplaceModule.closeCartDrawer()">
+        <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+      </button>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerItems">
+      <!-- Injected dynamically -->
+    </div>
+
+    <div class="cart-drawer-footer" id="cartDrawerFooter">
+      <div class="cart-escrow-badge">
+        <i data-lucide="shield-check" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+        <span><strong>100% Escrow Protection:</strong> Payment held securely until cold-chain delivery is inspected & confirmed.</span>
+      </div>
+
+      <div class="cart-summary-line">
+        <span>Produce Subtotal:</span>
+        <strong id="cartSubtotal" style="color: #fff;">₹ 0</strong>
+      </div>
+      <div class="cart-summary-line">
+        <span>Reefer Cold-Chain Freight:</span>
+        <strong style="color: #10b981;">FREE (Direct Farmgate)</strong>
+      </div>
+      <div class="cart-summary-line">
+        <span>Escrow & Quality Guarantee (1.5%):</span>
+        <strong id="cartEscrowFee" style="color: #fff;">₹ 0</strong>
+      </div>
+      <div class="cart-summary-line total">
+        <span>Total Payable:</span>
+        <span id="cartTotalPayable" style="color: #10b981;">₹ 0</span>
+      </div>
+
+      <!-- Shipping Address Input -->
+      <div style="margin-bottom: 0.85rem;">
+        <label style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">Delivery Destination Address *</label>
+        <input type="text" id="checkoutAddress" class="form-control" placeholder="Warehouse #4, APMC Sector 19, Navi Mumbai" value="B-12 Central Logistics Hub, Mumbai, MH" style="font-size: 0.82rem;" />
+      </div>
+
+      <button class="btn-checkout" id="btnProceedCheckout" onclick="MarketplaceModule.handleCheckout()">
+        <i data-lucide="lock"></i> Place Order via Escrow (Simulated)
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MY ORDERS & 5-STAGE VISUAL TRACKING TIMELINE MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="ordersTrackingModal">
+    <div class="modal-dialog" style="max-width: 860px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="brand-logo-icon" style="width: 32px; height: 32px; font-size: 0.9rem;">
+            <i data-lucide="package-check"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; color: #fff;">My Farm Orders & 5-Stage Cold-Chain Tracker</h3>
+            <div style="font-size: 0.72rem; color: #94a3b8;">Real-Time Logistics Status & IoT Reefer Telemetry</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('ordersTrackingModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="ordersTrackingBody" style="padding: 1.5rem;">
+        <!-- Injected dynamically by marketplace.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       BUYER KYC LOCK DIALOG (Shown when unverified buyer clicks contact farmer)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="kycLockModal">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-body" style="padding: 2rem 1.5rem; text-align: center;">
+        <div class="kyc-lock-icon">
+          <i data-lucide="shield-alert" style="width: 34px; height: 34px;"></i>
+        </div>
+        <h3 style="color: #fff; font-size: 1.25rem; margin-bottom: 0.5rem;">Enterprise KYC Verification Required</h3>
+        <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.5rem;">
+          To protect farmers from unsolicited broker contact, direct farmer phone numbers and farmgate visitation coordinates are restricted to <strong>Admin-Verified Buyers (GSTIN Verified)</strong>.
+        </p>
+
+        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 12px; text-align: left; margin-bottom: 1.5rem;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #f59e0b; margin-bottom: 4px;">
+            Current Account Status: <span id="kycDialogStatusText">PENDING REVIEW</span>
+          </div>
+          <p style="font-size: 0.75rem; color: #cbd5e1; margin: 0;">
+            Our governance team verifies GSTIN credentials within 2-4 business hours. You can still purchase produce safely through our Escrow Cart system!
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button class="btn btn-primary btn-sm" onclick="MarketplaceModule.closeModal('kycLockModal')">
+            <i data-lucide="check"></i> Understand & Continue Browsing
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FARMER DIRECT CONTACT MODAL (Shown for verified buyers)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="farmerContactModal">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3><i data-lucide="phone-call" style="color: #10b981;"></i> Verified Farmer Direct Contact</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('farmerContactModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="farmerContactBody" style="padding: 1.5rem;">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/marketplace.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      if (window.MarketplaceModule) {
+        await MarketplaceModule.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

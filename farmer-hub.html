@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer & FPO Producer Hub - KisanDirect AI</title>
+  <meta name="description" content="Manage harvest batches, track direct escrow payouts, review incoming buyer orders, and advance packing and reefer logistics stages.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core & E-Commerce Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/ecommerce.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <main class="content-wrapper">
+      <section id="view-farmer" class="view-panel active">
+        
+        <!-- Farmer Approval Status Banner -->
+        <div id="farmerApprovalBanner" style="display: none;"></div>
+
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="tractor" style="color: var(--emerald-400);"></i> Farmer & FPO Producer Portal</h3>
+            <p>Manage harvest batches, schedule farmgate reefer pickups, process incoming buyer orders, and receive 100% escrow payouts.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary" id="btnFarmerListBatch" onclick="MarketplaceModule.openFarmerListingModal()">
+              <i data-lucide="plus"></i> List New Harvest Batch
+            </button>
+          </div>
+        </div>
+
+        <!-- Producer Metrics -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="wallet"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Direct Payouts Realized</h4>
+              <div class="metric-value" id="farmerTotalPayoutMetric">₹ 4,82,500</div>
+              <div class="metric-meta positive"><i data-lucide="check"></i> 100% Escrow Settled via T+1</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="package-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Active Batches Listed</h4>
+              <div class="metric-value" id="farmerActiveLotsCount">-- Lots</div>
+              <div class="metric-meta positive"><i data-lucide="award"></i> Grade A QC Certified</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="truck"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Cold-Chain Pickups Scheduled</h4>
+              <div class="metric-value" id="farmerPickupsCount">3 Trucks</div>
+              <div class="metric-meta warning"><i data-lucide="clock"></i> Reefer pickup active</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Average Realization Premium</h4>
+              <div class="metric-value">+41.2%</div>
+              <div class="metric-meta positive"><i data-lucide="shield"></i> Above local APMC Mandi rate</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: INCOMING BUYER ORDERS & PACKING MANAGEMENT -->
+        <div class="doca-table-card" style="margin-bottom: 2rem;">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h4 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="package" style="color: #10b981;"></i> Incoming Buyer Orders & Fulfillment Stages
+              </h4>
+              <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+                Advance order states as you pack produce and hand over lots to refrigerated trucks. Escrow is locked upon order placement.
+              </p>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="MarketplaceModule.loadFarmerOrders()">
+              <i data-lucide="refresh-cw"></i> Refresh Orders
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Buyer Details</th>
+                  <th>Produce & Quantity</th>
+                  <th>Escrow Payout</th>
+                  <th>Destination</th>
+                  <th>Current Stage</th>
+                  <th>Farmer Action</th>
+                </tr>
+              </thead>
+              <tbody id="farmerOrdersTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading incoming orders...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 2: ACTIVE FARMER HARVEST BATCHES -->
+        <div class="doca-table-card">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h4 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 4px 0;">Live Farm Listings & Harvest Inventory</h4>
+              <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">Your active produce lots accessible to verified buyers nationally.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="MarketplaceModule.openFarmerListingModal()">
+              <i data-lucide="plus"></i> Add Produce Lot
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Batch ID & Crop</th>
+                  <th>Quantity</th>
+                  <th>Quality Grade</th>
+                  <th>Direct Farmgate Rate</th>
+                  <th>Mandi Comparison</th>
+                  <th>Scheduled Pickup</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="farmerBatchesTableBody">
+                <!-- Dynamically rendered from /api/farmer/my-listings or /api/batches?user_only=true -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Farmer Harvest Listing Wizard Modal -->
+  <div class="modal-backdrop" id="farmerListingModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i data-lucide="sprout" style="color: var(--emerald-400);"></i> List Harvest Batch on KisanDirect AI</h3>
+        <button class="modal-close-btn" onclick="MarketplaceModule.closeModal('farmerListingModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="farmerListingForm">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Select Produce / Commodity</label>
+              <select id="newCropCommoditySelect" class="form-control" required>
+                <!-- Populated dynamically from /api/commodities -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="newCropCategory" class="form-control">
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Grains">Grains</option>
+                <option value="Pulses">Pulses</option>
+                <option value="Spices">Spices</option>
+                <option value="Exotics">Exotics</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" id="newCropCustomRow" style="display: none; margin-bottom: 1rem;">
+            <label class="form-label">New Produce / Crop Name (Arbitrary Produce)</label>
+            <input type="text" id="newCropCustomName" class="form-control" placeholder="e.g. Nagpur Sweet Oranges or Shimla Capsicum" />
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">FPO Name / Farmer Name</label>
+              <input type="text" id="newCropFpo" class="form-control" required placeholder="e.g. Ramesh Patil / Sahyadri FPC" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Farm Location & District</label>
+              <input type="text" id="newCropLocation" class="form-control" required placeholder="e.g. Nashik, Maharashtra" />
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Your Direct Farmgate Price (₹ / unit)</label>
+              <input type="number" id="newCropPrice" class="form-control" step="0.5" required value="25.00" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Harvest Lot Size (e.g. Quintals / Crates)</label>
+              <input type="text" id="newCropQuantity" class="form-control" required value="250 Quintals" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Quality Grade Certification</label>
+            <select id="newCropGrade" class="form-control">
+              <option value="Grade A (Export Quality)">Grade A (Export Quality)</option>
+              <option value="Grade B (Commercial Table)">Grade B (Commercial Table)</option>
+              <option value="Certified Organic (NPOP)">Certified Organic (NPOP)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Payout Preview Box -->
+          <div id="farmerProfitPreview"
+            style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald-500); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i data-lucide="check-circle"></i> Publish Farm Batch & Request Reefer Pickup
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/marketplace.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      checkFarmerApprovalStatus();
+      if (window.MarketplaceModule) {
+        await MarketplaceModule.init();
+        await MarketplaceModule.renderFarmerBatches();
+        await MarketplaceModule.loadFarmerOrders();
+      }
+      lucide.createIcons();
+    });
+
+    function checkFarmerApprovalStatus() {
+      const userStr = localStorage.getItem('kd_user');
+      let user = null;
+      try { if (userStr) user = JSON.parse(userStr); } catch (e) {}
+      if (!user) return;
+
+      const banner = document.getElementById('farmerApprovalBanner');
+      const btn = document.getElementById('btnFarmerListBatch');
+      const isApproved = user.approval_status === 'APPROVED' || (user.role || '').toUpperCase() === 'OWNER';
+
+      if (!isApproved) {
+        if (banner) {
+          banner.innerHTML = `
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; border-radius: 12px; padding: 1.1rem 1.3rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i data-lucide="shield-alert" style="color: #f59e0b; width: 28px; height: 28px; flex-shrink: 0;"></i>
+                <div>
+                  <strong style="color: #f59e0b; font-size: 1rem;">Profile Under Platform Owner Review</strong>
+                  <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 2px;">
+                    Your Farmer Profile is awaiting approval from the Platform Owner. Produce listing will unlock once verified.
+                  </div>
+                </div>
+              </div>
+              <span class="badge badge-warning" style="padding: 4px 8px; font-size: 0.72rem;">PENDING APPROVAL</span>
+            </div>
+          `;
+          banner.style.display = 'block';
+        }
+        if (btn) {
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+          btn.style.cursor = 'not-allowed';
+          btn.title = 'Your farmer account is pending Platform Owner approval.';
+          btn.innerHTML = `<i data-lucide="lock"></i> Listing Locked (Pending Approval)`;
+        }
+      } else {
+        if (banner) banner.style.display = 'none';
+        if (btn) {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          btn.style.cursor = 'pointer';
+          btn.innerHTML = `<i data-lucide="plus"></i> List New Harvest Batch`;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

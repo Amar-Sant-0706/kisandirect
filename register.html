@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - KisanDirect AI National Agri-Marketplace</title>
+  <meta name="description" content="Register an account on KisanDirect AI. Connect directly as a Farmer, FPO, B2B Buyer, or Consumer.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core & Auth Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page-wrapper">
+
+  <!-- Top Government DOCA Advisory Banner -->
+  <header class="gov-banner">
+    <div class="gov-emblem-wrapper">
+      <span class="gov-emblem-badge">GOVT OF INDIA</span>
+      <span>Ministry of Consumer Affairs, Food & Public Distribution | Department of Consumer Affairs (DOCA)</span>
+    </div>
+    <div class="gov-live-ticker">
+      <span class="pulse-indicator">Registration Portal Online</span>
+      <span>Direct Farm Escrow Accounts Verified</span>
+    </div>
+  </header>
+
+  <main class="auth-main-container">
+    <div class="auth-card" style="max-width: 580px;">
+      <div class="auth-header">
+        <div class="auth-logo-badge">
+          <i data-lucide="user-plus" style="width: 32px; height: 32px;"></i>
+        </div>
+        <h2>Create KisanDirect Account</h2>
+        <p>Register your profile to access direct farmgate pricing and AI logistics</p>
+      </div>
+
+      <div class="auth-alert" id="regAlert"></div>
+
+      <!-- Registration Form -->
+      <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+        <!-- Full Name -->
+        <div class="form-field-group">
+          <label for="regName">Full Legal / Business Name *</label>
+          <input type="text" id="regName" placeholder="e.g. Ramesh Patil / Sahyadri Farmers Coop" required autocomplete="name">
+        </div>
+
+        <!-- Email & Phone Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-field-group">
+            <label for="regEmail">Email Address *</label>
+            <input type="email" id="regEmail" placeholder="name@domain.com" required autocomplete="email">
+          </div>
+          <div class="form-field-group">
+            <label for="regPhone">Mobile Phone (10-digits) *</label>
+            <input type="tel" id="regPhone" placeholder="9876543210" pattern="[0-9]{10}" required autocomplete="tel">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-field-group">
+          <label for="regPassword">Password *</label>
+          <input type="password" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+        </div>
+
+        <!-- Role Selection -->
+        <div class="form-field-group">
+          <label>Select Your Platform Role *</label>
+          <div class="role-cards-grid">
+            <label class="role-radio-card">
+              <input type="radio" name="regRole" value="Farmer" checked>
+              <div class="role-card-inner">
+                <span class="role-card-icon">👨‍🌾</span>
+                <div class="role-card-text">
+                  <strong>Farmer</strong>
+                  <small>List harvests, 72% escrow</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="role-radio-card">
+              <input type="radio" name="regRole" value="FPO_Member">
+              <div class="role-card-inner">
+                <span class="role-card-icon">🏢</span>
+                <div class="role-card-text">
+                  <strong>FPO Leader</strong>
+                  <small>Cluster produce lots</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="role-radio-card">
+              <input type="radio" name="regRole" value="B2B_Buyer">
+              <div class="role-card-inner">
+                <span class="role-card-icon">🏬</span>
+                <div class="role-card-text">
+                  <strong>B2B Buyer</strong>
+                  <small>Bulk RFQs & forward contracts</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="role-radio-card">
+              <input type="radio" name="regRole" value="Consumer">
+              <div class="role-card-inner">
+                <span class="role-card-icon">🛒</span>
+                <div class="role-card-text">
+                  <strong>Consumer</strong>
+                  <small>Direct farmgate retail cart</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- District & State -->
+        <div class="form-field-group">
+          <label for="regDistrict">District & State *</label>
+          <input type="text" id="regDistrict" placeholder="e.g. Nashik, Maharashtra" required>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="regSubmitBtn">
+          <i data-lucide="check-circle"></i> Complete Registration & Enter
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/login.html">Sign In here</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function showAlert(message, type = 'error') {
+      const el = document.getElementById('regAlert');
+      el.className = `auth-alert ${type}`;
+      el.innerHTML = `
+        <i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}" style="width: 16px; height: 16px;"></i>
+        <span>${message}</span>
+      `;
+      el.style.display = 'flex';
+      lucide.createIcons();
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const district_state = document.getElementById('regDistrict').value.trim();
+      const role = document.querySelector('input[name="regRole"]:checked')?.value || 'Farmer';
+      const btn = document.getElementById('regSubmitBtn');
+
+      if (!name || !email || !password || !phone || !district_state) {
+        showAlert('Please fill in all required fields.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-sm"></span> Registering Account...`;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            role,
+            phone,
+            district_state
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_user', JSON.stringify(data.user));
+          showAlert('Account registered successfully! Welcome to KisanDirect AI.', 'success');
+
+          setTimeout(() => {
+            if (role === 'Farmer' || role === 'FPO_Member') {
+              window.location.href = '/farmer-hub.html';
+            } else {
+              window.location.href = '/marketplace.html';
+            }
+          }, 700);
+        } else {
+          showAlert(data.error || 'Registration failed. Please try again.');
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="check-circle"></i> Complete Registration & Enter`;
+          lucide.createIcons();
+        }
+      } catch (err) {
+        console.error('Registration error:', err);
+        showAlert('Server communication error. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="check-circle"></i> Complete Registration & Enter`;
+        lucide.createIcons();
+      }
+    }
+  </script>
+</body>
+</html>

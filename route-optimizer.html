@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Route Optimizer & Logistics - KisanDirect AI</title>
+  <meta name="description" content="AI Route Optimization & Fleet Telemetry for farmgate pickup clustering, cold-chain monitoring, and multi-drop delivery.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Leaflet GIS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <main class="content-wrapper">
+      <section id="view-logistics" class="view-panel active">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="navigation" style="color: var(--emerald-400);"></i> AI Route Optimization & Fleet Telemetry (VRP)</h3>
+            <p>Clusters smallholder farmgate pickups, optimizes multi-drop urban delivery corridors, and monitors cold chain integrity.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary btn-sm" onclick="RouteOptimizerModule.reOptimizeRoute()">
+              <i data-lucide="refresh-cw"></i> Re-Calculate Dynamic VRP
+            </button>
+            <button class="btn btn-accent btn-sm" onclick="RouteOptimizerModule.triggerEmergencyReRoute()">
+              <i data-lucide="alert-triangle"></i> Simulate Spoilage & Auto-Reroute
+            </button>
+          </div>
+        </div>
+
+        <!-- Route Savings Metrics -->
+        <div class="metric-cards-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box emerald">
+              <i data-lucide="map-pin"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Distance Saved per Run</h4>
+              <div class="metric-value" id="routeKmSaved">74 km</div>
+              <div class="metric-meta positive"><i data-lucide="check"></i> 268 km vs 342 km uncoordinated</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i data-lucide="clock"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Transit Time Reduced</h4>
+              <div class="metric-value" id="routeTimeSaved">2.7 hrs</div>
+              <div class="metric-meta positive"><i data-lucide="arrow-down-right"></i> Direct bypass of mandi queues</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box cyan">
+              <i data-lucide="fuel"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Fuel & Toll Savings</h4>
+              <div class="metric-value" id="routeFuelSaved">₹4,250</div>
+              <div class="metric-meta positive"><i data-lucide="leaf"></i> -86.4 kg CO2 emissions</div>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-icon-box rose">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <div class="metric-body">
+              <h4>Produce Spoilage Reduction</h4>
+              <div class="metric-value" id="routeSpoilageReduced">-18.5%</div>
+              <div class="metric-meta positive"><i data-lucide="thermometer"></i> 4°C continuous cold chain</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive GIS Map & Route Details -->
+        <div class="logistics-dashboard-grid">
+          <div class="map-card">
+            <div class="map-header">
+              <div>
+                <strong>Corridor: Western Agri-Express (Nashik Cluster ➔ Greater Mumbai Hubs)</strong>
+                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">Multi-Stop Farm Pickups ➔ FPO Pre-Cooling Hub ➔ Urban B2C/B2B Depots</span>
+              </div>
+              <span class="badge badge-grade-a"><i data-lucide="radio"></i> Live GPS Telemetry Active</span>
+            </div>
+            <div id="logisticsMap"></div>
+          </div>
+
+          <div class="route-controls-card">
+            <h4 style="font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="milestone" style="color: var(--amber-400);"></i> Route Waypoints & Pickups
+            </h4>
+
+            <div class="waypoint-timeline" id="waypointsTimeline">
+              <!-- Populated by route-optimizer.js -->
+            </div>
+
+            <!-- IoT Cold Chain Telemetry Monitor -->
+            <h4 style="font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-top: 0.5rem;">
+              <i data-lucide="activity" style="color: var(--cyan-400);"></i> Cold-Chain Reefer Sensor Data
+            </h4>
+            <div class="telemetry-monitor" id="telemetryBox">
+              <!-- Populated by route-optimizer.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Leaflet GIS JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/route-optimizer.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      if (window.RouteOptimizerModule) {
+        window.RouteOptimizerModule.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

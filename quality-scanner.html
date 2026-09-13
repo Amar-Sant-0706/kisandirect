@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Quality Scanner - KisanDirect AI</title>
+  <meta name="description" content="Kisan-Vision neural computer vision quality scanner for automated defect detection, ripeness scoring, and verifiable DOCA certificates.">
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Injected Dynamic Header with Nav Guard -->
+    <div id="appHeader"></div>
+
+    <main class="content-wrapper">
+      <section id="view-vision" class="view-panel active">
+        <div class="section-header-row">
+          <div class="section-title-group">
+            <h3><i data-lucide="scan-line" style="color: var(--emerald-400);"></i> Kisan-Vision: Computer Vision AI Crop Quality Scanner</h3>
+            <p>Eliminating middleman grading fraud through automated neural defect detection, ripeness scoring, and tamper-proof DOCA QC certificates.</p>
+          </div>
+          <div class="action-btn-group">
+            <button class="btn btn-primary btn-sm" id="runVisionScanBtn">
+              <i data-lucide="refresh-cw"></i> Run Neural Inspection
+            </button>
+          </div>
+        </div>
+
+        <div class="vision-grid">
+          <!-- Left: AI Viewfinder Display -->
+          <div class="viewfinder-card">
+            <div class="scanner-display">
+              <div class="scanner-laser" id="scannerLaser"></div>
+              <img id="visionCropImage"
+                src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=700&q=80"
+                alt="Produce Under Inspection" />
+
+              <!-- Dynamic Bounding Box Overlay -->
+              <div class="ai-bbox" id="aiBoundingBox" style="top: 15%; left: 20%; width: 60%; height: 70%;">
+                <span class="ai-bbox-label"><i data-lucide="crosshair"></i> AI DETECT: <span id="visionCropTitle">Kolar Hybrid Tomato</span></span>
+              </div>
+            </div>
+
+            <!-- Universal Produce & Image Selector -->
+            <div class="sample-selector-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <label style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap;"><i data-lucide="scan"></i> Inspect Produce:</label>
+                <select id="visionCommoditySelect" class="form-control" style="flex: 1; min-width: 200px; background: var(--bg-surface); color: #fff; border: 1px solid var(--border-glow); border-radius: var(--radius-md); padding: 7px 12px; font-weight: 600;">
+                  <!-- Populated dynamically from /api/commodities -->
+                </select>
+                <label class="btn btn-outline btn-sm" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin: 0;">
+                  <i data-lucide="upload"></i> Upload Photo
+                  <input type="file" id="visionImageUpload" accept="image/*" style="display: none;" />
+                </label>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Presets:</span>
+                <button class="sample-thumb-btn active" data-crop="tomato">🍅 Tomato</button>
+                <button class="sample-thumb-btn" data-crop="onion">🧅 Onion</button>
+                <button class="sample-thumb-btn" data-crop="potato">🥔 Potato</button>
+                <button class="sample-thumb-btn" data-crop="apple">🍎 Apple</button>
+                <button class="sample-thumb-btn" data-crop="orange">🍊 Orange</button>
+                <button class="sample-thumb-btn" data-crop="mango">🥭 Mango</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Inspection Results & Cryptographic QC Certificate -->
+          <div class="qc-results-card">
+            <div class="qc-grade-badge-huge">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">AI Verified Quality Grade</span>
+                <div class="qc-grade-letter" id="visionGradeLetter">Grade A+</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 0.8rem; color: var(--emerald-400); font-weight: 700;">Freshness Index</span>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #fff;" id="visionOverallScore">96.4%</div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 2px;">
+                <span>Color & Ripeness Index</span>
+                <strong style="color: var(--emerald-400);" id="visionRipeness">94% (Optimal Harvest Red)</strong>
+              </div>
+              <div class="qc-meter-bar">
+                <div class="qc-meter-fill" id="visionMeterFill" style="width: 96%;"></div>
+              </div>
+            </div>
+
+            <div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: 1rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Surface Blemish Rate:</span>
+                <strong style="color: var(--emerald-400);" id="visionBlemish">1.2% (Negligible)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Calibrated Diameter:</span>
+                <strong id="visionDiameter">62 mm (Uniformity 98%)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Firmness & Transit Life:</span>
+                <strong style="color: var(--cyan-400);" id="visionFirmness">4.8 kg/cm² (10-Day Safe)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+                <span style="color: var(--text-muted);">Fair Farmgate Premium:</span>
+                <strong style="color: var(--emerald-400);" id="visionAdjustment">+14% Above APMC Base</strong>
+              </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--emerald-500); border-radius: var(--radius-md); padding: 0.85rem; font-size: 0.78rem;">
+              <div style="display: flex; align-items: center; gap: 6px; color: var(--emerald-400); font-weight: 700; margin-bottom: 2px;">
+                <i data-lucide="shield-check"></i> DOCA Anti-Fraud Digital QC Hash
+              </div>
+              <code style="font-size: 0.72rem; color: var(--text-muted); word-break: break-all;" id="visionHash">
+                SHA256: 7f8a91c2b4d90e8a7f6c5b4a3d2e1f0a
+              </code>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/kisan-vani.js"></script>
+  <script src="js/nav-guard.js"></script>
+  <script src="js/ai-vision.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await KisanData.loadInitialData();
+      if (window.AIVisionModule) {
+        window.AIVisionModule.init();
+      }
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanDirect AI - Multi-Portal Agricultural Architecture</title>
+  <meta name="description" content="AI-powered digital agricultural marketplace and regulatory control room connecting Farmers/FPOs, Buyers, and Regulators. Ministry of Consumer Affairs (DOCA).">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Multi-Portal Theme Stylesheet -->
+  <link rel="stylesheet" href="/src/styles/portals.css">
+</head>
+<body>
+
+  <!-- Root Application Container -->
+  <div id="app"></div>
+
+  <!-- Router Initialization -->
+  <script type="module">
+    import { Router } from '/src/router.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      Router.init('app');
+    });
+  </script>
+
+</body>
+</html>
