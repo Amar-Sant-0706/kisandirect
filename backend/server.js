@@ -72,6 +72,10 @@ const indexHtmlPath = fs.existsSync(path.join(distDir, 'index.html'))
   ? path.join(distDir, 'index.html')
   : path.join(publicDir, 'index.html');
 
+// Explicit root route serving the KisanDirect AI Multi-Portal Application
+app.get('/', (req, res) => res.sendFile(indexHtmlPath));
+app.get('/index.html', (req, res) => res.sendFile(indexHtmlPath));
+
 // 2. Client-side routing catch-all fallback:
 // Any non-API route (e.g. /farmer/dashboard, /buyer/marketplace, /owner/control-room, /auth/login)
 // is served the frontend index.html so client router handles it seamlessly with zero 404s.
