@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -146,14 +147,26 @@ app.get('/api/doca/surveillance', (req, res) => {
   }
 });
 
-// Fallback to login.html for unauthenticated or unmapped frontend routes
+// Fallback routing: API routes return 404 JSON, unmapped frontend routes serve index.html
 app.use((req, res) => {
-  res.redirect('/login.html');
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({
+      success: false,
+      error: 'NOT_FOUND',
+      message: `API route ${req.method} ${req.path} not found`
+    });
+  }
+  const rootFilePath = path.join(__dirname, '..', req.path);
+  if (fs.existsSync(rootFilePath) && fs.statSync(rootFilePath).isFile()) {
+    return res.sendFile(rootFilePath);
+  }
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log(`[KisanDirect AI] Universal Agri-Marketplace Backend running on http://localhost:${PORT}`);
+// Start server on 0.0.0.0 for cloud container and Render compatibility
+const HOST = process.env.HOST || '0.0.0.0';
+const server = app.listen(PORT, HOST, () => {
+  console.log(`[KisanDirect AI] Universal Agri-Marketplace Backend running on http://${HOST}:${PORT}`);
 });
 
 module.exports = { app, server };

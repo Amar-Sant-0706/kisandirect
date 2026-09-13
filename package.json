@@ -2,11 +2,10 @@
   "name": "antigravity",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
+    "start": "node server/server.js",
     "build": "node scripts/build.js",
-    "start": "node backend/server.js",
-    "start:legacy": "node server/server.js",
     "seed": "node server/seed.js",
     "test": "node test/embedded_ai_multi_portal_test.js",
     "test:ai": "node test/embedded_ai_multi_portal_test.js",
