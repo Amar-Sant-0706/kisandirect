@@ -5,38 +5,63 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-:root {
-  /* Color Palette - Premium AgriTech Theme */
-  --bg-primary: #0a0e17;
-  --bg-secondary: #0f172a;
-  --bg-surface: #141e33;
-  --bg-surface-elevated: #1a2744;
-  --bg-glass: rgba(20, 30, 51, 0.72);
-  --bg-glass-card: rgba(26, 39, 68, 0.55);
+:root, [data-theme="blue"] {
+  /* ==========================================================================
+     1. "Blue Skies" Theme (Steel/Navy Blue #1e5276 & Soft Sky #f0f6fa)
+     ========================================================================== */
+  --header-bg: #1e5276;
+  --header-top-bg: #153e5b;
+  --header-text: #ffffff;
+  --bg-primary: #f0f6fa;
+  --bg-secondary: #e2edf5;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f8fafc;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+  --bg-glass-card: rgba(255, 255, 255, 0.98);
+  --bg-subtle: #e2edf5;
   
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-glow: rgba(16, 185, 129, 0.28);
-  --border-active: #10b981;
+  --card-bg: #ffffff;
+  --card-border: #bde0f5;
+  --card-border-hover: #1e5276;
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --border-subtle: #bde0f5;
+  --border-glow: rgba(30, 82, 118, 0.22);
+  --border-active: #1e5276;
+
+  --text-primary: #0f2942;
+  --text-secondary: #546e7a;
   --text-muted: #64748b;
-  --text-inverse: #04101e;
+  --text-inverse: #ffffff;
+  --text-main: #0f2942;
+
+  --btn-cta-bg: #1e5276;
+  --btn-cta-hover: #153e5b;
+  --btn-cta-text: #ffffff;
+
+  --accent: #0284c7;
+  --accent-light: #e0f2fe;
+  --accent-text: #0369a1;
+
+  --chip-active-bg: #1e5276;
+  --chip-active-text: #ffffff;
+  --chip-bg: #ffffff;
+  --chip-border: #bde0f5;
+  --chip-text: #1e5276;
 
   /* Brand Accents */
   --emerald-50: #ecfdf5;
   --emerald-100: #d1fae5;
-  --emerald-400: #34d399;
-  --emerald-500: #10b981;
-  --emerald-600: #059669;
-  --emerald-700: #047857;
+  --emerald-400: #10b981;
+  --emerald-500: #059669;
+  --emerald-600: #047857;
+  --emerald-700: #065f46;
   
-  --amber-400: #fbbf24;
-  --amber-500: #f59e0b;
-  --amber-600: #d97706;
+  --amber-400: #f59e0b;
+  --amber-500: #d97706;
+  --amber-600: #b45309;
 
-  --cyan-400: #22d3ee;
-  --cyan-500: #06b6d4;
+  --cyan-400: #06b6d4;
+  --cyan-500: #0891b2;
 
   --rose-500: #f43f5e;
   --rose-600: #e11d48;
@@ -44,10 +69,10 @@
   --indigo-500: #6366f1;
 
   /* Shadows & Glass */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.45);
-  --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.2);
+  --shadow-sm: 0 2px 8px rgba(30, 82, 118, 0.08);
+  --shadow-md: 0 8px 24px rgba(30, 82, 118, 0.12);
+  --shadow-lg: 0 16px 40px rgba(30, 82, 118, 0.16);
+  --shadow-glow: 0 0 25px rgba(30, 82, 118, 0.2);
   --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.2);
 
   /* Radii */
@@ -61,6 +86,77 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="harvest"] {
+  /* ==========================================================================
+     2. "Golden Harvest" Theme (Warm Ochre #d4a044 & Parchment #fff9ee)
+     ========================================================================== */
+  --header-bg: #d4a044;
+  --header-top-bg: #b57b18;
+  --header-text: #ffffff;
+  --bg-primary: #fff9ee;
+  --bg-secondary: #fef0d9;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #fffcf7;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+  --bg-glass-card: rgba(255, 255, 255, 0.98);
+  --bg-subtle: #fef0d9;
+  
+  --card-bg: #ffffff;
+  --card-border: #f3dfb5;
+  --card-border-hover: #b57b18;
+
+  --border-subtle: #f3dfb5;
+  --border-glow: rgba(212, 160, 68, 0.22);
+  --border-active: #b57b18;
+
+  --text-primary: #3d2605;
+  --text-secondary: #785827;
+  --text-muted: #927546;
+  --text-inverse: #ffffff;
+  --text-main: #3d2605;
+
+  --btn-cta-bg: #b57b18;
+  --btn-cta-hover: #97640f;
+  --btn-cta-text: #ffffff;
+
+  --accent: #d97706;
+  --accent-light: #fef3c7;
+  --accent-text: #92400e;
+
+  --chip-active-bg: #b57b18;
+  --chip-active-text: #ffffff;
+  --chip-bg: #ffffff;
+  --chip-border: #f3dfb5;
+  --chip-text: #785827;
+
+  /* Brand Accents */
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-400: #10b981;
+  --emerald-500: #059669;
+  --emerald-600: #047857;
+  --emerald-700: #065f46;
+  
+  --amber-400: #f59e0b;
+  --amber-500: #d97706;
+  --amber-600: #b45309;
+
+  --cyan-400: #06b6d4;
+  --cyan-500: #0891b2;
+
+  --rose-500: #f43f5e;
+  --rose-600: #e11d48;
+
+  --indigo-500: #6366f1;
+
+  /* Shadows & Glass */
+  --shadow-sm: 0 2px 8px rgba(181, 123, 24, 0.08);
+  --shadow-md: 0 8px 24px rgba(181, 123, 24, 0.12);
+  --shadow-lg: 0 16px 40px rgba(181, 123, 24, 0.16);
+  --shadow-glow: 0 0 25px rgba(181, 123, 24, 0.2);
+  --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.2);
 }
 
 /* Reset & Base */
@@ -78,11 +174,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
-  background-attachment: fixed;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 code, pre, .font-mono {
@@ -123,15 +215,16 @@ a:hover {
 
 /* Top Banner: DOCA Ministry Bar */
 .gov-banner {
-  background: linear-gradient(90deg, #09121f 0%, #0d1b2d 50%, #09121f 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--header-top-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 6px 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.78rem;
-  color: var(--text-secondary);
+  color: #ffffff;
   z-index: 100;
+  transition: background 0.25s ease;
 }
 
 .gov-emblem-wrapper {
@@ -141,13 +234,14 @@ a:hover {
 }
 
 .gov-emblem-badge {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--amber-400);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   padding: 1px 8px;
   border-radius: var(--radius-full);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.72rem;
+  letter-spacing: 0.5px;
 }
 
 .gov-live-ticker {
@@ -160,7 +254,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--emerald-400);
+  color: #ffffff;
   font-weight: 600;
 }
 .pulse-indicator::before {
@@ -168,8 +262,8 @@ a:hover {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--emerald-500);
-  box-shadow: 0 0 8px var(--emerald-400);
+  background-color: #34d399;
+  box-shadow: 0 0 8px #34d399;
   animation: pulseDot 2s infinite;
 }
 
@@ -185,8 +279,9 @@ a:hover {
   top: 0;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: rgba(10, 14, 23, 0.85);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--header-bg);
+  color: var(--header-text);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 0.85rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -204,12 +299,13 @@ a:hover {
 .brand-logo-icon {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #0284c7 100%);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: #fff;
   font-size: 1.35rem;
 }
@@ -217,17 +313,16 @@ a:hover {
 .brand-text h1 {
   font-size: 1.25rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
   display: flex;
   align-items: center;
   gap: 6px;
+  margin: 0;
 }
 
 .brand-text span {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.85);
   display: block;
   font-weight: 500;
 }
@@ -235,17 +330,17 @@ a:hover {
 /* Persona Switcher Buttons */
 .persona-switcher {
   display: flex;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(255, 255, 255, 0.15);
   padding: 4px;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   gap: 4px;
 }
 
 .persona-btn {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.85);
   padding: 8px 14px;
   font-size: 0.85rem;
   font-weight: 600;
@@ -258,16 +353,37 @@ a:hover {
 }
 
 .persona-btn:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .persona-btn.active {
-  background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  background: #ffffff;
+  color: var(--btn-cta-bg);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Subtle Theme Switcher Pill Component */
+.theme-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.theme-toggle-pill:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
 /* Nav Actions */
 .nav-actions {
   display: flex;

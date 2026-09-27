@@ -1,718 +1,767 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="blue" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KisanDirect AI - National Multi-Role Agri-Marketplace Gateway</title>
-  <meta name="description" content="Sign in to KisanDirect AI. 3 isolated portals: Farmer & FPO Hub, Buyer E-Commerce Marketplace, and Owner Admin Control Tower.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>KisanDirect - Sign In & Multi-Role Gateway</title>
+  <meta name="description" content="Sign in to KisanDirect. Unified agricultural marketplace connecting Farmers & FPOs, Wholesale & Retail Buyers, and Regulatory Platform Owners." />
 
-  <!-- Typography & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 
-  <!-- Core, Auth & E-Commerce Styles -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/auth.css">
-  <link rel="stylesheet" href="css/ecommerce.css">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Remix Icon CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 
   <style>
-    /* Multi-Role Portal Switcher */
-    .portal-role-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
-      background: rgba(15, 23, 42, 0.8);
-      border-radius: var(--radius-md);
-      padding: 4px;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-subtle);
+    * {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .portal-tab-btn {
-      padding: 10px 8px;
-      text-align: center;
-      background: transparent;
-      border: none;
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      font-weight: 700;
-      font-size: 0.82rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      transition: all var(--transition-fast);
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .portal-tab-btn:hover {
-      color: var(--text-primary);
-      background: rgba(255, 255, 255, 0.04);
+    /* Zero-Scrollbar Utility */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ==========================================================================
+       THEME DESIGN TOKENS
+       1. "Blue Skies" Theme [data-theme="blue"]
+       2. "Golden Harvest" Theme [data-theme="harvest"]
+       ========================================================================== */
+    :root, [data-theme="blue"] {
+      --header-bg: #1e5276;
+      --header-top-bg: #153e5b;
+      --header-text: #ffffff;
+      --bg-main: #f0f6fa;
+      --card-bg: #ffffff;
+      --card-border: #bde0f5;
+      --card-border-hover: #1e5276;
+      --btn-cta-bg: #1e5276;
+      --btn-cta-hover: #153e5b;
+      --btn-cta-text: #ffffff;
+      --accent: #0284c7;
+      --accent-light: #e0f2fe;
+      --accent-text: #0369a1;
+      --text-main: #0f2942;
+      --text-muted: #546e7a;
+      --chip-active-bg: #1e5276;
+      --chip-active-text: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #bde0f5;
+      --chip-text: #1e5276;
     }
 
-    .portal-tab-btn.active {
-      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    [data-theme="harvest"] {
+      --header-bg: #d4a044;
+      --header-top-bg: #b57b18;
+      --header-text: #ffffff;
+      --bg-main: #fff9ee;
+      --card-bg: #ffffff;
+      --card-border: #f3dfb5;
+      --card-border-hover: #b57b18;
+      --btn-cta-bg: #b57b18;
+      --btn-cta-hover: #97640f;
+      --btn-cta-text: #ffffff;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --accent-text: #92400e;
+      --text-main: #3d2605;
+      --text-muted: #785827;
+      --chip-active-bg: #b57b18;
+      --chip-active-text: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #f3dfb5;
+      --chip-text: #785827;
     }
 
-    .portal-tab-btn.active.tab-admin {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    .portal-tab-btn.active.tab-buyer {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    .theme-header {
+      background-color: var(--header-bg);
+      color: var(--header-text);
+      transition: background-color 0.25s ease;
     }
 
-    /* Fast 1-Click Demo Pills */
-    .demo-accounts-card {
-      background: rgba(16, 185, 129, 0.05);
-      border: 1px dashed rgba(16, 185, 129, 0.3);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 1.5rem;
+    .theme-topbar {
+      background-color: var(--header-top-bg);
+      transition: background-color 0.25s ease;
     }
 
-    .demo-accounts-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
+    .theme-card {
+      background-color: var(--card-bg);
+      border-color: var(--card-border);
+      transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .demo-chip {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 8px 10px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .theme-card:hover {
+      border-color: var(--card-border-hover);
     }
 
-    .demo-chip:hover {
-      border-color: var(--emerald-400);
-      background: rgba(16, 185, 129, 0.15);
-      transform: translateY(-2px);
+    .theme-btn-cta {
+      background-color: var(--btn-cta-bg);
+      color: var(--btn-cta-text);
+      transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     }
 
-    .demo-chip-icon {
-      font-size: 1.2rem;
-    }
-
-    .demo-chip-text {
-      line-height: 1.2;
-    }
-
-    .demo-chip-text strong {
-      display: block;
-      font-size: 0.78rem;
-      color: #fff;
-    }
-
-    .demo-chip-text span {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-
-    /* Active Session Banner */
-    .active-session-banner {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--emerald-500);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      display: none;
+    .theme-btn-cta:hover {
+      background-color: var(--btn-cta-hover);
+      transform: translateY(-1px);
     }
   </style>
 </head>
-<body class="auth-page-wrapper">
+<body class="flex flex-col min-h-screen">
 
   <!-- ==========================================================================
-       1. ANIMATED BRAND OPENING LOGO SPLASH
+       1. TOP LIVE STATUS & LANGUAGE BAR (Identical to store.html)
        ========================================================================== -->
-  <div class="brand-intro-splash" id="brandIntroSplash">
-    <div class="splash-ambient-glow"></div>
-    <div class="splash-content">
-      <div class="splash-logo-container">
-        <div class="splash-logo-ring-outer"></div>
-        <div class="splash-logo-ring"></div>
-        <div class="splash-logo-icon">
-          <i data-lucide="sprout"></i>
-        </div>
-      </div>
-      <h1 class="splash-title">KisanDirect AI</h1>
-      <p class="splash-tagline">National Farm-to-Fork Direct Grid & Intelligent Supply Chain</p>
+  <aside class="theme-topbar text-white text-xs py-1.5 px-4 shadow-sm" aria-label="National Agriculture Status Bar">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
       
-      <div class="splash-badges">
-        <span class="splash-badge"><i data-lucide="shield-check"></i> 0% Middlemen Cut</span>
-        <span class="splash-badge"><i data-lucide="lock"></i> 100% Escrow Protection</span>
-        <span class="splash-badge"><i data-lucide="truck"></i> IoT Reefer Cold-Chain</span>
+      <!-- Live Mandi Update Badge & Pulse Ticker -->
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+        </span>
+        <span class="font-bold tracking-wide uppercase text-[11px] md:text-xs truncate">
+          Direct Mandi Rates & Govt MSP Updated Daily
+        </span>
+        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200">
+          <i class="ri-shield-check-fill text-xs" aria-hidden="true"></i> AGMARKNET Live
+        </span>
       </div>
 
-      <div class="splash-progress-bar">
-        <div class="splash-progress-fill"></div>
+      <!-- Right Action Strip: Theme Switcher & Language Dropdown -->
+      <div class="flex items-center gap-2 md:gap-4 shrink-0">
+        
+        <!-- Subtle Theme Switcher Pill -->
+        <button type="button" 
+                onclick="toggleAppTheme()" 
+                id="themeToggleBtn"
+                class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                title="Switch Color Theme">
+          <i class="ri-contrast-2-line text-xs" aria-hidden="true"></i>
+          <span id="themeToggleLabel" class="hidden sm:inline">Theme: Blue Skies</span>
+          <span class="sm:hidden font-mono text-[10px]">THEME</span>
+        </button>
+
+        <!-- Back to Storefront Link -->
+        <a href="/store" class="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all" title="Return to Marketplace">
+          <i class="ri-shopping-basket-line text-xs"></i>
+          <span>Mandi Store</span>
+        </a>
+
       </div>
-
-      <button class="splash-skip-btn" id="skipSplashBtn" onclick="dismissBrandSplash()">
-        Enter Platform Now &rarr;
-      </button>
     </div>
-  </div>
+  </aside>
 
-  <!-- Top Government DOCA Advisory Banner -->
-  <header class="gov-banner">
-    <div class="gov-emblem-wrapper">
-      <span class="gov-emblem-badge">GOVT OF INDIA</span>
-      <span>Ministry of Consumer Affairs, Food & Public Distribution | Department of Consumer Affairs (DOCA)</span>
-    </div>
-    <div class="gov-live-ticker">
-      <span class="pulse-indicator">Multi-Role RBAC Gateway Active</span>
-      <span>National Farm-to-Fork Grid • Verified</span>
-    </div>
-  </header>
+  <!-- ==========================================================================
+       2. BRAND HEADER
+       ========================================================================== -->
+  <header class="theme-header pt-4 pb-4 px-4 shadow-md transition-colors" role="banner">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Identity with Crop Leaf Emblem -->
+      <a href="/store" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1">
+        <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-2xl shadow-inner shrink-0" aria-hidden="true">
+          <i class="ri-leaf-fill text-emerald-300"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none">
+              KISAN DIRECT
+            </h1>
+            <span class="bg-emerald-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest">
+              DOCA
+            </span>
+          </div>
+          <p class="text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5">
+            National Farm-to-Fork Direct Grid & Intelligent Supply Chain
+          </p>
+        </div>
+      </a>
 
-  <main class="auth-main-container">
-    <div class="auth-card" style="max-width: 600px;">
-      <div style="margin-bottom: 0.75rem;">
-        <a href="/" style="display: inline-flex; align-items: center; gap: 6px; color: var(--emerald-400); font-size: 0.82rem; text-decoration: none; font-weight: 600;">
-          <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i> &larr; Back to Unified Main Web Platform
+      <!-- Quick Role Portal Links -->
+      <div class="hidden md:flex items-center gap-2">
+        <a href="/store" class="inline-flex items-center gap-1 text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg border border-white/20 transition-all">
+          <i class="ri-arrow-left-line"></i> Back to Store
+        </a>
+        <a href="/admin-portal.html" class="inline-flex items-center gap-1 text-xs font-bold bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg border border-white/20 transition-all">
+          <i class="ri-shield-keyhole-line"></i> Admin Tower
         </a>
       </div>
 
-      <!-- Logo & Heading -->
-      <div class="auth-header">
-        <div class="auth-logo-badge">
-          <i data-lucide="sprout" style="width: 32px; height: 32px;"></i>
-        </div>
-        <h2>KisanDirect AI Gateway</h2>
-        <p>Direct Agricultural Marketplace & Multi-Role Supply Chain Tower</p>
-      </div>
+    </div>
+  </header>
 
-      <!-- Active Session Notice -->
-      <div class="active-session-banner" id="activeSessionBanner">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <div style="font-size: 0.78rem; color: var(--text-muted);">Active Session Detected:</div>
-            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="activeSessionName">Ramesh Patil</div>
-            <div style="font-size: 0.75rem; color: var(--emerald-400);" id="activeSessionRole">FARMER (Nashik, Maharashtra)</div>
+  <!-- ==========================================================================
+       3. MAIN AUTHENTICATION CONTAINER
+       ========================================================================== -->
+  <main class="flex-1 flex items-center justify-center p-4 md:p-8">
+    <div class="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden theme-card">
+      
+      <!-- Top Color Accent Bar -->
+      <div class="h-2 w-full theme-topbar"></div>
+
+      <div class="p-6 md:p-8">
+        
+        <!-- Header Title -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 text-3xl mb-3 shadow-inner">
+            <i class="ri-shield-user-fill"></i>
           </div>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn btn-primary btn-sm" onclick="continueToPortal()">
-              <i data-lucide="arrow-right"></i> Enter Portal
+          <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900" id="authTitle">
+            Sign In to KisanDirect
+          </h2>
+          <p class="text-xs md:text-sm text-slate-500 font-medium mt-1">
+            Zero Middlemen • 100% Escrow Protection • Direct Mandi Access
+          </p>
+        </div>
+
+        <!-- Active Session Banner (if already logged in) -->
+        <div id="activeSessionBanner" class="hidden mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-slate-800">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Active Session Found</span>
+              <strong class="text-sm font-bold text-slate-900" id="activeSessionName">Ramesh Patil</strong>
+              <span class="text-xs text-slate-600 block" id="activeSessionRole">FARMER • Verified</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="continueToPortal()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs shadow hover:bg-emerald-700 transition">
+                Enter Portal &rarr;
+              </button>
+              <button type="button" onclick="clearSessionAndReset()" class="px-3 py-1.5 rounded-lg bg-white border border-rose-300 text-rose-600 font-bold text-xs hover:bg-rose-50 transition">
+                Switch
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Selector Tabs -->
+        <div class="grid grid-cols-3 gap-2 p-1.5 bg-slate-100 rounded-2xl mb-6">
+          <button type="button" 
+                  id="tabFarmer" 
+                  onclick="selectRole('FARMER')" 
+                  class="py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all bg-white text-emerald-700 shadow-sm border border-slate-200">
+            <i class="ri-truck-fill text-lg"></i>
+            <span>Farmer / FPO</span>
+          </button>
+          <button type="button" 
+                  id="tabBuyer" 
+                  onclick="selectRole('BUYER')" 
+                  class="py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all text-slate-600 hover:text-slate-900">
+            <i class="ri-store-3-fill text-lg"></i>
+            <span>Buyer Market</span>
+          </button>
+          <button type="button" 
+                  id="tabAdmin" 
+                  onclick="selectRole('OWNER')" 
+                  class="py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all text-slate-600 hover:text-slate-900">
+            <i class="ri-shield-keyhole-fill text-lg"></i>
+            <span>Owner Tower</span>
+          </button>
+        </div>
+
+        <!-- 1-Click Fast Demo Credentials Pill Grid -->
+        <div class="mb-6 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+              <i class="ri-flashlight-fill text-amber-500"></i> Fast 1-Click Demo Testing
+            </span>
+            <span class="text-[10px] text-slate-400 font-medium">Click to Auto-fill</span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <button type="button" onclick="quickLogin('farmer@kisandirect.gov.in', 'farmer123', 'FARMER')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 transition-all text-xs">
+              <span class="font-bold text-slate-800 block truncate">👨‍🌾 Ramesh (Farmer)</span>
+              <span class="text-[10px] text-slate-400 truncate block">farmer@kisandirect.gov.in</span>
             </button>
-            <button type="button" class="btn btn-outline btn-sm" onclick="clearSessionAndReset()" style="color: var(--rose-400); border-color: var(--rose-500);">
-              <i data-lucide="log-out"></i> Switch
+            <button type="button" onclick="quickLogin('procurement@reliancefresh.com', 'buyer123', 'BUYER')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-sky-500 transition-all text-xs">
+              <span class="font-bold text-slate-800 block truncate">🛒 Reliance Fresh</span>
+              <span class="text-[10px] text-slate-400 truncate block">procurement@reliancefresh.com</span>
+            </button>
+            <button type="button" onclick="quickLogin('owner@kisandirect.com', 'ownerPass123', 'OWNER')" class="text-left p-2 rounded-xl bg-white border border-slate-200 hover:border-purple-500 transition-all text-xs col-span-2 md:col-span-1">
+              <span class="font-bold text-slate-800 block truncate">🛡️ Platform Owner</span>
+              <span class="text-[10px] text-slate-400 truncate block">owner@kisandirect.com</span>
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Portal Tabs Selector -->
-      <div class="portal-role-tabs">
-        <button type="button" class="portal-tab-btn active" id="portalTabFarmer" onclick="selectPortalRole('FARMER')">
-          <i data-lucide="tractor" style="width: 18px; height: 18px;"></i>
-          <span>Farmer Portal</span>
-        </button>
-        <button type="button" class="portal-tab-btn tab-buyer" id="portalTabBuyer" onclick="selectPortalRole('BUYER')">
-          <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
-          <span>Buyer Market</span>
-        </button>
-        <button type="button" class="portal-tab-btn tab-admin" id="portalTabAdmin" onclick="selectPortalRole('ADMIN')">
-          <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i>
-          <span>Owner / Admin</span>
-        </button>
-      </div>
+        <!-- Alert Box -->
+        <div id="authAlert" class="hidden mb-4 p-3 rounded-xl text-xs font-bold flex items-center gap-2"></div>
 
-      <!-- Alert Box -->
-      <div class="auth-alert" id="authAlert" style="display: none;"></div>
-
-      <!-- 1-Click Fast Demo Credentials -->
-      <div class="demo-accounts-card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.8rem; font-weight: 700; color: var(--emerald-400);">
-            <i data-lucide="zap" style="width: 13px; height: 13px; display: inline-block; vertical-align: middle;"></i> 1-Click Fast Demo Logins
-          </span>
-          <span style="font-size: 0.7rem; color: var(--text-muted);">Strict RBAC Testing</span>
-        </div>
-        <div class="demo-accounts-grid">
-          <button type="button" class="demo-chip" onclick="quickLogin('owner@kisandirect.com', 'ownerPass123', 'OWNER')">
-            <span class="demo-chip-icon">🛡️</span>
-            <div class="demo-chip-text">
-              <strong>Platform Owner</strong>
-              <span>owner@kisandirect.com</span>
-            </div>
+        <!-- Mode Switch: Sign In vs Register -->
+        <div class="flex border-b border-slate-200 mb-5">
+          <button type="button" 
+                  id="modeSignInBtn" 
+                  onclick="switchAuthMode('signin')" 
+                  class="flex-1 pb-3 text-sm font-bold border-b-2 border-slate-900 text-slate-900 transition-all text-center">
+            Sign In with Password
           </button>
-          <button type="button" class="demo-chip" onclick="quickLogin('farmer@test.com', 'farmerPass123', 'FARMER')">
-            <span class="demo-chip-icon">⏳</span>
-            <div class="demo-chip-text">
-              <strong>Test Farmer (Pending)</strong>
-              <span>farmer@test.com</span>
-            </div>
-          </button>
-          <button type="button" class="demo-chip" onclick="quickLogin('buyer@test.com', 'buyerPass123', 'BUYER')">
-            <span class="demo-chip-icon">⏳</span>
-            <div class="demo-chip-text">
-              <strong>Test Buyer (Pending)</strong>
-              <span>buyer@test.com</span>
-            </div>
-          </button>
-          <button type="button" class="demo-chip" onclick="quickLogin('farmer@kisandirect.com', 'farmer123', 'FARMER')">
-            <span class="demo-chip-icon">👨‍🌾</span>
-            <div class="demo-chip-text">
-              <strong>Approved Farmer</strong>
-              <span>farmer@kisandirect.com</span>
-            </div>
-          </button>
-          <button type="button" class="demo-chip" onclick="quickLogin('verified_buyer@kisandirect.com', 'buyer123', 'BUYER')">
-            <span class="demo-chip-icon">🏢</span>
-            <div class="demo-chip-text">
-              <strong>Approved Buyer</strong>
-              <span>verified_buyer@kisandirect.com</span>
-            </div>
+          <button type="button" 
+                  id="modeRegisterBtn" 
+                  onclick="switchAuthMode('register')" 
+                  class="flex-1 pb-3 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all text-center">
+            Register New Account
           </button>
         </div>
-      </div>
 
-      <!-- Sub Tabs: Sign In / Create Account -->
-      <div style="display: flex; border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.25rem;">
-        <button type="button" class="auth-tab-btn active" id="subTabSignIn" onclick="switchAuthMode('signin')" style="flex: 1; border-radius: 0; border-bottom: 2px solid var(--emerald-500);">
-          Sign In to Portal
-        </button>
-        <button type="button" class="auth-tab-btn" id="subTabRegister" onclick="switchAuthMode('register')" style="flex: 1; border-radius: 0;">
-          Create New Account
-        </button>
-      </div>
-
-      <!-- SIGN IN FORM -->
-      <div id="signinView">
-        <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
-          <div class="form-field-group">
-            <label for="loginEmail">Email Address</label>
-            <input type="email" id="loginEmail" placeholder="e.g. farmer@kisandirect.com" required autocomplete="email">
-          </div>
-
-          <div class="form-field-group">
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
-          </div>
-
-          <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">
-            <i data-lucide="log-in"></i> Access Selected Portal
-          </button>
-        </form>
-      </div>
-
-      <!-- REGISTRATION FORM -->
-      <div id="registerView" style="display: none;">
-        <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
-          <div class="form-field-group">
-            <label for="regName">Full Legal / Contact Person Name *</label>
-            <input type="text" id="regName" placeholder="e.g. Ramesh Patil / Vikram Singhania" required autocomplete="name">
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div class="form-field-group">
-              <label for="regEmail">Email Address *</label>
-              <input type="email" id="regEmail" placeholder="name@domain.com" required autocomplete="email">
-            </div>
-            <div class="form-field-group">
-              <label for="regPhone">Mobile Phone (10 digits) *</label>
-              <input type="tel" id="regPhone" placeholder="9876543210" pattern="[0-9]{10}" required autocomplete="tel">
-            </div>
-          </div>
-
-          <div class="form-field-group">
-            <label for="regPassword">Create Password *</label>
-            <input type="password" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
-          </div>
-
-          <!-- Role Selection -->
-          <div class="form-field-group">
-            <label>Select Your Platform Role *</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-              <label class="role-radio-card">
-                <input type="radio" name="regRole" value="FARMER" checked onchange="toggleKycFields(this.value)">
-                <div class="role-card-inner">
-                  <span class="role-card-icon">👨‍🌾</span>
-                  <div class="role-card-text">
-                    <strong>Farmer / FPO</strong>
-                    <small>Direct farmgate harvest listing</small>
-                  </div>
-                </div>
+        <!-- ==========================================
+             FORM 1: SIGN IN FORM
+             ========================================== -->
+        <div id="signinView">
+          <form onsubmit="handleLogin(event)" class="space-y-4">
+            <div>
+              <label for="loginEmail" class="block text-xs font-bold text-slate-700 mb-1">
+                Email Address / User ID
               </label>
+              <div class="relative">
+                <i class="ri-mail-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="email" 
+                       id="loginEmail" 
+                       value="farmer@kisandirect.gov.in"
+                       required 
+                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+              </div>
+            </div>
 
-              <label class="role-radio-card">
-                <input type="radio" name="regRole" value="BUYER" onchange="toggleKycFields(this.value)">
-                <div class="role-card-inner">
-                  <span class="role-card-icon">🏬</span>
-                  <div class="role-card-text">
-                    <strong>Buyer / Retailer</strong>
-                    <small>Wholesale & institutional procurement</small>
-                  </div>
-                </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="loginPassword" class="block text-xs font-bold text-slate-700">
+                  Password
+                </label>
+                <a href="/auth/login" class="text-xs font-bold text-sky-600 hover:underline">Use 6-Digit OTP &rarr;</a>
+              </div>
+              <div class="relative">
+                <i class="ri-lock-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="password" 
+                       id="loginPassword" 
+                       value="farmer123"
+                       required 
+                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+              </div>
+            </div>
+
+            <button type="submit" 
+                    id="loginSubmitBtn"
+                    class="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-white shadow-md theme-btn-cta flex items-center justify-center gap-2 mt-2">
+              <i class="ri-login-circle-fill text-lg"></i>
+              <span>Access Selected Portal</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- ==========================================
+             FORM 2: REGISTRATION FORM
+             ========================================== -->
+        <div id="registerView" class="hidden">
+          <form onsubmit="handleRegister(event)" class="space-y-4">
+            <div>
+              <label for="regName" class="block text-xs font-bold text-slate-700 mb-1">
+                Full Legal Name / Business Representative *
               </label>
+              <input type="text" id="regName" placeholder="e.g. Ramesh Patil" required
+                     class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
             </div>
-          </div>
 
-          <!-- Farmer Details (shown if FARMER selected) -->
-          <div id="farmerDetailsFields" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-            <div style="font-size: 0.78rem; font-weight: 700; color: #10b981; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
-              <i data-lucide="sprout" style="width: 14px; height: 14px;"></i> Farmer Land & Crop Verification Profile:
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="form-field-group">
-                <label for="regLandArea">Land Holding (Acres) *</label>
-                <input type="number" id="regLandArea" placeholder="e.g. 5.5" step="0.1" min="0.1" value="5.0" required>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label for="regEmail" class="block text-xs font-bold text-slate-700 mb-1">
+                  Email Address *
+                </label>
+                <input type="email" id="regEmail" placeholder="farmer@example.com" required
+                       class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
               </div>
-              <div class="form-field-group">
-                <label for="regCropSpeciality">Primary Crop Speciality *</label>
-                <input type="text" id="regCropSpeciality" placeholder="e.g. Red Onion, Tomato" value="Red Onion & Vegetables" required>
-              </div>
-            </div>
-            <div class="form-field-group" style="margin-top: 8px;">
-              <label for="regKisanId">Kisan ID / PM-KISAN Ref (Optional)</label>
-              <input type="text" id="regKisanId" placeholder="e.g. KISAN-MH-94821">
-            </div>
-          </div>
-
-          <!-- B2B / Buyer KYC Credentials (shown if BUYER selected) -->
-          <div id="buyerKycFields" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
-            <div style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
-              <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Mandatory Buyer Verification & KYC Data:
-            </div>
-            <div class="form-field-group">
-              <label for="regBusinessName">Registered Business / Firm Name *</label>
-              <input type="text" id="regBusinessName" placeholder="e.g. Reliance Fresh Logistics Ltd">
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="form-field-group">
-                <label for="regGstin">GSTIN Number (15 Digits) *</label>
-                <input type="text" id="regGstin" placeholder="27AAACR7188G1ZV" maxlength="15">
-              </div>
-              <div class="form-field-group">
-                <label for="regTradeType">Trade Type *</label>
-                <select id="regTradeType" style="width: 100%; background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px 10px;">
-                  <option value="Wholesale Mandi Trader">Wholesale Mandi Trader</option>
-                  <option value="Supermarket / Modern Retail">Supermarket / Modern Retail</option>
-                  <option value="Food Processing / Agro Exporter">Food Processing / Agro Exporter</option>
-                  <option value="HoReCa & Hospitality">HoReCa & Hospitality</option>
-                  <option value="Individual Bulk Consumer">Individual Bulk Consumer</option>
-                </select>
+              <div>
+                <label for="regPhone" class="block text-xs font-bold text-slate-700 mb-1">
+                  Mobile Phone (10 digits) *
+                </label>
+                <input type="tel" id="regPhone" pattern="[0-9]{10}" placeholder="9876543210" required
+                       class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
               </div>
             </div>
-            <div class="form-field-group" style="margin-top: 8px;">
-              <label for="regFssai">FSSAI License (Optional)</label>
-              <input type="text" id="regFssai" placeholder="10012022000123" maxlength="14">
+
+            <div>
+              <label for="regPassword" class="block text-xs font-bold text-slate-700 mb-1">
+                Create Strong Password (min 6 characters) *
+              </label>
+              <input type="password" id="regPassword" minlength="6" placeholder="••••••••" required
+                     class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
             </div>
-          </div>
 
-          <div class="form-field-group">
-            <label for="regDistrict">District & State *</label>
-            <input type="text" id="regDistrict" placeholder="e.g. Nashik, Maharashtra" required>
-          </div>
+            <!-- Dynamic Farmer Verification Fields -->
+            <div id="regFarmerBox" class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-3">
+              <span class="text-xs font-bold text-emerald-800 flex items-center gap-1">
+                <i class="ri-plant-fill"></i> Farmer Land & Crop Verification Details:
+              </span>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="regLand" class="block text-[11px] font-bold text-slate-700 mb-1">Land (Acres) *</label>
+                  <input type="number" id="regLand" step="0.1" value="5.0" min="0.1" required
+                         class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold" />
+                </div>
+                <div>
+                  <label for="regCrop" class="block text-[11px] font-bold text-slate-700 mb-1">Primary Crop *</label>
+                  <input type="text" id="regCrop" value="Red Onion, Tomato" required
+                         class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold" />
+                </div>
+              </div>
+              <div>
+                <label for="regKisanId" class="block text-[11px] font-bold text-slate-700 mb-1">Kisan ID / PM-KISAN (Optional)</label>
+                <input type="text" id="regKisanId" placeholder="e.g. KISAN-MH-94821"
+                       class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold" />
+              </div>
+            </div>
 
-          <button type="submit" class="auth-submit-btn" id="regSubmitBtn">
-            <i data-lucide="check-circle"></i> Register Account & Proceed
-          </button>
-        </form>
+            <!-- Dynamic Buyer KYC Fields -->
+            <div id="regBuyerBox" class="hidden p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-3">
+              <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
+                <i class="ri-shield-check-fill"></i> Enterprise Buyer KYC & GSTIN Details:
+              </span>
+              <div>
+                <label for="regBizName" class="block text-[11px] font-bold text-slate-700 mb-1">Business / Firm Name *</label>
+                <input type="text" id="regBizName" placeholder="e.g. Reliance Fresh Retail"
+                       class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold" />
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="regGstin" class="block text-[11px] font-bold text-slate-700 mb-1">GSTIN Number (15 Digits) *</label>
+                  <input type="text" id="regGstin" maxlength="15" placeholder="27AAACR7188G1ZV"
+                         class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold" />
+                </div>
+                <div>
+                  <label for="regTradeType" class="block text-[11px] font-bold text-slate-700 mb-1">Trade Type *</label>
+                  <select id="regTradeType" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-semibold">
+                    <option value="Wholesale Mandi Trader">Wholesale Mandi Trader</option>
+                    <option value="Supermarket / Modern Retail">Supermarket / Modern Retail</option>
+                    <option value="Food Processing / Agro Exporter">Food Processing</option>
+                    <option value="HoReCa & Hospitality">HoReCa & Hospitality</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="regDistrict" class="block text-xs font-bold text-slate-700 mb-1">
+                District & State *
+              </label>
+              <input type="text" id="regDistrict" placeholder="e.g. Nashik, Maharashtra" required
+                     class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+            </div>
+
+            <button type="submit" 
+                    id="regSubmitBtn"
+                    class="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-white shadow-md bg-emerald-600 hover:bg-emerald-700 transition flex items-center justify-center gap-2 mt-2">
+              <i class="ri-user-add-line text-lg"></i>
+              <span>Complete Registration & Proceed</span>
+            </button>
+          </form>
+        </div>
+
       </div>
     </div>
   </main>
 
+  <!-- ==========================================================================
+       4. FOOTER NOTE
+       ========================================================================== -->
+  <footer class="py-4 text-center text-xs text-slate-500">
+    <p>Ministry of Consumer Affairs, Food & Public Distribution (DOCA) • KisanDirect AI National Grid</p>
+  </footer>
+
+  <!-- ==========================================================================
+       5. CONTROLLER SCRIPT
+       ========================================================================== -->
   <script>
-    lucide.createIcons();
+    var currentRole = 'FARMER';
+    var currentAuthMode = 'signin';
+    var currentTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
 
-    let selectedRole = 'FARMER';
+    // Theme Switcher
+    function applyTheme(theme) {
+      currentTheme = theme === 'harvest' ? 'harvest' : 'blue';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('kisan_selected_theme', currentTheme);
 
-    // 1. Splash Screen Lifecycle
-    const splashEl = document.getElementById('brandIntroSplash');
-    const splashAlreadySeen = sessionStorage.getItem('kd_splash_seen');
-    if (!splashAlreadySeen) {
-      // Auto dismiss smoothly after 1.8s
-      setTimeout(() => {
-        dismissBrandSplash(false);
-      }, 1800);
-    } else {
-      dismissBrandSplash(true);
-    }
-
-    function dismissBrandSplash(immediate = false) {
-      if (splashEl) {
-        sessionStorage.setItem('kd_splash_seen', 'true');
-        if (immediate) {
-          splashEl.style.display = 'none';
-        } else {
-          splashEl.classList.add('fade-out');
-          setTimeout(() => {
-            splashEl.style.display = 'none';
-          }, 500);
-        }
+      var label = document.getElementById('themeToggleLabel');
+      if (label) {
+        label.textContent = currentTheme === 'harvest' ? 'Theme: Golden Harvest' : 'Theme: Blue Skies';
       }
     }
 
-    // 2. Select Portal Role
-    function selectPortalRole(role) {
-      selectedRole = role;
-      document.getElementById('portalTabFarmer').className = 'portal-tab-btn ' + (role === 'FARMER' ? 'active' : '');
-      document.getElementById('portalTabBuyer').className = 'portal-tab-btn tab-buyer ' + (role === 'BUYER' ? 'active' : '');
-      document.getElementById('portalTabAdmin').className = 'portal-tab-btn tab-admin ' + (role === 'ADMIN' || role === 'OWNER' ? 'active' : '');
-      
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPassword');
+    function toggleAppTheme() {
+      var next = currentTheme === 'blue' ? 'harvest' : 'blue';
+      applyTheme(next);
+    }
+    applyTheme(currentTheme);
+
+    // Role Selection
+    function selectRole(role) {
+      currentRole = role;
+      var tabFarmer = document.getElementById('tabFarmer');
+      var tabBuyer = document.getElementById('tabBuyer');
+      var tabAdmin = document.getElementById('tabAdmin');
+
+      var regFarmerBox = document.getElementById('regFarmerBox');
+      var regBuyerBox = document.getElementById('regBuyerBox');
+
+      [tabFarmer, tabBuyer, tabAdmin].forEach(function(btn) {
+        btn.className = "py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all text-slate-600 hover:text-slate-900";
+      });
+
+      var emailInput = document.getElementById('loginEmail');
+      var passInput = document.getElementById('loginPassword');
+
       if (role === 'FARMER') {
-        emailInput.value = 'farmer@test.com';
-        passInput.value = 'farmerPass123';
+        tabFarmer.className = "py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all bg-white text-emerald-700 shadow-sm border border-slate-200";
+        if (regFarmerBox) regFarmerBox.classList.remove('hidden');
+        if (regBuyerBox) regBuyerBox.classList.add('hidden');
+        emailInput.value = 'farmer@kisandirect.gov.in';
+        passInput.value = 'farmer123';
       } else if (role === 'BUYER') {
-        emailInput.value = 'buyer@test.com';
-        passInput.value = 'buyerPass123';
-      } else if (role === 'ADMIN' || role === 'OWNER') {
+        tabBuyer.className = "py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all bg-white text-sky-700 shadow-sm border border-slate-200";
+        if (regFarmerBox) regFarmerBox.classList.add('hidden');
+        if (regBuyerBox) regBuyerBox.classList.remove('hidden');
+        emailInput.value = 'procurement@reliancefresh.com';
+        passInput.value = 'buyer123';
+      } else {
+        tabAdmin.className = "py-2.5 px-2 rounded-xl text-xs md:text-sm font-bold flex flex-col items-center gap-1 transition-all bg-white text-purple-700 shadow-sm border border-slate-200";
+        if (regFarmerBox) regFarmerBox.classList.add('hidden');
+        if (regBuyerBox) regBuyerBox.classList.add('hidden');
         emailInput.value = 'owner@kisandirect.com';
         passInput.value = 'ownerPass123';
       }
     }
 
-    // 3. Toggle Buyer / Farmer Fields
-    function toggleKycFields(role) {
-      const farmerBox = document.getElementById('farmerDetailsFields');
-      const kycBox = document.getElementById('buyerKycFields');
-      const gstinInput = document.getElementById('regGstin');
-      const bizInput = document.getElementById('regBusinessName');
-      const landInput = document.getElementById('regLandArea');
-      const cropInput = document.getElementById('regCropSpeciality');
-
-      if (role === 'BUYER') {
-        if (farmerBox) farmerBox.style.display = 'none';
-        if (kycBox) kycBox.style.display = 'block';
-        if (gstinInput) gstinInput.required = true;
-        if (bizInput) bizInput.required = true;
-        if (landInput) landInput.required = false;
-        if (cropInput) cropInput.required = false;
-      } else {
-        if (farmerBox) farmerBox.style.display = 'block';
-        if (kycBox) kycBox.style.display = 'none';
-        if (gstinInput) gstinInput.required = false;
-        if (bizInput) bizInput.required = false;
-        if (landInput) landInput.required = true;
-        if (cropInput) cropInput.required = true;
-      }
-      lucide.createIcons();
-    }
-
-    // 4. Auth Mode (Sign in vs Register)
+    // Switch between Sign in and Register
     function switchAuthMode(mode) {
-      const signinView = document.getElementById('signinView');
-      const registerView = document.getElementById('registerView');
-      const tabIn = document.getElementById('subTabSignIn');
-      const tabReg = document.getElementById('subTabRegister');
-      const alertBox = document.getElementById('authAlert');
-      alertBox.style.display = 'none';
+      currentAuthMode = mode;
+      var inView = document.getElementById('signinView');
+      var regView = document.getElementById('registerView');
+      var btnIn = document.getElementById('modeSignInBtn');
+      var btnReg = document.getElementById('modeRegisterBtn');
+      var title = document.getElementById('authTitle');
+      hideAlert();
 
       if (mode === 'signin') {
-        signinView.style.display = 'block';
-        registerView.style.display = 'none';
-        tabIn.style.borderBottom = '2px solid var(--emerald-500)';
-        tabIn.classList.add('active');
-        tabReg.style.borderBottom = 'none';
-        tabReg.classList.remove('active');
+        inView.classList.remove('hidden');
+        regView.classList.add('hidden');
+        btnIn.className = "flex-1 pb-3 text-sm font-bold border-b-2 border-slate-900 text-slate-900 transition-all text-center";
+        btnReg.className = "flex-1 pb-3 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all text-center";
+        title.textContent = "Sign In to KisanDirect";
       } else {
-        signinView.style.display = 'none';
-        registerView.style.display = 'block';
-        tabReg.style.borderBottom = '2px solid var(--emerald-500)';
-        tabReg.classList.add('active');
-        tabIn.style.borderBottom = 'none';
-        tabIn.classList.remove('active');
-      }
-      lucide.createIcons();
-    }
-
-    // Check existing session
-    checkExistingSession();
-
-    function checkExistingSession() {
-      const token = localStorage.getItem('kd_auth_token');
-      const userStr = localStorage.getItem('kd_user');
-      if (token && userStr) {
-        try {
-          const user = JSON.parse(userStr);
-          document.getElementById('activeSessionName').textContent = user.name;
-          document.getElementById('activeSessionRole').textContent = `${user.role} • ${user.district_state || 'Verified'}`;
-          document.getElementById('activeSessionBanner').style.display = 'block';
-        } catch (e) {}
+        inView.classList.add('hidden');
+        regView.classList.remove('hidden');
+        btnReg.className = "flex-1 pb-3 text-sm font-bold border-b-2 border-slate-900 text-slate-900 transition-all text-center";
+        btnIn.className = "flex-1 pb-3 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all text-center";
+        title.textContent = "Create New Account";
       }
     }
 
-    function continueToPortal() {
-      const userStr = localStorage.getItem('kd_user');
-      let role = 'BUYER';
-      try {
-        if (userStr) role = JSON.parse(userStr).role;
-      } catch (e) {}
-
-      const norm = (role || '').toUpperCase();
-      if (norm === 'OWNER' || norm === 'ADMIN') {
-        window.location.href = '/owner/dashboard';
-      } else if (norm === 'FARMER' || norm === 'FPO_MEMBER') {
-        window.location.href = '/farmer/dashboard';
-      } else {
-        window.location.href = '/buyer/dashboard';
-      }
+    function showAlert(msg, isSuccess) {
+      var box = document.getElementById('authAlert');
+      box.className = isSuccess 
+        ? "mb-4 p-3 rounded-xl text-xs font-bold flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800"
+        : "mb-4 p-3 rounded-xl text-xs font-bold flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-700";
+      box.innerHTML = `<i class="${isSuccess ? 'ri-checkbox-circle-fill text-emerald-600' : 'ri-error-warning-fill text-rose-600'} text-base"></i> <span>${msg}</span>`;
+      box.classList.remove('hidden');
     }
 
-    function clearSessionAndReset() {
-      localStorage.removeItem('kd_auth_token');
-      localStorage.removeItem('kd_user');
-      document.getElementById('activeSessionBanner').style.display = 'none';
-      showAlert('Session cleared. Sign in with desired credentials.', 'success');
-    }
-
-    function showAlert(msg, type = 'error') {
-      const el = document.getElementById('authAlert');
-      el.className = `auth-alert ${type}`;
-      el.innerHTML = `
-        <i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}" style="width: 16px; height: 16px;"></i>
-        <span>${msg}</span>
-      `;
-      el.style.display = 'flex';
-      lucide.createIcons();
+    function hideAlert() {
+      var box = document.getElementById('authAlert');
+      if (box) box.classList.add('hidden');
     }
 
     function quickLogin(email, password, role) {
       document.getElementById('loginEmail').value = email;
       document.getElementById('loginPassword').value = password;
-      selectPortalRole(role);
-      showAlert(`Loaded ${role} demo credentials. Signing in...`, 'success');
+      selectRole(role);
+      showAlert(`Selected ${role} credentials. Authenticating...`, true);
       handleLogin();
+    }
+
+    // Check existing session
+    (function checkSession() {
+      var token = localStorage.getItem('kd_auth_token') || localStorage.getItem('kd_token');
+      var userStr = localStorage.getItem('kd_user');
+      if (token && userStr) {
+        try {
+          var user = JSON.parse(userStr);
+          document.getElementById('activeSessionName').textContent = user.name;
+          document.getElementById('activeSessionRole').textContent = `${user.role} • ${user.district_state || user.business_name || 'Verified'}`;
+          document.getElementById('activeSessionBanner').classList.remove('hidden');
+        } catch (e) {}
+      }
+    })();
+
+    function continueToPortal() {
+      var userStr = localStorage.getItem('kd_user');
+      var role = 'BUYER';
+      try {
+        if (userStr) role = JSON.parse(userStr).role;
+      } catch (e) {}
+
+      var norm = (role || '').toUpperCase();
+      if (norm === 'OWNER' || norm === 'ADMIN') {
+        window.location.href = '/admin-portal.html';
+      } else if (norm === 'FARMER' || norm === 'FPO_MEMBER') {
+        window.location.href = '/store.html';
+      } else {
+        window.location.href = '/store.html';
+      }
+    }
+
+    function clearSessionAndReset() {
+      localStorage.removeItem('kd_auth_token');
+      localStorage.removeItem('kd_token');
+      localStorage.removeItem('kd_user');
+      document.getElementById('activeSessionBanner').classList.add('hidden');
+      showAlert('Session cleared. Sign in with desired credentials.', true);
     }
 
     async function handleLogin(e) {
       if (e) e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginSubmitBtn');
+      var email = document.getElementById('loginEmail').value.trim();
+      var password = document.getElementById('loginPassword').value;
+      var btn = document.getElementById('loginSubmitBtn');
 
       if (!email || !password) {
-        showAlert('Please enter both email and password.');
+        showAlert('Please enter both email and password.', false);
         return;
       }
 
       btn.disabled = true;
-      btn.innerHTML = `<span class="spinner-sm"></span> Authenticating...`;
+      btn.innerHTML = `<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Authenticating...`;
 
       try {
-        const res = await fetch('/api/auth/login', {
+        var res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-
-        const data = await res.json();
+        var data = await res.json();
 
         if (res.ok && data.success) {
           localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_token', data.token);
           localStorage.setItem('kd_user', JSON.stringify(data.user));
-          showAlert(`✓ Access Granted! Welcome, ${data.user.name} (${data.user.role}). Redirecting...`, 'success');
+          showAlert(`✓ Access Granted! Welcome, ${data.user.name} (${data.user.role}). Redirecting...`, true);
 
-          setTimeout(() => {
-            const role = (data.user.role || '').toUpperCase();
+          setTimeout(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var redirectUrl = urlParams.get('redirect');
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+              return;
+            }
+
+            var role = (data.user.role || '').toUpperCase();
             if (role === 'OWNER' || role === 'ADMIN') {
-              window.location.href = '/owner/dashboard';
-            } else if (role === 'FARMER' || role === 'FPO_MEMBER') {
-              window.location.href = '/farmer/dashboard';
+              window.location.href = '/admin-portal.html';
             } else {
-              window.location.href = '/buyer/dashboard';
+              window.location.href = '/store.html';
             }
           }, 500);
         } else {
-          showAlert(data.error || 'Invalid credentials.');
+          showAlert(data.error || 'Invalid credentials. Please verify your email and password.', false);
           btn.disabled = false;
-          btn.innerHTML = `<i data-lucide="log-in"></i> Access Selected Portal`;
-          lucide.createIcons();
+          btn.innerHTML = `<i class="ri-login-circle-fill text-lg"></i> <span>Access Selected Portal</span>`;
         }
       } catch (err) {
-        showAlert('Network or server error. Please try again.');
+        showAlert('Network or server error. Please try again.', false);
         btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="log-in"></i> Access Selected Portal`;
-        lucide.createIcons();
+        btn.innerHTML = `<i class="ri-login-circle-fill text-lg"></i> <span>Access Selected Portal</span>`;
       }
     }
 
     async function handleRegister(e) {
       e.preventDefault();
-      const name = document.getElementById('regName').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const phone = document.getElementById('regPhone').value.trim();
-      const password = document.getElementById('regPassword').value;
-      const district_state = document.getElementById('regDistrict').value.trim();
-      const role = document.querySelector('input[name="regRole"]:checked')?.value || 'FARMER';
-      const land_area_acres = parseFloat(document.getElementById('regLandArea')?.value) || 5.0;
-      const crop_speciality = document.getElementById('regCropSpeciality')?.value?.trim() || 'Mixed Crops';
-      const kisan_id = document.getElementById('regKisanId')?.value?.trim() || '';
-      const business_name = document.getElementById('regBusinessName')?.value?.trim() || '';
-      const gstin_number = document.getElementById('regGstin')?.value?.trim() || '';
-      const trade_type = document.getElementById('regTradeType')?.value || 'Wholesale Mandi Trader';
-      const fssai_license = document.getElementById('regFssai')?.value?.trim() || '';
-      const btn = document.getElementById('regSubmitBtn');
+      var name = document.getElementById('regName').value.trim();
+      var email = document.getElementById('regEmail').value.trim();
+      var phone = document.getElementById('regPhone').value.trim();
+      var password = document.getElementById('regPassword').value;
+      var district_state = document.getElementById('regDistrict').value.trim();
+      var role = currentRole;
+      var land_area_acres = parseFloat(document.getElementById('regLand')?.value) || 5.0;
+      var crop_speciality = document.getElementById('regCrop')?.value?.trim() || 'Mixed Crops';
+      var kisan_id = document.getElementById('regKisanId')?.value?.trim() || '';
+      var business_name = document.getElementById('regBizName')?.value?.trim() || '';
+      var gstin_number = document.getElementById('regGstin')?.value?.trim() || '';
+      var trade_type = document.getElementById('regTradeType')?.value || 'Wholesale Mandi Trader';
+      var btn = document.getElementById('regSubmitBtn');
 
       if (!name || !email || !password || !phone || !district_state) {
-        showAlert('Please fill in all mandatory fields.');
+        showAlert('Please fill in all mandatory fields.', false);
         return;
       }
 
       btn.disabled = true;
-      btn.innerHTML = `<span class="spinner-sm"></span> Registering...`;
+      btn.innerHTML = `<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Registering...`;
 
       try {
-        const res = await fetch('/api/auth/register', {
+        var res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name, email, phone, password, role, district_state, state_district: district_state,
-            land_area_acres, crop_speciality, kisan_id,
-            business_name, gstin_number, trade_type, fssai_license
+            name: name,
+            email: email,
+            phone: phone,
+            password: password,
+            role: role,
+            district_state: district_state,
+            state_district: district_state,
+            land_area_acres: land_area_acres,
+            crop_speciality: crop_speciality,
+            kisan_id: kisan_id,
+            business_name: business_name,
+            gstin_number: gstin_number,
+            trade_type: trade_type
           })
         });
 
-        const data = await res.json();
+        var data = await res.json();
 
         if (res.ok && data.success) {
           localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_token', data.token);
           localStorage.setItem('kd_user', JSON.stringify(data.user));
           
-          const statusNotice = data.user.approval_status === 'PENDING_APPROVAL'
-            ? ' (Pending Owner Approval)'
-            : '';
-          showAlert(`✓ Account Registered! Directing to ${data.user.role} portal${statusNotice}...`, 'success');
+          showAlert(`✓ Account Registered as ${data.user.role}! Redirecting...`, true);
 
-          setTimeout(() => {
-            const norm = (role || '').toUpperCase();
-            if (norm === 'OWNER' || norm === 'ADMIN') {
-              window.location.href = '/owner/dashboard';
-            } else if (norm === 'FARMER' || norm === 'FPO_MEMBER') {
-              window.location.href = '/farmer/dashboard';
-            } else {
-              window.location.href = '/buyer/dashboard';
-            }
+          setTimeout(function() {
+            window.location.href = '/store.html';
           }, 600);
         } else {
-          showAlert(data.error || 'Registration failed.');
+          showAlert(data.error || 'Registration failed.', false);
           btn.disabled = false;
-          btn.innerHTML = `<i data-lucide="check-circle"></i> Register Account & Proceed`;
-          lucide.createIcons();
+          btn.innerHTML = `<i class="ri-user-add-line text-lg"></i> <span>Complete Registration & Proceed</span>`;
         }
       } catch (err) {
-        showAlert('Registration network error. Please try again.');
+        showAlert('Registration network error. Please try again.', false);
         btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="check-circle"></i> Register Account & Proceed`;
-        lucide.createIcons();
+        btn.innerHTML = `<i class="ri-user-add-line text-lg"></i> <span>Complete Registration & Proceed</span>`;
       }
     }
   </script>

@@ -18,6 +18,14 @@ router.get('/pending-transactions', ownerController.getPendingTransactions);
 router.post('/orders/:id/verify', ownerController.handleTransactionAction);
 router.post('/transactions/:id/action', ownerController.handleTransactionAction);
 
+// Admin Portal Compatibility Endpoints
+router.get('/dashboard-metrics', ownerController.getDashboardMetrics);
+router.get('/pending-users', ownerController.getPendingUsers);
+router.post('/approve-user/:id', ownerController.approveUser);
+router.post('/reject-user/:id', ownerController.rejectUser);
+router.get('/all-orders', ownerController.getAllOrders);
+router.put('/orders/:id/status', ownerController.updateOrderStatus);
+
 // User Moderation & Profile Dismissal Deck
 router.get('/users', ownerController.getUsers);
 router.patch('/users/:id/dismiss', ownerController.dismissUser);

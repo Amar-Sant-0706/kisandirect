@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="blue">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KisanDirect AI - E-Commerce Direct Agri-Marketplace</title>
   <meta name="description" content="Direct farmgate agri-marketplace. Browse fresh harvests, buy with zero middlemen markups, full cart and 5-stage order tracking.">
+
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 
   <!-- Typography & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +25,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/ecommerce.css">
 </head>
-<body>
+<body class="auth-page-wrapper">
 
   <div class="app-container">
     <!-- Injected Dynamic Header with Nav Guard -->

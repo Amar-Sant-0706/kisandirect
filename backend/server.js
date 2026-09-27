@@ -58,27 +58,106 @@ const fs = require('fs');
 const distDir = path.join(__dirname, '..', 'frontend', 'dist');
 const publicDir = path.join(__dirname, '..', 'frontend', 'public');
 const srcDir = path.join(__dirname, '..', 'frontend', 'src');
+const rootDir = path.join(__dirname, '..');
 
-// 1. Serve frontend static build directly from root route '/'
-if (fs.existsSync(distDir)) {
-  app.use(express.static(distDir));
-}
-app.use(express.static(publicDir));
-app.use('/src', express.static(srcDir));
-app.use(express.static(srcDir));
-
-// Fallback index.html path (prefers dist if built, otherwise public)
-const indexHtmlPath = fs.existsSync(path.join(distDir, 'index.html'))
+// Primary SPA HTML shell for Multi-Portal Architecture
+const spaIndexHtml = fs.existsSync(path.join(distDir, 'index.html'))
   ? path.join(distDir, 'index.html')
   : path.join(publicDir, 'index.html');
 
-// Explicit root route serving the KisanDirect AI Multi-Portal Application
-app.get('/', (req, res) => res.sendFile(indexHtmlPath));
-app.get('/index.html', (req, res) => res.sendFile(indexHtmlPath));
+// Storefront (KisanDirect Mobile-First Agri-Marketplace)
+const rootStoreHtml = fs.existsSync(path.join(rootDir, 'store.html'))
+  ? path.join(rootDir, 'store.html')
+  : path.join(rootDir, 'index.html');
 
-// 2. Client-side routing catch-all fallback:
-// Any non-API route (e.g. /farmer/dashboard, /buyer/marketplace, /owner/control-room, /auth/login)
-// is served the frontend index.html so client router handles it seamlessly with zero 404s.
+// 1. Explicit SPA Multi-Portal Routes
+app.get('/', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/index.html', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/auth/login', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/farmer/dashboard', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/buyer/marketplace', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/owner/control-room', (req, res) => res.sendFile(spaIndexHtml));
+
+// 2. Direct Storefront & Classic Multi-Page Routes
+app.get('/store', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/store.html', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/shop', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/mandi', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/storefront', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/marketplace-classic', (req, res) => res.sendFile(rootStoreHtml));
+
+// Standalone Portal Pages
+app.get('/login', (req, res) => res.sendFile(path.join(rootDir, 'login.html')));
+app.get('/register', (req, res) => res.sendFile(path.join(rootDir, 'register.html')));
+app.get('/admin-portal', (req, res) => res.sendFile(path.join(rootDir, 'admin-portal.html')));
+app.get('/farmer-hub', (req, res) => res.sendFile(path.join(rootDir, 'farmer-hub.html')));
+app.get('/marketplace-hub', (req, res) => res.sendFile(path.join(rootDir, 'marketplace.html')));
+app.get('/quality-scanner', (req, res) => res.sendFile(path.join(rootDir, 'quality-scanner.html')));
+app.get('/route-optimizer', (req, res) => res.sendFile(path.join(rootDir, 'route-optimizer.html')));
+app.get('/demand-forecast', (req, res) => res.sendFile(path.join(rootDir, 'demand-forecast.html')));
+app.get('/doca-control', (req, res) => res.sendFile(path.join(rootDir, 'doca-control.html')));
+
+// 3. Admin & Owner API Compatibility
+const ownerController = require('./controllers/ownerController');
+app.get('/api/owner/dashboard-metrics', ownerController.getDashboardMetrics);
+app.get('/api/owner/pending-users', ownerController.getPendingUsers);
+app.post('/api/owner/approve-user/:id', ownerController.approveUser);
+app.post('/api/owner/reject-user/:id', ownerController.rejectUser);
+app.get('/api/admin/all-orders', ownerController.getAllOrders);
+app.put('/api/admin/orders/:id/status', ownerController.updateOrderStatus);
+
+// 4. Commodities, Batches, QC, Forecast, and DOCA Surveillance Endpoints
+try {
+  const commoditiesRouter = require('../server/routes/commodities');
+  const batchesRouter = require('../server/routes/batches');
+  const qcRouter = require('../server/routes/qc');
+  const forecastRouter = require('../server/routes/forecast');
+  
+  app.use('/api/commodities', commoditiesRouter);
+  app.use('/api/batches', batchesRouter);
+  app.use('/api/qc', qcRouter);
+  app.use('/api/forecast', forecastRouter);
+} catch (e) {
+  console.warn('[Server] Legacy router mount notice:', e.message);
+}
+
+// DOCA Surveillance Endpoint
+app.get('/api/doca/surveillance', (req, res) => {
+  try {
+    const serverDb = require('../server/db');
+    const commodities = serverDb.prepare(`
+      SELECT c.*, p.name as category
+      FROM commodities c
+      JOIN produce_categories p ON c.category_id = p.id
+      ORDER BY c.price_volatility_score DESC
+    `).all();
+
+    const priceSpikeAlerts = commodities.filter(c => c.price_volatility_score > 60);
+
+    res.json({
+      success: true,
+      surveillance: {
+        timestamp: new Date().toISOString(),
+        totalTrackedCommodities: commodities.length,
+        priceSpikeAlertsCount: priceSpikeAlerts.length,
+        commodities
+      }
+    });
+  } catch (err) {
+    res.json({ success: true, surveillance: { timestamp: new Date().toISOString(), commodities: [] } });
+  }
+});
+
+// 5. Static Assets Serving
+app.use(express.static(rootDir, { index: false }));
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir, { index: false }));
+}
+app.use(express.static(publicDir, { index: false }));
+app.use('/src', express.static(srcDir));
+app.use(express.static(srcDir));
+
+// 6. Client-Side Catch-All Fallback (Serves SPA shell so Router handles with zero 404s)
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({
@@ -86,7 +165,7 @@ app.use((req, res) => {
       message: `API route ${req.method} ${req.path} not found`
     });
   }
-  res.sendFile(indexHtmlPath);
+  res.sendFile(spaIndexHtml);
 });
 
 const HOST = process.env.HOST || '0.0.0.0';

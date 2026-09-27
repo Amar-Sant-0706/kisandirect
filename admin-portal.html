@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="blue">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Platform Owner Control Room - KisanDirect AI</title>
   <meta name="description" content="Platform Owner Central Governance Tower. Review and approve pending farmers and enterprise buyers, oversee GMV and cold-chain logistics.">
+
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 
   <!-- Typography & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,9 +27,9 @@
 
   <style>
     .admin-header-bar {
-      background: rgba(15, 23, 42, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 1rem 2rem;
+      background: var(--header-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.85rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -29,10 +37,12 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(12px);
+      transition: background 0.25s ease;
     }
 
     .owner-badge {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       color: #fff;
       font-size: 0.72rem;
       font-weight: 800;
@@ -45,22 +55,78 @@
     }
 
     .desk-card {
-      background: var(--bg-surface, #131b26);
-      border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+      background: var(--card-bg, #ffffff);
+      border: 1px solid var(--card-border, #bde0f5);
       border-radius: 16px;
       margin-bottom: 2rem;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.25s ease;
     }
 
     .desk-card-header {
       padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid var(--card-border, #bde0f5);
+      background: var(--bg-subtle, #f0f6fa);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+    }
+
+    .desk-card-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary, #0f2942) !important;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .desk-card-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted, #546e7a) !important;
+      margin: 0;
+    }
+
+    /* Table Surface */
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .custom-table th {
+      background: var(--bg-subtle, #f0f6fa);
+      color: var(--text-secondary, #546e7a);
+      font-weight: 700;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border, #bde0f5);
+    }
+
+    .custom-table td {
+      padding: 14px 16px;
+      color: var(--text-primary, #0f2942);
+      border-bottom: 1px solid var(--card-border, #bde0f5);
+      font-size: 0.86rem;
+      vertical-align: middle;
+    }
+
+    .custom-table tbody tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .custom-table tbody tr:hover {
+      background: rgba(30, 82, 118, 0.04);
+    }
+
+    [data-theme="harvest"] .custom-table tbody tr:hover {
+      background: rgba(181, 123, 24, 0.05);
     }
 
     .btn-approve-farmer {
@@ -104,9 +170,9 @@
     }
 
     .btn-reject-user {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #ef4444;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #dc2626;
       padding: 7px 12px;
       border-radius: 8px;
       font-size: 0.8rem;
@@ -119,38 +185,81 @@
     }
 
     .btn-reject-user:hover {
-      background: rgba(239, 68, 68, 0.25);
+      background: #fecaca;
+      transform: translateY(-1px);
+    }
+
+    /* Metric Cards Grid */
+    .metric-card {
+      background: var(--card-bg, #ffffff);
+      border: 1px solid var(--card-border, #bde0f5);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.25s ease;
+    }
+
+    .metric-card h4 {
+      font-size: 0.82rem;
+      color: var(--text-muted, #546e7a);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .metric-card .metric-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-primary, #0f2942);
     }
   </style>
 </head>
-<body class="auth-page-wrapper" style="background: #090e15;">
+<body class="auth-page-wrapper">
 
   <!-- Owner Header Bar -->
   <header class="admin-header-bar">
     <div style="display: flex; align-items: center; gap: 12px;">
       <a href="/owner/dashboard" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
-        <div class="brand-logo-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <div class="brand-logo-icon" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.35);">
           <i data-lucide="shield-check"></i>
         </div>
         <div>
           <h2 style="font-size: 1.15rem; font-weight: 800; color: #fff; margin: 0;">
             KisanDirect AI <span class="owner-badge"><i data-lucide="shield"></i> PLATFORM OWNER CONTROL ROOM</span>
           </h2>
-          <div style="font-size: 0.72rem; color: #94a3b8;">Farmer & Buyer Approval Governance Desk & Master Escrow Surveillance</div>
+          <div style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.85);">Farmer & Buyer Approval Governance Desk & Master Escrow Surveillance</div>
         </div>
       </a>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <a href="/buyer/dashboard" class="btn btn-outline btn-sm" style="text-decoration: none;">
-        <i data-lucide="store"></i> Buyer Catalog Oversight
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <!-- Subtle Theme Switcher Pill -->
+      <button type="button" 
+              onclick="togglePortalTheme()" 
+              id="themeToggleBtn"
+              class="theme-toggle-pill"
+              title="Switch Color Theme">
+        <span id="themePillIcon">⛅</span>
+        <span id="themeToggleLabel">Theme: Blue Skies</span>
+      </button>
+
+      <a href="/owner/control-room" class="btn btn-sm" style="text-decoration: none; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-weight: 700;">
+        <i data-lucide="shield"></i> DOCA Control Room
       </a>
-      <a href="/farmer/dashboard" class="btn btn-outline btn-sm" style="text-decoration: none;">
-        <i data-lucide="tractor"></i> Farmer Hub Oversight
+      <a href="/buyer/marketplace" class="btn btn-sm" style="text-decoration: none; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-weight: 700;">
+        <i data-lucide="store"></i> Buyer Market
       </a>
-      <div id="adminUserPill" style="display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 9999px; padding: 4px 12px;">
+      <a href="/farmer/dashboard" class="btn btn-sm" style="text-decoration: none; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-weight: 700;">
+        <i data-lucide="tractor"></i> Farmer Portal
+      </a>
+      <a href="/store" class="btn btn-sm" style="text-decoration: none; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; font-weight: 700;">
+        <i data-lucide="shopping-bag"></i> Mandi Store
+      </a>
+      <div id="adminUserPill" style="display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 9999px; padding: 4px 12px;">
         <span style="font-size: 0.8rem; font-weight: 700; color: #fff;" id="adminUserName">Platform Owner</span>
-        <button class="btn btn-ghost btn-sm" onclick="signout()" title="Sign Out" style="color: #ef4444; padding: 2px 4px; cursor: pointer;">
+        <button class="btn btn-ghost btn-sm" onclick="signout()" title="Sign Out" style="color: #ffffff; padding: 2px 4px; cursor: pointer; border: none; background: transparent;">
           <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
         </button>
       </div>
@@ -331,7 +440,35 @@
   <script>
     lucide.createIcons();
 
-    const token = localStorage.getItem('kd_auth_token');
+    // Theme Engine Synchronization (Blue Skies vs Golden Harvest)
+    var currentAdminTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+
+    function applyPortalTheme(theme) {
+      currentAdminTheme = theme === 'harvest' ? 'harvest' : 'blue';
+      document.documentElement.setAttribute('data-theme', currentAdminTheme);
+      localStorage.setItem('kisan_selected_theme', currentAdminTheme);
+
+      var label = document.getElementById('themeToggleLabel');
+      var icon = document.getElementById('themePillIcon');
+      if (label) {
+        label.textContent = currentAdminTheme === 'harvest' ? 'Theme: Golden Harvest' : 'Theme: Blue Skies';
+      }
+      if (icon) {
+        icon.textContent = currentAdminTheme === 'harvest' ? '🌾' : '⛅';
+      }
+    }
+
+    function togglePortalTheme() {
+      var next = currentAdminTheme === 'blue' ? 'harvest' : 'blue';
+      applyPortalTheme(next);
+      if (typeof showToast === 'function') {
+        showToast(next === 'harvest' ? '🌾 Switched to Golden Harvest Theme' : '⛅ Switched to Blue Skies Theme', 'success');
+      }
+    }
+
+    applyPortalTheme(currentAdminTheme);
+
+    const token = localStorage.getItem('kd_auth_token') || localStorage.getItem('kd_token');
     const userStr = localStorage.getItem('kd_user');
 
     // Security Gate: Ensure user is logged in and role is OWNER or ADMIN
@@ -345,7 +482,7 @@
         const normRole = (user.role || '').toUpperCase();
         if (normRole !== 'OWNER' && normRole !== 'ADMIN') {
           alert('Access Denied: Platform Owner Control Room requires OWNER credentials.');
-          window.location.href = normRole === 'FARMER' ? '/farmer/dashboard' : '/buyer/dashboard';
+          window.location.href = normRole === 'FARMER' ? '/farmer/dashboard' : '/buyer/marketplace';
           return;
         }
         document.getElementById('adminUserName').textContent = `${user.name} (Platform Owner)`;
@@ -356,6 +493,7 @@
 
     function signout() {
       localStorage.removeItem('kd_auth_token');
+      localStorage.removeItem('kd_token');
       localStorage.removeItem('kd_user');
       window.location.href = '/login.html?logged_out=1';
     }

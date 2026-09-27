@@ -855,8 +855,16 @@ window.MarketplaceModule = {
           return `
             <tr>
               <td>
-                <div style="font-weight: 700; color: #fff;">${b.commodity_name}</div>
-                <div style="font-size: 0.72rem; color: #94a3b8;">Lot #${b.lot_number || b.id} &bull; Harvest: ${harvestDate}</div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <img src="${b.image || b.commodity_image || b.image_url || 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=120&q=80'}" 
+                       alt="${b.commodity_name}" 
+                       style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0;" 
+                       onerror="this.src='https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=120&q=80'" />
+                  <div>
+                    <div style="font-weight: 700; color: #fff;">${b.commodity_name}</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8;">Lot #${b.lot_number || b.id} &bull; Harvest: ${harvestDate}</div>
+                  </div>
+                </div>
               </td>
               <td>${quantity} ${b.unit || 'kg'}</td>
               <td><span class="badge badge-grade-a">${b.quality_grade || 'Grade A'}</span></td>

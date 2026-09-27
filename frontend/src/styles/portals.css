@@ -3,26 +3,39 @@
    Ministry of Consumer Affairs, Food & Public Distribution (DOCA)
    ========================================================================== */
 
-:root {
-  --bg-main: #070c18;
-  --bg-subtle: #0d1527;
-  --bg-surface: #131e36;
-  --bg-surface-elevated: #1a2849;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(255, 255, 255, 0.16);
+:root, [data-theme="blue"] {
+  /* ==========================================================================
+     1. "Blue Skies" Multi-Portal Theme
+     ========================================================================== */
+  --header-bg: #1e5276;
+  --header-top-bg: #153e5b;
+  --header-text: #ffffff;
+  --bg-main: #f0f6fa;
+  --bg-subtle: #e2edf5;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f8fafc;
+  --border-subtle: #bde0f5;
+  --border-highlight: #1e5276;
   
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-primary: #0f2942;
+  --text-secondary: #546e7a;
   --text-muted: #64748b;
 
   --farmer-accent: #10b981;
-  --farmer-glow: rgba(16, 185, 129, 0.3);
+  --farmer-glow: rgba(16, 185, 129, 0.25);
   
-  --buyer-accent: #38bdf8;
-  --buyer-glow: rgba(56, 189, 248, 0.3);
+  --buyer-accent: #0284c7;
+  --buyer-glow: rgba(2, 132, 199, 0.25);
 
-  --owner-accent: #c084fc;
-  --owner-glow: rgba(192, 132, 252, 0.3);
+  --owner-accent: #6366f1;
+  --owner-glow: rgba(99, 102, 241, 0.25);
+
+  --btn-cta-bg: #1e5276;
+  --btn-cta-hover: #153e5b;
+  --btn-cta-text: #ffffff;
+
+  --card-bg: #ffffff;
+  --card-border: #bde0f5;
 
   --amber-accent: #f59e0b;
   --rose-accent: #f43f5e;
@@ -35,6 +48,41 @@
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="harvest"] {
+  /* ==========================================================================
+     2. "Golden Harvest" Multi-Portal Theme
+     ========================================================================== */
+  --header-bg: #d4a044;
+  --header-top-bg: #b57b18;
+  --header-text: #ffffff;
+  --bg-main: #fff9ee;
+  --bg-subtle: #fef0d9;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #fffcf7;
+  --border-subtle: #f3dfb5;
+  --border-highlight: #b57b18;
+  
+  --text-primary: #3d2605;
+  --text-secondary: #785827;
+  --text-muted: #927546;
+
+  --farmer-accent: #10b981;
+  --farmer-glow: rgba(16, 185, 129, 0.25);
+  
+  --buyer-accent: #d97706;
+  --buyer-glow: rgba(217, 119, 6, 0.25);
+
+  --owner-accent: #b57b18;
+  --owner-glow: rgba(181, 123, 24, 0.25);
+
+  --btn-cta-bg: #b57b18;
+  --btn-cta-hover: #97640f;
+  --btn-cta-text: #ffffff;
+
+  --card-bg: #ffffff;
+  --card-border: #f3dfb5;
 }
 
 * {
@@ -50,13 +98,14 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Glass Header */
 .portal-header {
-  background: rgba(13, 21, 39, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 12px 2rem;
   display: flex;
   align-items: center;
@@ -64,6 +113,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: background 0.25s ease;
 }
 
 .portal-brand {
@@ -225,7 +275,8 @@ body {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.25s ease;
 }
 
 .card-header {
@@ -234,12 +285,13 @@ body {
   justify-content: space-between;
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .card-title {
   font-size: 1.15rem;
   font-weight: 700;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -263,6 +315,8 @@ body {
   gap: 6px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.25s ease;
 }
 
 .stat-box::before {
@@ -289,7 +343,7 @@ body {
 .stat-value {
   font-size: 1.75rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
@@ -312,9 +366,9 @@ body {
 
 .portal-table th {
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--text-muted);
-  font-weight: 600;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
@@ -323,12 +377,17 @@ body {
 
 .portal-table td {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
   vertical-align: middle;
+  color: var(--text-primary);
 }
 
 .portal-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(30, 82, 118, 0.04);
+}
+
+[data-theme="harvest"] .portal-table tr:hover td {
+  background: rgba(181, 123, 24, 0.05);
 }
 
 /* Status Badges */

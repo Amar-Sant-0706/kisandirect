@@ -23,7 +23,11 @@ exports.createCrop = async (req, res) => {
       image
     } = req.body;
 
-    if (!crop_name || !quantity_kg || !farmgate_price) {
+    const resolvedCropName = crop_name || req.body.commodity_name;
+    const resolvedQty = quantity_kg !== undefined && quantity_kg !== null ? quantity_kg : req.body.quantity;
+    const resolvedPrice = farmgate_price !== undefined && farmgate_price !== null ? farmgate_price : (req.body.price_per_unit || req.body.price);
+
+    if (!resolvedCropName || resolvedQty === undefined || resolvedPrice === undefined) {
       return res.status(400).json({
         success: false,
         error: 'MISSING_FIELDS',
@@ -31,12 +35,12 @@ exports.createCrop = async (req, res) => {
       });
     }
 
-    const lotId = `LOT-${crop_name.slice(0, 3).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+    const lotId = `LOT-${resolvedCropName.slice(0, 3).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
     const grade = qc_grade || 'Grade A+';
-    const loc = location || req.user.location || 'Nashik, Maharashtra';
+    const loc = location || req.body.farm_location || req.user.location || 'Nashik, Maharashtra';
     const hDate = harvest_date || new Date().toISOString().split('T')[0];
-    const qty = parseFloat(quantity_kg);
-    const price = parseFloat(farmgate_price);
+    const qty = parseFloat(resolvedQty);
+    const price = parseFloat(resolvedPrice);
     const mandiPrice = mandi_benchmark_price ? parseFloat(mandi_benchmark_price) : +(price * 0.72).toFixed(2);
     const img = image || 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=600&q=80';
 
@@ -59,7 +63,7 @@ exports.createCrop = async (req, res) => {
     `).run(
       lotId,
       req.user.id,
-      crop_name,
+      resolvedCropName,
       variety || 'High-Yield Hybrid',
       category || 'Vegetables',
       qty,
@@ -88,7 +92,7 @@ exports.createCrop = async (req, res) => {
       req.user.name,
       'farmer',
       'LISTED_CROP',
-      `Listed ${qty} kg of ${crop_name} at ₹${price}/kg (Lot #${lotId})`,
+      `Listed ${qty} kg of ${resolvedCropName} at ₹${price}/kg (Lot #${lotId})`,
       new Date().toISOString()
     );
 
@@ -97,7 +101,7 @@ exports.createCrop = async (req, res) => {
       message: `Crop lot ${lotId} listed successfully on the KisanDirect National Grid!`,
       lot: {
         id: lotId,
-        crop_name,
+        crop_name: resolvedCropName,
         variety: variety || 'High-Yield Hybrid',
         quantity_kg: qty,
         farmgate_price: price,

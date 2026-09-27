@@ -1,15 +1,14 @@
 services:
   - type: web
-    name: kisandirect
+    name: kisandirect-ai
     env: node
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: node server.js
-    healthCheckPath: /api/health
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: JWT_SECRET
+        generateValue: true
       - key: PORT
         value: 10000
-      - key: HOST
-        value: 0.0.0.0

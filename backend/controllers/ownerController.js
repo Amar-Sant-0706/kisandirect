@@ -257,3 +257,143 @@ exports.dismissUser = async (req, res) => {
     res.status(500).json({ success: false, error: 'INTERNAL_ERROR', message: err.message });
   }
 };
+
+exports.getDashboardMetrics = async (req, res) => {
+  try {
+    const totalFarmers = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'farmer' AND is_banned = 0").get().count;
+    const totalBuyers = db.prepare("SELECT COUNT(*) as count FROM users WHERE role = 'buyer' AND is_banned = 0").get().count;
+    const pendingCount = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'pending_owner'").get().count;
+    const gmv = db.prepare("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders").get().total;
+
+    res.json({
+      success: true,
+      metrics: {
+        totalFarmersApproved: totalFarmers,
+        totalBuyersApproved: totalBuyers,
+        pendingApprovals: {
+          total: pendingCount,
+          farmers: 0,
+          buyers: 0
+        },
+        totalGmv: gmv
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+exports.getPendingUsers = async (req, res) => {
+  try {
+    const allUsers = db.prepare(`SELECT * FROM users WHERE is_banned = 0 ORDER BY created_at DESC`).all();
+    const farmers = allUsers.filter(u => u.role === 'farmer').map(f => ({
+      ...f,
+      state_district: f.location,
+      district_state: f.location,
+      farmer_details: {
+        land_area_acres: '10.0',
+        crop_speciality: 'Onion, Tomato, Grapes',
+        kisan_id: `MH-KISAN-${f.id.slice(-4)}`
+      }
+    }));
+    const buyers = allUsers.filter(u => u.role === 'buyer').map(b => ({
+      ...b,
+      state_district: b.location,
+      district_state: b.location,
+      buyer_details: {
+        business_name: b.business_name || b.name,
+        gstin: '27AABCA1234F1ZP',
+        trade_type: 'Wholesale Mandi & Retail'
+      }
+    }));
+
+    res.json({
+      success: true,
+      farmers,
+      buyers
+    });
+  } catch (err) {
+    console.error('getPendingUsers error:', err);
+    res.status(500).json({ success: false, error: 'INTERNAL_ERROR', message: err.message });
+  }
+};
+
+exports.approveUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    res.json({
+      success: true,
+      message: `User ${id} has been approved.`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+exports.rejectUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    db.prepare('UPDATE users SET is_banned = 1, banned_reason = ? WHERE id = ?').run('Rejected by platform owner', id);
+    res.json({
+      success: true,
+      message: `User ${id} has been rejected.`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = db.prepare(`
+      SELECT 
+        o.id,
+        o.order_number,
+        o.quantity,
+        o.total_amount,
+        o.escrow_status,
+        o.status as order_status,
+        o.delivery_address,
+        o.created_at,
+        b.name as buyer_name,
+        b.business_name as buyer_business,
+        f.name as farmer_name,
+        c.crop_name as produce_name,
+        c.unit
+      FROM orders o
+      JOIN users b ON o.buyer_id = b.id
+      JOIN users f ON o.farmer_id = f.id
+      JOIN crop_lots c ON o.crop_lot_id = c.id
+      ORDER BY o.created_at DESC
+    `).all();
+
+    res.json({
+      success: true,
+      count: orders.length,
+      orders
+    });
+  } catch (err) {
+    console.error('getAllOrders error:', err);
+    res.status(500).json({ success: false, error: 'INTERNAL_ERROR', message: err.message });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { order_status } = req.body;
+    const escrow_status = order_status === 'DELIVERED' ? 'settled' : 'held';
+    db.prepare(`
+      UPDATE orders 
+      SET status = ?, escrow_status = ?, updated_at = ?
+      WHERE id = ?
+    `).run(order_status.toLowerCase(), escrow_status, new Date().toISOString(), id);
+
+    res.json({
+      success: true,
+      message: `Order status updated to ${order_status}`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

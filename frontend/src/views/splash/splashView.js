@@ -72,6 +72,19 @@ export const SplashView = {
               </button>
             </div>
           </div>
+
+          <!-- Secondary Quick-Launch Links -->
+          <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);">
+            <a href="/store" class="btn btn-outline" style="border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; text-decoration: none;">
+              🛒 Mandi E-Commerce Storefront
+            </a>
+            <a href="/login.html" class="btn btn-outline" style="border-color: rgba(16, 185, 129, 0.4); color: #34d399; text-decoration: none;">
+              🔑 Password & 1-Click Demo Login
+            </a>
+            <a href="/admin-portal.html" class="btn btn-outline" style="border-color: rgba(192, 132, 252, 0.4); color: #c084fc; text-decoration: none;">
+              🛡️ Admin Governance Tower
+            </a>
+          </div>
         </div>
       </div>
 

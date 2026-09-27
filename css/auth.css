@@ -9,11 +9,12 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+    radial-gradient(circle at 15% 20%, rgba(30, 82, 118, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(2, 132, 199, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(212, 160, 68, 0.04) 0%, transparent 60%);
   position: relative;
   overflow-x: hidden;
+  transition: background-color 0.25s ease;
 }
 
 /* Ambient Animated Grid Lines */
@@ -22,8 +23,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(30, 82, 118, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 82, 118, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -42,16 +43,15 @@
 .auth-card {
   width: 100%;
   max-width: 520px;
-  background: rgba(20, 30, 51, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, #bde0f5);
   border-radius: var(--radius-xl);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 30px rgba(16, 185, 129, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08), 0 0 20px rgba(30, 82, 118, 0.04);
   padding: 2.5rem 2.25rem;
   position: relative;
   overflow: hidden;
   animation: authCardFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 @keyframes authCardFadeIn {
@@ -71,8 +71,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--emerald-500), var(--cyan-400), var(--amber-400));
+  height: 4px;
+  background: linear-gradient(90deg, var(--btn-cta-bg), var(--accent), #10b981);
 }
 
 .auth-header {
@@ -84,14 +84,14 @@
   width: 58px;
   height: 58px;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(6, 182, 212, 0.15));
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: var(--accent-light, #e0f2fe);
+  border: 1px solid var(--card-border, #bde0f5);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  color: var(--emerald-400);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  color: var(--btn-cta-bg, #1e5276);
+  box-shadow: 0 4px 14px rgba(30, 82, 118, 0.12);
 }
 
 .auth-header h2 {
@@ -109,8 +109,8 @@
 
 /* Fast 1-Click Demo Logins Section */
 .fast-demo-section {
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px dashed rgba(16, 185, 129, 0.35);
+  background: var(--bg-secondary, #e2edf5);
+  border: 1px dashed var(--card-border, #bde0f5);
   border-radius: var(--radius-md);
   padding: 1rem;
   margin-bottom: 1.75rem;
@@ -121,7 +121,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--emerald-400);
+  color: var(--btn-cta-bg, #1e5276);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -135,8 +135,8 @@
 }
 
 .demo-role-btn {
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  border: 1px solid var(--card-border, #bde0f5);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
   display: flex;
@@ -148,11 +148,12 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .demo-role-btn:hover {
-  border-color: var(--emerald-500);
-  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--btn-cta-bg);
+  background: var(--accent-light, #e0f2fe);
   transform: translateY(-1px);
 }
 
@@ -187,7 +188,7 @@
 .form-field-group label {
   font-size: 0.84rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -196,8 +197,8 @@
 .form-field-group input,
 .form-field-group select {
   width: 100%;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  border: 1px solid var(--card-border, #bde0f5);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   color: var(--text-primary);
@@ -209,9 +210,9 @@
 .form-field-group input:focus,
 .form-field-group select:focus {
   outline: none;
-  border-color: var(--emerald-500);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-  background: rgba(15, 23, 42, 0.95);
+  border-color: var(--btn-cta-bg);
+  box-shadow: 0 0 0 3px rgba(30, 82, 118, 0.15);
+  background: #ffffff;
 }
 
 /* Role Selection Radio Cards */
@@ -233,8 +234,8 @@
 }
 
 .role-card-inner {
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
+  border: 1px solid var(--card-border, #bde0f5);
+  background: #ffffff;
   border-radius: var(--radius-md);
   padding: 10px;
   display: flex;
@@ -244,9 +245,9 @@
 }
 
 .role-radio-card input[type="radio"]:checked + .role-card-inner {
-  border-color: var(--emerald-500);
-  background: rgba(16, 185, 129, 0.15);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  border-color: var(--btn-cta-bg);
+  background: var(--accent-light, #e0f2fe);
+  box-shadow: 0 0 12px rgba(30, 82, 118, 0.15);
 }
 
 .role-card-icon {
@@ -271,8 +272,8 @@
 .auth-submit-btn {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
-  color: #fff;
+  background: var(--btn-cta-bg);
+  color: var(--btn-cta-text);
   border: none;
   border-radius: var(--radius-md);
   font-size: 0.95rem;
@@ -282,15 +283,15 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
   transition: all var(--transition-fast);
   margin-top: 0.5rem;
 }
 
 .auth-submit-btn:hover {
-  background: linear-gradient(135deg, var(--emerald-400), var(--emerald-500));
+  background: var(--btn-cta-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
 .auth-footer {

@@ -176,12 +176,12 @@
           ${initial}
         </div>
         <div style="line-height: 1.2;">
-          <div style="font-size: 0.8rem; font-weight: 700; color: #fff;">${user.name}</div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">${user.name}</div>
           <div style="font-size: 0.68rem; color: var(--text-muted);">${user.business_name || user.state_district || user.district_state || user.role}</div>
         </div>
         <span class="badge ${roleBadge}" style="font-size: 0.65rem; padding: 2px 6px;">${user.role}</span>
         ${approvalPill}
-        <button class="btn btn-ghost btn-sm" onclick="signoutUser()" title="Sign out" style="padding: 4px 6px; font-size: 0.72rem; color: var(--rose-400); margin-left: 2px; cursor: pointer;">
+        <button class="btn btn-ghost btn-sm" onclick="signoutUser()" title="Sign out" style="padding: 4px 6px; font-size: 0.72rem; color: var(--rose-400); margin-left: 2px; cursor: pointer; border: none; background: transparent;">
           <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
         </button>
       </div>
@@ -204,6 +204,14 @@
         </div>
         <div class="gov-live-ticker">
           <span class="pulse-indicator">Zero-Leakage RBAC Active</span>
+          <button type="button" 
+                  onclick="window.toggleAppTheme && window.toggleAppTheme()" 
+                  id="themeToggleBtn"
+                  class="theme-toggle-pill"
+                  title="Switch Color Theme">
+            <span id="themePillIcon">⛅</span>
+            <span id="themeToggleLabel">Theme: Blue Skies</span>
+          </button>
           <span>Portal: ${isFarmer ? 'Farmer Producer Hub' : (isBuyer ? 'Buyer E-Commerce Market' : 'Platform Owner Control Tower')}</span>
         </div>
       </header>
@@ -345,4 +353,28 @@
 
     document.body.insertAdjacentHTML('beforeend', modalHtml);
   }
+
+  // Global Unified Theme Controller (Blue Skies vs Golden Harvest)
+  function syncTheme() {
+    const savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const label = document.getElementById('themeToggleLabel');
+    const icon = document.getElementById('themePillIcon');
+    if (label) {
+      label.textContent = savedTheme === 'harvest' ? 'Theme: Golden Harvest' : 'Theme: Blue Skies';
+    }
+    if (icon) {
+      icon.textContent = savedTheme === 'harvest' ? '🌾' : '⛅';
+    }
+  }
+
+  window.toggleAppTheme = function() {
+    const current = document.documentElement.getAttribute('data-theme') || 'blue';
+    const next = current === 'blue' ? 'harvest' : 'blue';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('kisan_selected_theme', next);
+    syncTheme();
+  };
+
+  syncTheme();
 })();

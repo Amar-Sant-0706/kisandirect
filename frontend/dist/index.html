@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="blue">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KisanDirect AI - Multi-Portal Agricultural Architecture</title>
   <meta name="description" content="AI-powered digital agricultural marketplace and regulatory control room connecting Farmers/FPOs, Buyers, and Regulators. Ministry of Consumer Affairs (DOCA).">
+
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
