@@ -32,6 +32,18 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+      width: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    img, svg, video {
+      max-width: 100%;
+      height: auto;
+    }
+
     .font-mono {
       font-family: 'JetBrains Mono', monospace;
     }
@@ -137,39 +149,39 @@
   <!-- ==========================================================================
        1. TOP LIVE STATUS & LANGUAGE BAR (Identical to store.html)
        ========================================================================== -->
-  <aside class="theme-topbar text-white text-xs py-1.5 px-4 shadow-sm" aria-label="National Agriculture Status Bar">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+  <aside class="theme-topbar text-white text-xs py-1.5 px-3 sm:px-4 shadow-sm" aria-label="National Agriculture Status Bar">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       
       <!-- Live Mandi Update Badge & Pulse Ticker -->
-      <div class="flex items-center gap-2 overflow-hidden">
-        <span class="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-hidden min-w-0 flex-1">
+        <span class="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 shrink-0" aria-hidden="true">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-emerald-400"></span>
         </span>
-        <span class="font-bold tracking-wide uppercase text-[11px] md:text-xs truncate">
+        <span class="font-bold tracking-wide uppercase text-[10px] sm:text-[11px] md:text-xs truncate">
           Direct Mandi Rates & Govt MSP Updated Daily
         </span>
-        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200">
+        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200 shrink-0">
           <i class="ri-shield-check-fill text-xs" aria-hidden="true"></i> AGMARKNET Live
         </span>
       </div>
 
       <!-- Right Action Strip: Theme Switcher & Language Dropdown -->
-      <div class="flex items-center gap-2 md:gap-4 shrink-0">
+      <div class="flex items-center gap-1.5 sm:gap-2 md:gap-4 shrink-0">
         
         <!-- Subtle Theme Switcher Pill -->
         <button type="button" 
                 onclick="toggleAppTheme()" 
                 id="themeToggleBtn"
-                class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                class="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 text-white px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0"
                 title="Switch Color Theme">
           <i class="ri-contrast-2-line text-xs" aria-hidden="true"></i>
           <span id="themeToggleLabel" class="hidden sm:inline">Theme: Blue Skies</span>
-          <span class="sm:hidden font-mono text-[10px]">THEME</span>
+          <span class="sm:hidden font-mono text-[9px]">THEME</span>
         </button>
 
         <!-- Back to Storefront Link -->
-        <a href="/store" class="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all" title="Return to Marketplace">
+        <a href="/store" class="inline-flex items-center gap-1 bg-white/15 hover:bg-white/25 text-white px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold transition-all shrink-0" title="Return to Marketplace">
           <i class="ri-shopping-basket-line text-xs"></i>
           <span>Mandi Store</span>
         </a>
@@ -181,24 +193,24 @@
   <!-- ==========================================================================
        2. BRAND HEADER
        ========================================================================== -->
-  <header class="theme-header pt-4 pb-4 px-4 shadow-md transition-colors" role="banner">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+  <header class="theme-header pt-3 pb-3 sm:pt-4 sm:pb-4 px-3 sm:px-4 shadow-md transition-colors" role="banner">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
       
       <!-- Brand Identity with Crop Leaf Emblem -->
-      <a href="/store" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1">
-        <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-2xl shadow-inner shrink-0" aria-hidden="true">
+      <a href="/store" class="flex items-center gap-2 sm:gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-xl sm:text-2xl shadow-inner shrink-0" aria-hidden="true">
           <i class="ri-leaf-fill text-emerald-300"></i>
         </div>
-        <div>
+        <div class="min-w-0">
           <div class="flex items-center gap-1.5">
-            <h1 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none">
+            <h1 class="text-base sm:text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none truncate">
               KISAN DIRECT
             </h1>
-            <span class="bg-emerald-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest">
+            <span class="bg-emerald-500 text-white text-[8px] sm:text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest shrink-0">
               DOCA
             </span>
           </div>
-          <p class="text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5">
+          <p class="hidden sm:block text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5">
             National Farm-to-Fork Direct Grid & Intelligent Supply Chain
           </p>
         </div>

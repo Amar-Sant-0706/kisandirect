@@ -28,6 +28,18 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+      width: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    img, svg, video {
+      max-width: 100%;
+      height: auto;
+    }
+
     /* Zero-Scrollbar Utility */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -235,30 +247,30 @@
        1. TOP LIVE STATUS & LANGUAGE BAR
        ========================================================================== -->
   <aside class="theme-topbar text-white text-xs py-2 px-4 sticky top-0 z-50 transition-colors shadow-sm" aria-label="Live Market Updates">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-3">
       
       <!-- Live Mandi Update Badge & Pulse Ticker -->
-      <div class="flex items-center gap-2 overflow-hidden">
+      <div class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
         <span class="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
         </span>
-        <span class="font-bold tracking-wide uppercase text-[11px] md:text-xs truncate" id="liveTickerText">
+        <span class="font-bold tracking-wide uppercase text-[10px] sm:text-[11px] md:text-xs truncate" id="liveTickerText">
           Direct Mandi Rates & Govt MSP Updated Daily
         </span>
-        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200">
+        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200 shrink-0">
           <i class="ri-shield-check-fill text-xs" aria-hidden="true"></i> AGMARKNET Live
         </span>
       </div>
 
       <!-- Right Action Strip: Theme Switcher & Language Dropdown -->
-      <div class="flex items-center gap-2 md:gap-4 shrink-0">
+      <div class="flex items-center gap-1.5 sm:gap-2 md:gap-4 shrink-0">
         
         <!-- Subtle Theme Switcher Pill -->
         <button type="button" 
                 onclick="toggleAppTheme()" 
                 id="themeToggleBtn"
-                class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                class="inline-flex items-center gap-1 sm:gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0"
                 title="Switch Color Theme">
           <i class="ri-contrast-2-line text-xs" aria-hidden="true"></i>
           <span id="themeToggleLabel" class="hidden sm:inline">Theme: Blue Skies</span>
@@ -266,13 +278,13 @@
         </button>
 
         <!-- Language Switcher Dropdown -->
-        <div class="relative flex items-center">
+        <div class="relative flex items-center shrink-0">
           <label for="languageSelect" class="sr-only">Select Language</label>
-          <div class="flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded px-2 py-1 text-[11px] font-bold transition-all">
+          <div class="flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] font-bold transition-all">
             <i class="ri-global-line text-xs" aria-hidden="true"></i>
             <select id="languageSelect" 
                     onchange="changeAppLanguage(this.value)"
-                    class="bg-transparent text-white font-bold text-[11px] focus:outline-none cursor-pointer pr-1">
+                    class="bg-transparent text-white font-bold text-[10px] sm:text-[11px] focus:outline-none cursor-pointer pr-1">
               <option value="en" class="text-slate-900">English</option>
               <option value="hi" class="text-slate-900">हिन्दी (Hindi)</option>
               <option value="mr" class="text-slate-900">मराठी (Marathi)</option>
@@ -291,38 +303,38 @@
     <div class="max-w-7xl mx-auto">
       
       <!-- Brand & Top Icons Row -->
-      <div class="flex items-center justify-between gap-4 mb-4">
+      <div class="flex items-center justify-between gap-1.5 sm:gap-4 mb-3 sm:mb-4">
         
         <!-- Brand Identity with Crop Leaf Emblem -->
-        <a href="/store" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1">
-          <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-2xl shadow-inner shrink-0" aria-hidden="true">
+        <a href="/store" class="flex items-center gap-2 sm:gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1 min-w-0 shrink">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-xl sm:text-2xl shadow-inner shrink-0" aria-hidden="true">
             <i class="ri-leaf-fill text-emerald-300"></i>
           </div>
-          <div>
-            <div class="flex items-center gap-1.5">
-              <h1 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1 sm:gap-1.5">
+              <h1 class="text-base sm:text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none truncate">
                 KISAN DIRECT
               </h1>
-              <span class="bg-emerald-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest">
+              <span class="bg-emerald-500 text-white text-[8px] sm:text-[9px] font-black uppercase px-1 sm:px-1.5 py-0.5 rounded tracking-widest shrink-0">
                 DOCA
               </span>
             </div>
-            <p class="text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5" id="brandTagline">
+            <p class="text-[10px] sm:text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5 truncate hidden sm:block" id="brandTagline">
               Direct Farmgate Agri-Marketplace
             </p>
           </div>
         </a>
 
         <!-- Header Actions: KisanVani AI Voice, AI Scanner, Sell Crops, Auth, Notifications & Cart -->
-        <div class="flex items-center gap-1.5 sm:gap-2.5">
+        <div class="flex items-center gap-1 sm:gap-2 md:gap-2.5 shrink-0">
           
           <!-- 1. KisanVani Multilingual AI Voice Copilot Pill -->
           <button type="button" 
                   id="kisanVaniNavBtn" 
                   onclick="openKisanVaniModal()" 
-                  class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  class="inline-flex items-center justify-center gap-1 sm:gap-1.5 bg-white/15 hover:bg-white/25 text-white w-8 h-8 sm:w-auto sm:h-auto px-0 sm:px-3 py-0 sm:py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
                   title="Open KisanVani Multilingual AI Voice Copilot (9 Languages & Role Voices)">
-            <span class="relative flex h-2 w-2">
+            <span class="relative flex h-2 w-2 shrink-0">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
@@ -334,7 +346,7 @@
           <button type="button" 
                   id="aiScannerNavBtn" 
                   onclick="openQualityScannerModal()" 
-                  class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  class="inline-flex items-center justify-center gap-1 sm:gap-1.5 bg-white/15 hover:bg-white/25 text-white w-8 h-8 sm:w-auto sm:h-auto px-0 sm:px-3 py-0 sm:py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
                   title="Universal AI Crop Quality & Defect Scanner (DOCA Certified)">
             <i class="ri-qr-scan-2-line text-sm text-emerald-300" aria-hidden="true"></i>
             <span class="hidden md:inline">AI Scanner</span>
@@ -354,7 +366,7 @@
           <button type="button" 
                   id="navMyListedCropsBtn" 
                   onclick="openMyListedCropsModal()" 
-                  class="hidden md:inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  class="hidden lg:inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
                   title="View My Listed Crops with Photos & Status">
             <i class="ri-list-check-2 text-sm text-emerald-300" aria-hidden="true"></i>
             <span>My Listings (<span id="navListedLotsCount">2</span>)</span>
@@ -366,8 +378,8 @@
             <button type="button" 
                     id="navSignInBtn" 
                     onclick="openStoreLoginModal()" 
-                    class="inline-flex items-center gap-1.5 bg-white text-slate-900 hover:bg-slate-100 px-3 py-1.5 rounded-full text-xs font-extrabold shadow transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0">
-              <i class="ri-user-shared-line text-sm text-emerald-600"></i>
+                    class="inline-flex items-center gap-1 sm:gap-1.5 bg-white text-slate-900 hover:bg-slate-100 px-2 sm:px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-extrabold shadow transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0">
+              <i class="ri-user-shared-line text-xs sm:text-sm text-emerald-600"></i>
               <span>Sign In</span>
             </button>
           </div>
@@ -375,22 +387,22 @@
           <!-- 5. Notification Bell -->
           <button type="button" 
                   onclick="toggleNotificationsModal()" 
-                  class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
+                  class="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
                   title="View Mandi Alerts & Notifications"
                   aria-label="Notifications (1 new)">
-            <i class="ri-notification-3-line text-lg" aria-hidden="true"></i>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-white"></span>
+            <i class="ri-notification-3-line text-base sm:text-lg" aria-hidden="true"></i>
+            <span class="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-white"></span>
           </button>
 
           <!-- 6. Mandi Bag Shopping Bag with Active Badge -->
           <button type="button" 
                   onclick="openCartDrawer()" 
-                  id="headerCartBtn"
-                  class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
+                  id="headerCartBtn" 
+                  class="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
                   title="Open Mandi Bag"
                   aria-label="Shopping bag with 2 items">
-            <i class="ri-shopping-bag-3-fill text-lg" aria-hidden="true"></i>
-            <span id="cartBadgeCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-black w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shadow-md ring-2 ring-white">
+            <i class="ri-shopping-bag-3-fill text-base sm:text-lg" aria-hidden="true"></i>
+            <span id="cartBadgeCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shadow-md ring-2 ring-white">
               2
             </span>
           </button>
@@ -497,7 +509,7 @@
   <!-- ==========================================================================
        MAIN CONTENT CONTAINER
        ========================================================================== -->
-  <main class="max-w-7xl mx-auto px-4 pt-4">
+  <main class="max-w-7xl mx-auto px-3 sm:px-4 pt-3 sm:pt-4 pb-24 md:pb-8">
 
     <!-- Section Heading & Active Filter Feedback -->
     <div class="flex items-center justify-between mb-3">
@@ -577,14 +589,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('PREMIUM WHEAT', '₹2,250/qtl', 'Sukhdev Patil', '+91 98220 11982', 'LOT-WHT-8902', 2250, 'qtl')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Sukhdev Patil', '+91 98220 11982', 'Kopargaon, Nashik, MH', 'PREMIUM WHEAT', '₹2,250/qtl', 'LOT-WHT-8902', 'Grade A+ Sharbati Golden', '98.5%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Sukhdev Patil">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -650,14 +662,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('RED ONIONS', '₹24/kg', 'Babanrao Shinde', '+91 94231 88201', 'LOT-ONI-4411', 24, 'kg')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Babanrao Shinde', '+91 94231 88201', 'Lasalgaon, Nashik, MH', 'RED ONIONS', '₹24/kg', 'LOT-ONI-4411', 'Garwa Pink Export Grade', '96.2%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Babanrao Shinde">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -723,14 +735,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('BANANAS', '₹40/doz', 'Kiran Chaudhari', '+91 97650 44321', 'LOT-BAN-1029', 40, 'doz')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Kiran Chaudhari', '+91 97650 44321', 'Raver, Jalgaon, MH', 'BANANAS', '₹40/doz', 'LOT-BAN-1029', 'Grand Naine Golden Ripe', '94.8%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Kiran Chaudhari">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -796,14 +808,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('RICE (Indrayani Basmati)', '₹55/kg', 'Kolhapur Agro FPO', '+91 98900 12099', 'LOT-RIC-5520', 55, 'kg')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Kolhapur Agro FPO', '+91 98900 12099', 'Kolhapur, Maharashtra', 'RICE (Indrayani Basmati)', '₹55/kg', 'LOT-RIC-5520', 'Indrayani Fragrant', '97.2%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact Kolhapur Agro FPO">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -849,14 +861,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('FARM TOMATOES', '₹22/kg', 'Anand Jadhav', '+91 98221 44556', 'LOT-TOM-7721', 22, 'kg')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Anand Jadhav', '+91 98221 44556', 'Narayangaon, Pune, MH', 'FARM TOMATOES', '₹22/kg', 'LOT-TOM-7721', 'Hybrid Red Firm', '97.8%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Anand Jadhav">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -902,14 +914,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('NASHIK GRAPES', '₹75/kg', 'Vikas Gaikwad', '+91 94222 33110', 'LOT-GRP-3301', 75, 'kg')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Vikas Gaikwad', '+91 94222 33110', 'Dindori, Nashik, MH', 'NASHIK GRAPES', '₹75/kg', 'LOT-GRP-3301', 'Thompson Seedless Export', '98.2%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Vikas Gaikwad">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -955,14 +967,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('YELLOW SOYBEAN', '₹4,550/qtl', 'Pandurang Deshmukh', '+91 98233 77665', 'LOT-SOY-9912', 4550, 'qtl')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Place Escrow Procurement Order">
             <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
             <span>ORDER</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Pandurang Deshmukh', '+91 98233 77665', 'Latur APMC, MH', 'YELLOW SOYBEAN', '₹4,550/qtl', 'LOT-SOY-9912', 'JS-335 Cleaned Seed', '95.1%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact farmer Pandurang Deshmukh">
             <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">CONTACT</span>
@@ -1008,14 +1020,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-1">
           <button type="button" 
                   onclick="gateBuyProduceAction('GOVT MSP WHEAT TENDER', '₹2,275/qtl', 'Food Corporation of India', '+91 11 2345 6789', 'TDR-FCI-2026-01', 2275, 'qtl')"
-                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   title="Participate in MSP Tender">
             <i class="ri-file-shield-2-fill text-xs" aria-hidden="true"></i>
             <span>BID ESCROW</span>
           </button>
           <button type="button" 
                   onclick="openFarmerContactModal('Food Corporation of India', '+91 11 2345 6789', 'Manmad Silo Complex, MH', 'GOVT MSP WHEAT TENDER', '₹2,275/qtl', 'TDR-FCI-2026-01', 'Central Depot Buffer Lot', '99.1%')"
-                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm"
                   aria-label="Contact Depot Office">
             <i class="ri-building-line text-xs text-emerald-600" aria-hidden="true"></i>
             <span class="btn-contact-text truncate">DEPOT</span>
@@ -1238,11 +1250,11 @@
 
       <!-- Direct Call & WhatsApp Action Buttons -->
       <div class="grid grid-cols-2 gap-2 mb-4">
-        <a id="modalCallLink" href="tel:+919822011982" class="theme-btn-cta py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow text-center focus:outline-none">
-          <i class="ri-phone-fill text-sm"></i> Call Farmer
+        <a id="modalCallLink" href="tel:+919822011982" class="theme-btn-cta py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 shadow text-center focus:outline-none truncate">
+          <i class="ri-phone-fill text-sm"></i> <span>Call Farmer</span>
         </a>
-        <a id="modalWhatsAppLink" href="https://wa.me/919822011982" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow text-center focus:outline-none">
-          <i class="ri-whatsapp-line text-base"></i> WhatsApp Chat
+        <a id="modalWhatsAppLink" href="https://wa.me/919822011982" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 shadow text-center focus:outline-none truncate">
+          <i class="ri-whatsapp-line text-base"></i> <span>WhatsApp Chat</span>
         </a>
       </div>
 
@@ -1469,12 +1481,12 @@
       </div>
 
       <!-- Action & Status Ribbon -->
-      <div class="flex items-center justify-between gap-2 mb-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200 shrink-0">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200 shrink-0">
         <div class="flex items-center gap-1.5 text-xs text-slate-600 font-bold">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Active Farmgate Listings (100% Escrow Payout Guaranteed)</span>
         </div>
-        <button type="button" onclick="closeMyListedCropsModal(); gateSellProduceAction();" class="theme-btn-cta px-3 py-1.5 rounded-lg font-black text-xs flex items-center gap-1 shadow-sm">
+        <button type="button" onclick="closeMyListedCropsModal(); gateSellProduceAction();" class="theme-btn-cta px-3 py-1.5 rounded-lg font-black text-xs flex items-center justify-center gap-1 shadow-sm w-full sm:w-auto shrink-0">
           <i class="ri-add-line"></i> + List New Crop
         </button>
       </div>
@@ -1499,7 +1511,7 @@
        MODAL 4: MANDI BAG CART DRAWER
        ========================================================================== -->
   <div id="cartModal" class="hidden fixed inset-0 z-50 flex items-center justify-end bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white h-full w-full max-w-md p-5 flex flex-col justify-between shadow-2xl overflow-y-auto">
+    <div class="bg-white h-full w-full max-w-full sm:max-w-md p-4 sm:p-5 flex flex-col justify-between shadow-2xl overflow-y-auto">
       <div>
         <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
           <div class="flex items-center gap-2">
@@ -1550,8 +1562,8 @@
   <!-- ==========================================================================
        MODAL 5: UNIFIED IN-STORE SIGN IN & REGISTRATION MODAL
        ========================================================================== -->
-  <div id="storeLoginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="storeLoginTitle">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+  <div id="storeLoginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="storeLoginTitle">
+    <div class="bg-white rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
       
       <!-- Modal Header -->
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
@@ -1579,13 +1591,13 @@
 
       <!-- Role Selector Tabs -->
       <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl mb-3 text-center">
-        <button type="button" id="storeTabFarmer" onclick="selectStoreRole('FARMER')" class="py-2 rounded-lg text-xs font-bold transition-all bg-white text-emerald-700 shadow-sm border border-slate-200">
+        <button type="button" id="storeTabFarmer" onclick="selectStoreRole('FARMER')" class="py-2 px-1 rounded-lg text-[10px] sm:text-xs font-bold transition-all bg-white text-emerald-700 shadow-sm border border-slate-200 truncate">
           👨‍🌾 Farmer / FPO
         </button>
-        <button type="button" id="storeTabBuyer" onclick="selectStoreRole('BUYER')" class="py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+        <button type="button" id="storeTabBuyer" onclick="selectStoreRole('BUYER')" class="py-2 px-1 rounded-lg text-[10px] sm:text-xs font-bold transition-all text-slate-600 hover:text-slate-900 truncate">
           🛒 Buyer / Retail
         </button>
-        <button type="button" id="storeTabOwner" onclick="selectStoreRole('OWNER')" class="py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+        <button type="button" id="storeTabOwner" onclick="selectStoreRole('OWNER')" class="py-2 px-1 rounded-lg text-[10px] sm:text-xs font-bold transition-all text-slate-600 hover:text-slate-900 truncate">
           🛡️ Control Tower
         </button>
       </div>
@@ -1678,11 +1690,11 @@
   <!-- ==========================================================================
        MODAL 6: KISANVANI MULTILINGUAL AI VOICE COPILOT
        ========================================================================== -->
-  <div id="kisanVaniModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="vaniModalTitle">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+  <div id="kisanVaniModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="vaniModalTitle">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
       
       <!-- Modal Header -->
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
         <div class="flex items-center gap-2">
           <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
             <i class="ri-voiceprint-line text-xl"></i>
@@ -1700,9 +1712,9 @@
       </div>
 
       <!-- Commodity Filter Dropdown -->
-      <div class="flex items-center justify-between gap-2 mb-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 mb-3">
         <label for="vaniCommoditySelect" class="text-xs font-bold text-slate-700">Filter Broadcast:</label>
-        <select id="vaniCommoditySelect" onchange="onVaniCommodityChange(this.value)" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs font-bold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        <select id="vaniCommoditySelect" onchange="onVaniCommodityChange(this.value)" class="w-full sm:w-auto bg-slate-50 border border-slate-300 text-slate-900 text-xs font-bold rounded-xl px-2.5 sm:px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
           <option value="">🌾 All Top Commodities (Full Daily Bulletin)</option>
           <option value="wheat">🌾 Sharbati Wheat (Kopargaon)</option>
           <option value="onion">🧅 Red Onion (Lasalgaon)</option>
@@ -1719,13 +1731,13 @@
           <i class="ri-mic-line text-emerald-600"></i> AI Voice Actor & Tone Persona:
         </span>
         <div class="grid grid-cols-3 gap-1.5">
-          <button type="button" id="voiceRoleFarmer" onclick="setVaniPersona('FARMER')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border transition-all bg-white border-emerald-600 text-emerald-700 shadow-sm">
+          <button type="button" id="voiceRoleFarmer" onclick="setVaniPersona('FARMER')" class="py-2 px-1 text-center rounded-lg text-[10px] sm:text-xs font-bold border transition-all bg-white border-emerald-600 text-emerald-700 shadow-sm truncate">
             👨‍🌾 Farmer (Baritone)
           </button>
-          <button type="button" id="voiceRoleBuyer" onclick="setVaniPersona('BUYER')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all">
+          <button type="button" id="voiceRoleBuyer" onclick="setVaniPersona('BUYER')" class="py-2 px-1 text-center rounded-lg text-[10px] sm:text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all truncate">
             🛒 Buyer (Commercial)
           </button>
-          <button type="button" id="voiceRoleAdmin" onclick="setVaniPersona('ADMIN')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all">
+          <button type="button" id="voiceRoleAdmin" onclick="setVaniPersona('ADMIN')" class="py-2 px-1 text-center rounded-lg text-[10px] sm:text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all truncate">
             🛡️ Admin (Authoritative)
           </button>
         </div>
@@ -1806,8 +1818,8 @@
   <!-- ==========================================================================
        MODAL 7: KISAN-VISION UNIVERSAL AI QUALITY & DEFECT SCANNER
        ========================================================================== -->
-  <div id="aiQualityScannerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="scannerModalTitle">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+  <div id="aiQualityScannerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="scannerModalTitle">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
       
       <!-- Modal Header -->
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
@@ -2213,18 +2225,18 @@
             <button type="button" 
                     onclick="toggleUserMenuDropdown(event)" 
                     id="navUserProfileBtn"
-                    class="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 hover:bg-white/30 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 border border-white/20"
+                    class="inline-flex items-center gap-1 sm:gap-2 bg-white/20 hover:bg-white/30 text-white px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 border border-white/20"
                     title="${user.name} (${roleLabel})">
-              <span class="w-6 h-6 rounded-full ${roleBadgeClass} font-black flex items-center justify-center text-[10px] shadow-sm">
+              <span class="w-6 h-6 rounded-full ${roleBadgeClass} font-black flex items-center justify-center text-[10px] shadow-sm shrink-0">
                 ${initial}
               </span>
-              <span class="max-w-[90px] sm:max-w-[120px] truncate hidden sm:inline" id="navUserName">${user.name}</span>
-              <span class="text-[9px] uppercase px-1.5 py-0.2 rounded font-black bg-white/25 text-white tracking-wide" id="navUserRoleBadge">${roleLabel}</span>
-              <i class="ri-arrow-down-s-line text-xs"></i>
+              <span class="max-w-[75px] sm:max-w-[120px] truncate hidden sm:inline" id="navUserName">${user.name}</span>
+              <span class="text-[8px] sm:text-[9px] uppercase px-1 sm:px-1.5 py-0.2 rounded font-black bg-white/25 text-white tracking-wide hidden xs:inline" id="navUserRoleBadge">${roleLabel}</span>
+              <i class="ri-arrow-down-s-line text-xs shrink-0"></i>
             </button>
             
             <!-- User Dropdown Menu -->
-            <div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-900 text-xs font-semibold">
+            <div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-60 max-w-[85vw] bg-white rounded-2xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-900 text-xs font-semibold">
               <div class="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-t-2xl">
                 <p class="font-black text-slate-900 truncate">${user.name}</p>
                 <p class="text-[10px] text-slate-500 font-mono truncate">${user.email || 'Verified Member'}</p>
@@ -3053,13 +3065,13 @@
           <div class="grid grid-cols-2 gap-1.5 pt-1">
             <button type="button" 
                     onclick="gateBuyProduceAction('${crop}', '₹${price}/${unit}', '${user.name}', '+91 98220 00000', '${lotId}', ${price}, '${unit}')"
-                    class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm">
-              <i class="ri-shopping-cart-2-fill text-xs"></i> <span>ORDER</span>
+                    class="theme-btn-cta font-black text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm">
+              <i class="ri-shopping-cart-2-fill text-[11px] sm:text-xs"></i> <span>ORDER</span>
             </button>
             <button type="button" 
                     onclick="openFarmerContactModal('${user.name}', '+91 98220 00000', '${loc}', '${crop}', '₹${price}/${unit}', '${lotId}', 'Farmgate Fresh', '98.0%')"
-                    class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm">
-              <i class="ri-phone-fill text-xs text-emerald-600"></i> <span class="btn-contact-text truncate">CONTACT</span>
+                    class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-[10px] sm:text-xs rounded-xl py-1.5 sm:py-2 px-1 flex items-center justify-center gap-0.5 sm:gap-1 shadow-sm">
+              <i class="ri-phone-fill text-[11px] sm:text-xs text-emerald-600"></i> <span class="btn-contact-text truncate">CONTACT</span>
             </button>
           </div>
         `;
