@@ -165,7 +165,8 @@ app.use((req, res) => {
 
 // Start server on 0.0.0.0 for cloud container and Render compatibility
 const HOST = process.env.HOST || '0.0.0.0';
-const server = app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
   console.log(`[KisanDirect AI] Universal Agri-Marketplace Backend running on http://${HOST}:${PORT}`);
 });
 

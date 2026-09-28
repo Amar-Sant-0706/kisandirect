@@ -8,4 +8,4 @@
 // - Owner DOCA Control Room (/owner/control-room) with Double-Approval & Fleet VRP Optimizer
 // ==============================================================================
 
-require('./backend/server.js');
+module.exports = require('./backend/server.js');

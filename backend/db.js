@@ -13,7 +13,8 @@ if (!fs.existsSync(dbDir)) {
 
 const db = new Database(dbPath);
 
-db.pragma('journal_mode = WAL');
+// Use standard DELETE journal mode for container stability (prevents POSIX shared memory /dev/shm SIGSEGV)
+db.pragma('journal_mode = DELETE');
 db.pragma('foreign_keys = ON');
 
 function initDatabase() {

@@ -5,8 +5,8 @@ const fs = require('fs');
 const dbPath = path.join(__dirname, 'kisandirect.db');
 const db = new Database(dbPath);
 
-// Enable foreign keys and WAL mode for high concurrency
-db.pragma('journal_mode = WAL');
+// Use standard DELETE journal mode for container stability (prevents POSIX shared memory /dev/shm SIGSEGV)
+db.pragma('journal_mode = DELETE');
 db.pragma('foreign_keys = ON');
 
 function initSchema() {

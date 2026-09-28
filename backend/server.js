@@ -170,7 +170,8 @@ app.use((req, res) => {
 
 const HOST = process.env.HOST || '0.0.0.0';
 
-const server = app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
   console.log(`[KisanDirect AI] Multi-Portal Unified Production Server running at http://${HOST}:${PORT}`);
 });
 
