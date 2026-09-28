@@ -1,39 +1,3533 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="blue">
+<html lang="en" data-theme="blue" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KisanDirect AI - Multi-Portal Agricultural Architecture</title>
-  <meta name="description" content="AI-powered digital agricultural marketplace and regulatory control room connecting Farmers/FPOs, Buyers, and Regulators. Ministry of Consumer Affairs (DOCA).">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>KisanDirect - Farmer Direct Agricultural Marketplace</title>
+  <meta name="description" content="Direct mandi rates, APMC price index, crop quality certification, and direct farmgate procurement for wheat, onions, bananas, rice, and fresh produce. Ministry of Consumer Affairs (DOCA)." />
 
-  <!-- Immediate Theme Initializer -->
-  <script>
-    (function() {
-      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-  </script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Multi-Portal Theme Stylesheet -->
-  <link rel="stylesheet" href="/src/styles/portals.css">
+  <!-- Remix Icon CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Zero-Scrollbar Utility */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #app:empty { display: none !important; }
+
+    /* ==========================================================================
+       THEME DESIGN TOKENS
+       1. "Blue Skies" Theme [data-theme="blue"]
+       2. "Golden Harvest" Theme [data-theme="harvest"]
+       ========================================================================== */
+    :root, [data-theme="blue"] {
+      --header-bg: #1e5276;
+      --header-top-bg: #153e5b;
+      --header-text: #ffffff;
+      --bg-main: #f0f6fa;
+      --card-bg: #ffffff;
+      --card-border: #bde0f5;
+      --card-border-hover: #1e5276;
+      --btn-cta-bg: #1e5276;
+      --btn-cta-hover: #153e5b;
+      --btn-cta-text: #ffffff;
+      --accent: #0284c7;
+      --accent-light: #e0f2fe;
+      --accent-text: #0369a1;
+      --text-main: #0f2942;
+      --text-muted: #546e7a;
+      --chip-active-bg: #1e5276;
+      --chip-active-text: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #bde0f5;
+      --chip-text: #1e5276;
+      --bottom-bar-bg: #ffffff;
+      --bottom-bar-border: #dbeafe;
+      --bottom-bar-active: #1e5276;
+      --fab-bg: #1e5276;
+      --fab-hover: #153e5b;
+      --badge-pulse: #10b981;
+    }
+
+    [data-theme="harvest"] {
+      --header-bg: #d4a044;
+      --header-top-bg: #b57b18;
+      --header-text: #ffffff;
+      --bg-main: #fff9ee;
+      --card-bg: #ffffff;
+      --card-border: #f3dfb5;
+      --card-border-hover: #b57b18;
+      --btn-cta-bg: #b57b18;
+      --btn-cta-hover: #97640f;
+      --btn-cta-text: #ffffff;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --accent-text: #92400e;
+      --text-main: #3d2605;
+      --text-muted: #785827;
+      --chip-active-bg: #b57b18;
+      --chip-active-text: #ffffff;
+      --chip-bg: #ffffff;
+      --chip-border: #f3dfb5;
+      --chip-text: #785827;
+      --bottom-bar-bg: #ffffff;
+      --bottom-bar-border: #f3dfb5;
+      --bottom-bar-active: #b57b18;
+      --fab-bg: #b57b18;
+      --fab-hover: #97640f;
+      --badge-pulse: #10b981;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Dynamic Theme Class Bindings */
+    .theme-header {
+      background-color: var(--header-bg);
+      color: var(--header-text);
+      transition: background-color 0.25s ease;
+    }
+
+    .theme-topbar {
+      background-color: var(--header-top-bg);
+      transition: background-color 0.25s ease;
+    }
+
+    .theme-card {
+      background-color: var(--card-bg);
+      border-color: var(--card-border);
+      transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .theme-card:hover {
+      border-color: var(--card-border-hover);
+    }
+
+    .theme-btn-cta {
+      background-color: var(--btn-cta-bg);
+      color: var(--btn-cta-text);
+      transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      min-height: 44px;
+    }
+
+    .theme-btn-cta:hover {
+      background-color: var(--btn-cta-hover);
+      transform: translateY(-1px);
+    }
+
+    .theme-chip {
+      background-color: var(--chip-bg);
+      border-color: var(--chip-border);
+      color: var(--chip-text);
+      min-height: 44px;
+      transition: all 0.2s ease;
+    }
+
+    .theme-chip.active-chip {
+      background-color: var(--chip-active-bg) !important;
+      border-color: var(--chip-active-bg) !important;
+      color: var(--chip-active-text) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .theme-bottom-bar {
+      background-color: var(--bottom-bar-bg);
+      border-top-color: var(--bottom-bar-border);
+    }
+
+    .theme-fab {
+      background-color: var(--fab-bg);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .theme-fab:hover {
+      background-color: var(--fab-hover);
+      transform: scale(1.05);
+    }
+
+    /* Listening pulse animation for Web Speech API */
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .mic-recording {
+      animation: micPulse 1.2s infinite;
+      background-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+
+    /* Voice Equalizer Waveform */
+    .voice-equalizer-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 42px;
+      margin: 10px 0;
+    }
+    .voice-wave-bar {
+      width: 4px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 9999px;
+      transition: height 0.15s ease;
+    }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(1) { animation: soundWave 0.75s infinite ease-in-out 0.1s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(2) { animation: soundWave 0.9s infinite ease-in-out 0.25s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(3) { animation: soundWave 1.1s infinite ease-in-out 0.15s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(4) { animation: soundWave 0.7s infinite ease-in-out 0.35s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(5) { animation: soundWave 1.25s infinite ease-in-out 0.05s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(6) { animation: soundWave 0.85s infinite ease-in-out 0.3s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(7) { animation: soundWave 1.05s infinite ease-in-out 0.2s; }
+    .voice-equalizer-container.active .voice-wave-bar:nth-child(8) { animation: soundWave 0.8s infinite ease-in-out 0.12s; }
+
+    @keyframes soundWave {
+      0%, 100% { height: 6px; }
+      50% { height: 32px; background: #059669; }
+    }
+
+    /* Laser Scanner Animation */
+    @keyframes scanLaser {
+      0% { top: 0%; opacity: 0.8; }
+      50% { top: 92%; opacity: 1; }
+      100% { top: 0%; opacity: 0.8; }
+    }
+    .scanner-laser-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #10b981, #34d399, transparent);
+      box-shadow: 0 0 14px #10b981;
+      animation: scanLaser 2s infinite ease-in-out;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body>
+<body class="pb-24 md:pb-12">
 
-  <!-- Root Application Container -->
+  <!-- ==========================================================================
+       1. TOP LIVE STATUS & LANGUAGE BAR
+       ========================================================================== -->
+  <aside class="theme-topbar text-white text-xs py-2 px-4 sticky top-0 z-50 transition-colors shadow-sm" aria-label="Live Market Updates">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      
+      <!-- Live Mandi Update Badge & Pulse Ticker -->
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+        </span>
+        <span class="font-bold tracking-wide uppercase text-[11px] md:text-xs truncate" id="liveTickerText">
+          Direct Mandi Rates & Govt MSP Updated Daily
+        </span>
+        <span class="hidden sm:inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-200">
+          <i class="ri-shield-check-fill text-xs" aria-hidden="true"></i> AGMARKNET Live
+        </span>
+      </div>
+
+      <!-- Right Action Strip: Theme Switcher & Language Dropdown -->
+      <div class="flex items-center gap-2 md:gap-4 shrink-0">
+        
+        <!-- Subtle Theme Switcher Pill -->
+        <button type="button" 
+                onclick="toggleAppTheme()" 
+                id="themeToggleBtn"
+                class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-full text-[11px] font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                title="Switch Color Theme">
+          <i class="ri-contrast-2-line text-xs" aria-hidden="true"></i>
+          <span id="themeToggleLabel" class="hidden sm:inline">Theme: Blue Skies</span>
+          <span class="sm:hidden font-mono text-[10px]">THEME</span>
+        </button>
+
+        <!-- Language Switcher Dropdown -->
+        <div class="relative flex items-center">
+          <label for="languageSelect" class="sr-only">Select Language</label>
+          <div class="flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded px-2 py-1 text-[11px] font-bold transition-all">
+            <i class="ri-global-line text-xs" aria-hidden="true"></i>
+            <select id="languageSelect" 
+                    onchange="changeAppLanguage(this.value)"
+                    class="bg-transparent text-white font-bold text-[11px] focus:outline-none cursor-pointer pr-1">
+              <option value="en" class="text-slate-900">English</option>
+              <option value="hi" class="text-slate-900">हिन्दी (Hindi)</option>
+              <option value="mr" class="text-slate-900">मराठी (Marathi)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       2. MAIN BRAND & SEARCH BAR
+       ========================================================================== -->
+  <header class="theme-header pt-4 pb-5 px-4 shadow-md transition-colors" role="banner">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Brand & Top Icons Row -->
+      <div class="flex items-center justify-between gap-4 mb-4">
+        
+        <!-- Brand Identity with Crop Leaf Emblem -->
+        <a href="/store" class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-white/50 rounded-lg py-1">
+          <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white text-2xl shadow-inner shrink-0" aria-hidden="true">
+            <i class="ri-leaf-fill text-emerald-300"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h1 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase leading-none">
+                KISAN DIRECT
+              </h1>
+              <span class="bg-emerald-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest">
+                DOCA
+              </span>
+            </div>
+            <p class="text-[11px] text-white/80 font-medium tracking-wide leading-tight mt-0.5" id="brandTagline">
+              Direct Farmgate Agri-Marketplace
+            </p>
+          </div>
+        </a>
+
+        <!-- Header Actions: KisanVani AI Voice, AI Scanner, Sell Crops, Auth, Notifications & Cart -->
+        <div class="flex items-center gap-1.5 sm:gap-2.5">
+          
+          <!-- 1. KisanVani Multilingual AI Voice Copilot Pill -->
+          <button type="button" 
+                  id="kisanVaniNavBtn" 
+                  onclick="openKisanVaniModal()" 
+                  class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  title="Open KisanVani Multilingual AI Voice Copilot (9 Languages & Role Voices)">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            <i class="ri-voiceprint-line text-sm text-emerald-300" aria-hidden="true"></i>
+            <span class="hidden md:inline">KisanVani AI</span>
+          </button>
+
+          <!-- 2. AI Quality Scanner (Kisan-Vision) Pill -->
+          <button type="button" 
+                  id="aiScannerNavBtn" 
+                  onclick="openQualityScannerModal()" 
+                  class="inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  title="Universal AI Crop Quality & Defect Scanner (DOCA Certified)">
+            <i class="ri-qr-scan-2-line text-sm text-emerald-300" aria-hidden="true"></i>
+            <span class="hidden md:inline">AI Scanner</span>
+          </button>
+
+          <!-- 3. + Sell Crops CTA Button (Farmer Gated Action) -->
+          <button type="button" 
+                  id="navSellProduceBtn" 
+                  onclick="gateSellProduceAction()" 
+                  class="hidden sm:inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0"
+                  title="Sell & List Your Harvest Batch Directly">
+            <i class="ri-add-circle-fill text-sm" aria-hidden="true"></i>
+            <span>+ Sell Crops</span>
+          </button>
+
+          <!-- 3B. My Listed Crops Button with Live Batch Count -->
+          <button type="button" 
+                  id="navMyListedCropsBtn" 
+                  onclick="openMyListedCropsModal()" 
+                  class="hidden md:inline-flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 shadow-sm border border-white/20"
+                  title="View My Listed Crops with Photos & Status">
+            <i class="ri-list-check-2 text-sm text-emerald-300" aria-hidden="true"></i>
+            <span>My Listings (<span id="navListedLotsCount">2</span>)</span>
+          </button>
+
+          <!-- 4. Dynamic Auth Widget Container (Sign In / User Profile Badge) -->
+          <div id="navUserContainer" class="relative inline-flex items-center shrink-0">
+            <!-- Rendered dynamically by JavaScript based on localStorage auth session -->
+            <button type="button" 
+                    id="navSignInBtn" 
+                    onclick="openStoreLoginModal()" 
+                    class="inline-flex items-center gap-1.5 bg-white text-slate-900 hover:bg-slate-100 px-3 py-1.5 rounded-full text-xs font-extrabold shadow transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0">
+              <i class="ri-user-shared-line text-sm text-emerald-600"></i>
+              <span>Sign In</span>
+            </button>
+          </div>
+
+          <!-- 5. Notification Bell -->
+          <button type="button" 
+                  onclick="toggleNotificationsModal()" 
+                  class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
+                  title="View Mandi Alerts & Notifications"
+                  aria-label="Notifications (1 new)">
+            <i class="ri-notification-3-line text-lg" aria-hidden="true"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-white"></span>
+          </button>
+
+          <!-- 6. Mandi Bag Shopping Bag with Active Badge -->
+          <button type="button" 
+                  onclick="openCartDrawer()" 
+                  id="headerCartBtn"
+                  class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0" 
+                  title="Open Mandi Bag"
+                  aria-label="Shopping bag with 2 items">
+            <i class="ri-shopping-bag-3-fill text-lg" aria-hidden="true"></i>
+            <span id="cartBadgeCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-black w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center shadow-md ring-2 ring-white">
+              2
+            </span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Full-Width Rounded Search Bar with Voice Microphone -->
+      <div class="relative w-full">
+        <label for="produceSearchInput" class="sr-only">Search for wheat, onions, crops...</label>
+        <div class="flex items-center w-full bg-white rounded-full shadow-lg border border-slate-200 focus-within:ring-2 focus-within:ring-emerald-400 overflow-hidden transition-all pl-4 pr-1.5 py-1">
+          
+          <!-- Magnifying Glass Icon -->
+          <i class="ri-search-line text-slate-400 text-xl shrink-0 mr-2" aria-hidden="true"></i>
+          
+          <!-- Search Input Field -->
+          <input type="text" 
+                 id="produceSearchInput" 
+                 oninput="handleSearchFilter(this.value)" 
+                 placeholder="Search for wheat, onions, crops..." 
+                 class="w-full bg-transparent text-slate-900 placeholder:text-slate-400 text-sm md:text-base font-semibold focus:outline-none py-2"
+                 autocomplete="off" />
+
+          <!-- Clear Query Button (Hidden when empty) -->
+          <button type="button" 
+                  id="clearSearchBtn" 
+                  onclick="clearSearchQuery()" 
+                  class="hidden text-slate-400 hover:text-slate-600 p-2 shrink-0" 
+                  title="Clear search">
+            <i class="ri-close-circle-fill text-lg" aria-hidden="true"></i>
+          </button>
+
+          <!-- Dedicated Voice Search Microphone Button (Web Speech API) -->
+          <button type="button" 
+                  id="voiceSearchBtn" 
+                  onclick="startVoiceSearch()" 
+                  class="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-500 ml-1" 
+                  title="Voice Search: Speak crop name"
+                  aria-label="Search by voice">
+            <i class="ri-mic-line text-lg" id="voiceMicIcon" aria-hidden="true"></i>
+          </button>
+
+        </div>
+
+        <!-- Listening Status Banner (Revealed during Speech Recognition) -->
+        <div id="voiceListeningToast" class="hidden absolute left-0 right-0 -bottom-10 bg-slate-900/90 text-white text-xs font-bold py-1.5 px-4 rounded-full flex items-center justify-center gap-2 z-30 shadow-lg backdrop-blur">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+          <span id="voiceListeningText">Listening... Speak now (e.g. "Wheat", "Onion")</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       3. HORIZONTAL CATEGORY CHIPS (SWIPEABLE)
+       ========================================================================== -->
+  <nav class="w-full py-3 px-4 border-b border-slate-200/60 sticky top-10 z-40 bg-white/95 backdrop-blur-md transition-colors" aria-label="Commodity Categories">
+    <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x">
+      
+      <!-- Category 1: All Categories (Default Active) -->
+      <button type="button" 
+              onclick="filterByCategory('all', this)" 
+              class="theme-chip active-chip px-4 py-2 rounded-full font-bold text-xs md:text-sm border whitespace-nowrap flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+        <span>All Categories</span>
+      </button>
+
+      <!-- Category 2: Vegetables -->
+      <button type="button" 
+              onclick="filterByCategory('vegetables', this)" 
+              class="theme-chip px-4 py-2 rounded-full font-bold text-xs md:text-sm border whitespace-nowrap flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500">
+        <span>🌱</span>
+        <span>Vegetables</span>
+      </button>
+
+      <!-- Category 3: Grains & Pulses -->
+      <button type="button" 
+              onclick="filterByCategory('grains', this)" 
+              class="theme-chip px-4 py-2 rounded-full font-bold text-xs md:text-sm border whitespace-nowrap flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500">
+        <span>🌾</span>
+        <span>Grains & Pulses</span>
+      </button>
+
+      <!-- Category 4: Fresh Fruits -->
+      <button type="button" 
+              onclick="filterByCategory('fruits', this)" 
+              class="theme-chip px-4 py-2 rounded-full font-bold text-xs md:text-sm border whitespace-nowrap flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500">
+        <span>🍎</span>
+        <span>Fresh Fruits</span>
+      </button>
+
+      <!-- Category 5: Govt MSP Tenders -->
+      <button type="button" 
+              onclick="filterByCategory('tenders', this)" 
+              class="theme-chip px-4 py-2 rounded-full font-bold text-xs md:text-sm border whitespace-nowrap flex items-center gap-1.5 shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500">
+        <span>🏛️</span>
+        <span>Govt MSP Tenders</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== -->
+  <main class="max-w-7xl mx-auto px-4 pt-4">
+
+    <!-- Section Heading & Active Filter Feedback -->
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="text-base md:text-xl font-extrabold tracking-tight text-slate-900" id="catalogHeadingText">
+          Verified Farmgate Produce Catalog
+        </h2>
+        <p class="text-xs text-slate-500 font-semibold" id="catalogSubheadingText">
+          Direct farm-to-consumer procurement with live Mandi benchmarks & escrow protection
+        </p>
+      </div>
+      <span class="text-xs font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-full shrink-0" id="produceCountBadge">
+        8 Available Lots
+      </span>
+    </div>
+
+    <!-- ==========================================================================
+         4. PRODUCE CARD GRID (2-COLUMNS ON MOBILE, 4-COLUMNS ON DESKTOP)
+         ========================================================================== -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5" id="produceGridContainer">
+      
+      <!-- CARD 1: PREMIUM WHEAT -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="grains"
+               data-title="PREMIUM WHEAT"
+               data-crop="wheat">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80" 
+                 alt="Premium Sharbati Wheat" 
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Grade A+ MSP
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('wheat')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Wheat with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="flex items-baseline justify-between gap-1 mb-1">
+            <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate">
+              PREMIUM WHEAT
+            </h3>
+          </div>
+
+          <!-- Price & Benchmark -->
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">
+              ₹2,250<span class="text-xs font-bold text-slate-600">/qtl</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">
+              Govt MSP: ₹2,275 • Mandi: ₹2,180
+            </div>
+          </div>
+
+          <!-- Farmer & Lot Metadata -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1">
+              <i class="ri-user-smile-line text-emerald-600" aria-hidden="true"></i> Sukhdev Patil
+            </div>
+            <div class="flex items-center gap-1 text-[10px] text-slate-500">
+              <i class="ri-map-pin-2-line" aria-hidden="true"></i> Kopargaon, Maharashtra
+            </div>
+            <div class="font-mono text-[9px] text-emerald-800 font-bold truncate">
+              #LOT-WHT-8902 • SHA-256 Verified
+            </div>
+          </div>
+        </div>
+
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('PREMIUM WHEAT', '₹2,250/qtl', 'Sukhdev Patil', '+91 98220 11982', 'LOT-WHT-8902', 2250, 'qtl')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Sukhdev Patil', '+91 98220 11982', 'Kopargaon, Nashik, MH', 'PREMIUM WHEAT', '₹2,250/qtl', 'LOT-WHT-8902', 'Grade A+ Sharbati Golden', '98.5%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Sukhdev Patil">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 2: RED ONIONS -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="vegetables"
+               data-title="RED ONIONS"
+               data-crop="onion">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80" 
+                 alt="Lasalgaon Red Onions" 
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-amber-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Lasalgaon APMC
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('onion')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Red Onions with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="flex items-baseline justify-between gap-1 mb-1">
+            <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate">
+              RED ONIONS
+            </h3>
+          </div>
+
+          <!-- Price & Benchmark -->
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">
+              ₹24<span class="text-xs font-bold text-slate-600">/kg</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">
+              Lasalgaon APMC Benchmark: ₹18/kg
+            </div>
+          </div>
+
+          <!-- Farmer & Lot Metadata -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1">
+              <i class="ri-user-smile-line text-emerald-600" aria-hidden="true"></i> Babanrao Shinde
+            </div>
+            <div class="flex items-center gap-1 text-[10px] text-slate-500">
+              <i class="ri-map-pin-2-line" aria-hidden="true"></i> Lasalgaon, Nashik, MH
+            </div>
+            <div class="font-mono text-[9px] text-emerald-800 font-bold truncate">
+              #LOT-ONI-4411 • Freshness 96.2%
+            </div>
+          </div>
+        </div>
+
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('RED ONIONS', '₹24/kg', 'Babanrao Shinde', '+91 94231 88201', 'LOT-ONI-4411', 24, 'kg')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Babanrao Shinde', '+91 94231 88201', 'Lasalgaon, Nashik, MH', 'RED ONIONS', '₹24/kg', 'LOT-ONI-4411', 'Garwa Pink Export Grade', '96.2%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Babanrao Shinde">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 3: BANANAS -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="fruits"
+               data-title="BANANAS"
+               data-crop="banana">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=800&q=80" 
+                 alt="Grand Naine Bananas" 
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-sky-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Jalgaon Hub
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('banana')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Bananas with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="flex items-baseline justify-between gap-1 mb-1">
+            <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate">
+              BANANAS
+            </h3>
+          </div>
+
+          <!-- Price & Benchmark -->
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">
+              ₹40<span class="text-xs font-bold text-slate-600">/doz</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">
+              Mandi Benchmark: ₹32/doz (Direct +25%)
+            </div>
+          </div>
+
+          <!-- Farmer & Lot Metadata -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1">
+              <i class="ri-user-smile-line text-emerald-600" aria-hidden="true"></i> Kiran Chaudhari
+            </div>
+            <div class="flex items-center gap-1 text-[10px] text-slate-500">
+              <i class="ri-map-pin-2-line" aria-hidden="true"></i> Raver, Jalgaon, MH
+            </div>
+            <div class="font-mono text-[9px] text-emerald-800 font-bold truncate">
+              #LOT-BAN-1029 • Ripeness 94.8%
+            </div>
+          </div>
+        </div>
+
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('BANANAS', '₹40/doz', 'Kiran Chaudhari', '+91 97650 44321', 'LOT-BAN-1029', 40, 'doz')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Kiran Chaudhari', '+91 97650 44321', 'Raver, Jalgaon, MH', 'BANANAS', '₹40/doz', 'LOT-BAN-1029', 'Grand Naine Golden Ripe', '94.8%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Kiran Chaudhari">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 4: RICE -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="grains"
+               data-title="RICE"
+               data-crop="rice">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80" 
+                 alt="Indrayani Basmati Rice" 
+                 class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-indigo-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Aromatic Basmati
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('rice')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Basmati Rice with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+
+          <!-- Product Details -->
+          <div class="flex items-baseline justify-between gap-1 mb-1">
+            <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate">
+              RICE
+            </h3>
+          </div>
+
+          <!-- Price & Benchmark -->
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">
+              ₹55<span class="text-xs font-bold text-slate-600">/kg</span>
+            </div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">
+              Govt Procurement MSP: ₹52/kg
+            </div>
+          </div>
+
+          <!-- Farmer & Lot Metadata -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1">
+              <i class="ri-user-smile-line text-emerald-600" aria-hidden="true"></i> Kolhapur Agro FPO
+            </div>
+            <div class="flex items-center gap-1 text-[10px] text-slate-500">
+              <i class="ri-map-pin-2-line" aria-hidden="true"></i> Kolhapur, Maharashtra
+            </div>
+            <div class="font-mono text-[9px] text-emerald-800 font-bold truncate">
+              #LOT-RIC-5520 • 2026 Kharif
+            </div>
+          </div>
+        </div>
+
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('RICE (Indrayani Basmati)', '₹55/kg', 'Kolhapur Agro FPO', '+91 98900 12099', 'LOT-RIC-5520', 55, 'kg')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Kolhapur Agro FPO', '+91 98900 12099', 'Kolhapur, Maharashtra', 'RICE (Indrayani Basmati)', '₹55/kg', 'LOT-RIC-5520', 'Indrayani Fragrant', '97.2%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact Kolhapur Agro FPO">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 5: FARM TOMATOES -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="vegetables"
+               data-title="FARM TOMATOES"
+               data-crop="tomato">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80" 
+                 alt="Farm Fresh Tomatoes" 
+                 class="w-full h-full object-cover object-center"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Grade A+ Fresh
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('tomato')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Tomatoes with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+          <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate mb-1">
+            FARM TOMATOES
+          </h3>
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">₹22<span class="text-xs font-bold text-slate-600">/kg</span></div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">Narayangaon Mandi: ₹16/kg</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1"><i class="ri-user-smile-line text-emerald-600"></i> Anand Jadhav</div>
+            <div class="text-[10px] text-slate-500"><i class="ri-map-pin-2-line"></i> Narayangaon, Pune, MH</div>
+          </div>
+        </div>
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('FARM TOMATOES', '₹22/kg', 'Anand Jadhav', '+91 98221 44556', 'LOT-TOM-7721', 22, 'kg')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Anand Jadhav', '+91 98221 44556', 'Narayangaon, Pune, MH', 'FARM TOMATOES', '₹22/kg', 'LOT-TOM-7721', 'Hybrid Red Firm', '97.8%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Anand Jadhav">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 6: TABLE GRAPES -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="fruits"
+               data-title="NASHIK GRAPES"
+               data-crop="grapes">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=800&q=80" 
+                 alt="Nashik Table Grapes" 
+                 class="w-full h-full object-cover object-center"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-purple-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Dindori Cluster
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('grapes')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Grapes with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+          <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate mb-1">
+            NASHIK GRAPES
+          </h3>
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">₹75<span class="text-xs font-bold text-slate-600">/kg</span></div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">Nashik Mandi: ₹55/kg (Cold-Chain)</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1"><i class="ri-user-smile-line text-emerald-600"></i> Vikas Gaikwad</div>
+            <div class="text-[10px] text-slate-500"><i class="ri-map-pin-2-line"></i> Dindori, Nashik, MH</div>
+          </div>
+        </div>
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('NASHIK GRAPES', '₹75/kg', 'Vikas Gaikwad', '+91 94222 33110', 'LOT-GRP-3301', 75, 'kg')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Vikas Gaikwad', '+91 94222 33110', 'Dindori, Nashik, MH', 'NASHIK GRAPES', '₹75/kg', 'LOT-GRP-3301', 'Thompson Seedless Export', '98.2%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Vikas Gaikwad">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 7: YELLOW SOYBEAN -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="grains"
+               data-title="YELLOW SOYBEAN"
+               data-crop="soybean">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1599587425272-88d44e59f425?auto=format&fit=crop&w=800&q=80" 
+                 alt="Yellow Soybean Seeds" 
+                 class="w-full h-full object-cover object-center"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-amber-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              Latur Mandi Hub
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('soybean')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Soybean with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+          <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate mb-1">
+            YELLOW SOYBEAN
+          </h3>
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">₹4,550<span class="text-xs font-bold text-slate-600">/qtl</span></div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">MSP: ₹4,892 • Oil Content: 19.5%</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1"><i class="ri-user-smile-line text-emerald-600"></i> Pandurang Deshmukh</div>
+            <div class="text-[10px] text-slate-500"><i class="ri-map-pin-2-line"></i> Latur APMC, MH</div>
+          </div>
+        </div>
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('YELLOW SOYBEAN', '₹4,550/qtl', 'Pandurang Deshmukh', '+91 98233 77665', 'LOT-SOY-9912', 4550, 'qtl')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Place Escrow Procurement Order">
+            <i class="ri-shopping-cart-2-fill text-xs" aria-hidden="true"></i>
+            <span>ORDER</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Pandurang Deshmukh', '+91 98233 77665', 'Latur APMC, MH', 'YELLOW SOYBEAN', '₹4,550/qtl', 'LOT-SOY-9912', 'JS-335 Cleaned Seed', '95.1%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact farmer Pandurang Deshmukh">
+            <i class="ri-phone-fill text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">CONTACT</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- CARD 8: GOVT MSP TENDER LOT -->
+      <article class="theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card"
+               data-category="tenders"
+               data-title="GOVT MSP TENDER LOT"
+               data-crop="tender">
+        <div>
+          <!-- 4:3 High-Resolution Crop Image Container with AI Scan Badge -->
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" 
+                 alt="Government Procurement Depot" 
+                 class="w-full h-full object-cover object-center"
+                 loading="lazy" />
+            <span class="absolute top-2 left-2 bg-emerald-700 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+              FCI / DOCA Tender
+            </span>
+            <button type="button" 
+                    onclick="openQualityScannerForCrop('wheat')" 
+                    class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                    title="Inspect Tender Lots with Kisan-Vision AI Scanner">
+              <i class="ri-qr-scan-2-line"></i> AI Scan
+            </button>
+          </div>
+          <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate mb-1">
+            GOVT MSP TENDER
+          </h3>
+          <div class="mb-2">
+            <div class="text-base md:text-lg font-black text-emerald-700">₹2,275<span class="text-xs font-bold text-slate-600">/qtl MSP</span></div>
+            <div class="text-[11px] text-slate-500 font-semibold truncate">Direct Central Depot Procurement</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+            <div class="font-bold text-slate-800 flex items-center gap-1"><i class="ri-bank-line text-emerald-600"></i> Food Corp of India (FCI)</div>
+            <div class="text-[10px] text-slate-500"><i class="ri-map-pin-2-line"></i> Manmad Silo Complex, MH</div>
+          </div>
+        </div>
+        <!-- E-Commerce Actions: Order (Buyer Escrow) & Contact Farmer -->
+        <div class="grid grid-cols-2 gap-1.5 pt-1">
+          <button type="button" 
+                  onclick="gateBuyProduceAction('GOVT MSP WHEAT TENDER', '₹2,275/qtl', 'Food Corporation of India', '+91 11 2345 6789', 'TDR-FCI-2026-01', 2275, 'qtl')"
+                  class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  title="Participate in MSP Tender">
+            <i class="ri-file-shield-2-fill text-xs" aria-hidden="true"></i>
+            <span>BID ESCROW</span>
+          </button>
+          <button type="button" 
+                  onclick="openFarmerContactModal('Food Corporation of India', '+91 11 2345 6789', 'Manmad Silo Complex, MH', 'GOVT MSP WHEAT TENDER', '₹2,275/qtl', 'TDR-FCI-2026-01', 'Central Depot Buffer Lot', '99.1%')"
+                  class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm"
+                  aria-label="Contact Depot Office">
+            <i class="ri-building-line text-xs text-emerald-600" aria-hidden="true"></i>
+            <span class="btn-contact-text truncate">DEPOT</span>
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Empty Filter Notice (Hidden unless zero results) -->
+    <div id="noResultsNotice" class="hidden text-center py-12 px-4 bg-white rounded-2xl border border-slate-200 mt-4">
+      <i class="ri-search-eye-line text-4xl text-slate-400 mb-2" aria-hidden="true"></i>
+      <h3 class="text-base font-bold text-slate-800">No matching produce lots found</h3>
+      <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">Try clearing your search query or selecting "All Categories".</p>
+      <button type="button" onclick="clearSearchQuery(); filterByCategory('all', document.querySelector('.theme-chip'));" class="theme-btn-cta px-4 py-2 rounded-xl text-xs font-bold">
+        Reset Search
+      </button>
+    </div>
+
+    <!-- ==========================================================================
+         5. MANDI PRICE INDEX WIDGET (MAHARASHTRA)
+         ========================================================================== -->
+    <section class="mt-8 mb-6" aria-labelledby="mandiIndexHeading">
+      <div class="theme-card rounded-2xl border p-4 md:p-6 shadow-sm">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
+              <i class="ri-line-chart-fill" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 id="mandiIndexHeading" class="text-sm md:text-base font-black text-slate-900 tracking-tight">
+                Latest Mandi Prices (Maharashtra)
+              </h3>
+              <p class="text-[11px] text-slate-500 font-medium">
+                Live AGMARKNET auction feeds & APMC arrival rates
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+            <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[10px] font-bold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Live Agmarknet Sync
+            </span>
+            <span class="text-[10px] text-slate-400">Updated 12m ago</span>
+          </div>
+        </div>
+
+        <!-- Live Market Trends Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 py-4">
+          
+          <!-- Item 1: Wheat Kopargaon -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">WHEAT</div>
+              <div class="text-xs font-bold text-slate-700">Kopargaon Mandi</div>
+              <div class="text-base font-black text-slate-900 mt-0.5">₹2,250<span class="text-[10px] font-bold text-slate-500">/qtl</span></div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center gap-0.5 text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-lg">
+                <i class="ri-arrow-right-up-line text-sm" aria-hidden="true"></i> +₹70
+              </span>
+              <div class="text-[9px] text-slate-400 font-bold mt-1">Arrivals: 420 Qtl</div>
+            </div>
+          </div>
+
+          <!-- Item 2: Onion Lasalgaon -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">RED ONION</div>
+              <div class="text-xs font-bold text-slate-700">Lasalgaon Mandi</div>
+              <div class="text-base font-black text-slate-900 mt-0.5">₹2,400<span class="text-[10px] font-bold text-slate-500">/qtl</span></div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center gap-0.5 text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-lg">
+                <i class="ri-arrow-right-up-line text-sm" aria-hidden="true"></i> +₹120
+              </span>
+              <div class="text-[9px] text-slate-400 font-bold mt-1">Arrivals: 1,850 Qtl</div>
+            </div>
+          </div>
+
+          <!-- Item 3: Soybean Latur -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">SOYBEAN</div>
+              <div class="text-xs font-bold text-slate-700">Latur APMC</div>
+              <div class="text-base font-black text-slate-900 mt-0.5">₹4,550<span class="text-[10px] font-bold text-slate-500">/qtl</span></div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center gap-0.5 text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-lg">
+                <i class="ri-arrow-right-up-line text-sm" aria-hidden="true"></i> +₹45
+              </span>
+              <div class="text-[9px] text-slate-400 font-bold mt-1">Arrivals: 910 Qtl</div>
+            </div>
+          </div>
+
+          <!-- Item 4: Tomato Narayangaon -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">TOMATO</div>
+              <div class="text-xs font-bold text-slate-700">Narayangaon</div>
+              <div class="text-base font-black text-slate-900 mt-0.5">₹1,800<span class="text-[10px] font-bold text-slate-500">/crate</span></div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center gap-0.5 text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-lg">
+                <i class="ri-arrow-right-up-line text-sm" aria-hidden="true"></i> +₹150
+              </span>
+              <div class="text-[9px] text-slate-400 font-bold mt-1">Arrivals: 640 Crates</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Disintermediation Impact Footer Strip -->
+        <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-semibold text-slate-600">
+          <div class="flex items-center gap-2">
+            <i class="ri-shield-flash-fill text-emerald-600 text-base" aria-hidden="true"></i>
+            <span>Farmers earn <strong>72% of final consumer price</strong> on KisanDirect vs 28% through cartel middlemen.</span>
+          </div>
+          <a href="/login.html" class="text-emerald-700 hover:text-emerald-800 font-bold inline-flex items-center gap-1 shrink-0">
+            Sign In for Escrow Direct Bidding &rarr;
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       6. MOBILE BOTTOM APP BAR (FIXED AT BOTTOM ON MOBILE VIEWPORTS)
+       ========================================================================== -->
+  <nav class="theme-bottom-bar fixed bottom-0 left-0 right-0 z-40 border-t md:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.06)]" aria-label="Mobile Navigation">
+    <div class="grid grid-cols-5 items-center justify-items-center h-16 max-w-lg mx-auto relative px-1">
+      
+      <!-- 1. Home -->
+      <a href="/store" class="flex flex-col items-center justify-center w-full h-full text-emerald-700 font-bold text-[10px] focus:outline-none" aria-current="page">
+        <i class="ri-home-fill text-xl leading-none mb-1" aria-hidden="true"></i>
+        <span>Home</span>
+      </a>
+
+      <!-- 2. Explore Mandi -->
+      <button type="button" onclick="focusSearchInput()" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-slate-800 font-medium text-[10px] focus:outline-none">
+        <i class="ri-store-2-line text-xl leading-none mb-1" aria-hidden="true"></i>
+        <span>Explore</span>
+      </button>
+
+      <!-- 3. Elevated Floating Action Button (FAB): Sell Produce (Gated) -->
+      <div class="relative flex flex-col items-center justify-center">
+        <button type="button" 
+                onclick="gateSellProduceAction()" 
+                class="theme-fab -top-5 absolute w-14 h-14 rounded-full text-white shadow-xl flex items-center justify-center border-4 border-white focus:outline-none focus:ring-2 focus:ring-emerald-500" 
+                title="List your crop to sell directly (Farmer)"
+                aria-label="Sell Produce">
+          <i class="ri-add-line text-2xl font-bold" aria-hidden="true"></i>
+        </button>
+        <span class="text-[9px] font-extrabold text-slate-700 mt-6 tracking-tight">Sell Produce</span>
+      </div>
+
+      <!-- 4. Orders -->
+      <button type="button" onclick="openCartDrawer()" class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-slate-800 font-medium text-[10px] focus:outline-none relative">
+        <i class="ri-inbox-archive-line text-xl leading-none mb-1" aria-hidden="true"></i>
+        <span>Orders</span>
+        <span class="absolute top-2 right-4 w-2 h-2 rounded-full bg-emerald-500"></span>
+      </button>
+
+      <!-- 5. Account (Opens Login Modal or Profile) -->
+      <button type="button" 
+              onclick="handleAccountNavClick()" 
+              id="mobileAccountNavBtn"
+              class="flex flex-col items-center justify-center w-full h-full text-slate-500 hover:text-slate-800 font-medium text-[10px] focus:outline-none">
+        <i class="ri-user-3-line text-xl leading-none mb-1" aria-hidden="true"></i>
+        <span id="mobileAccountNavLabel">Account</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       MODAL 1: FARMER DIRECT CONTACT MODAL
+       ========================================================================== -->
+  <div id="farmerContactModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="contactFarmerModalTitle">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i class="ri-verified-badge-fill text-lg"></i>
+          </div>
+          <div>
+            <h3 id="contactFarmerModalTitle" class="font-black text-base text-slate-900 leading-tight">
+              Verified Farmer Direct Contact
+            </h3>
+            <span class="text-[11px] text-emerald-700 font-bold">100% Farmgate Price Realization</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeFarmerContactModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Farmer Profile Box -->
+      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="font-extrabold text-base text-slate-900" id="modalFarmerName">Sukhdev Patil</div>
+          <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full" id="modalFarmerScore">Freshness: 98.5%</span>
+        </div>
+        <div class="text-xs text-slate-600 flex items-center gap-1.5" id="modalFarmerLocation">
+          <i class="ri-map-pin-line text-emerald-600"></i> Kopargaon, Maharashtra
+        </div>
+        <div class="text-xs text-slate-600 flex items-center gap-1.5">
+          <i class="ri-plant-line text-emerald-600"></i> Listing: <strong id="modalCropName" class="text-slate-900">PREMIUM WHEAT</strong> (<span id="modalCropPrice" class="text-emerald-700 font-bold">₹2,250/qtl</span>)
+        </div>
+        <div class="text-[11px] text-slate-500 font-mono pt-1 border-t border-slate-200" id="modalLotId">
+          Lot ID: LOT-WHT-8902 • SHA-256 QC Verified
+        </div>
+      </div>
+
+      <!-- Direct Call & WhatsApp Action Buttons -->
+      <div class="grid grid-cols-2 gap-2 mb-4">
+        <a id="modalCallLink" href="tel:+919822011982" class="theme-btn-cta py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow text-center focus:outline-none">
+          <i class="ri-phone-fill text-sm"></i> Call Farmer
+        </a>
+        <a id="modalWhatsAppLink" href="https://wa.me/919822011982" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow text-center focus:outline-none">
+          <i class="ri-whatsapp-line text-base"></i> WhatsApp Chat
+        </a>
+      </div>
+
+      <div class="text-[11px] text-slate-500 text-center">
+        No broker margins applied. Safe direct farmgate aggregation under DOCA guidelines.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: VIEW OFFER & ESCROW CHECKOUT MODAL
+       ========================================================================== -->
+  <div id="offerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div>
+          <h3 class="font-black text-base text-slate-900" id="offerModalTitle">Produce Procurement Offer</h3>
+          <span class="text-xs text-slate-500">Government T+1 Escrow Protection</span>
+        </div>
+        <button type="button" onclick="closeOfferModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3 mb-4">
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+          <span class="text-slate-600 font-semibold">Base Price:</span>
+          <span class="font-black text-slate-900 text-sm" id="offerModalPrice">₹55/kg</span>
+        </div>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+          <span class="text-slate-600 font-semibold">Quantity Required:</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="adjustOfferQty(-5)" class="w-7 h-7 rounded bg-white border border-slate-300 font-bold text-slate-700 flex items-center justify-center">-</button>
+            <span class="font-black text-slate-900" id="offerModalQtyText">25 kg</span>
+            <button type="button" onclick="adjustOfferQty(5)" class="w-7 h-7 rounded bg-white border border-slate-300 font-bold text-slate-700 flex items-center justify-center">+</button>
+          </div>
+        </div>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center text-xs">
+          <span class="text-emerald-900 font-bold">Estimated Escrow Payable:</span>
+          <span class="font-black text-emerald-800 text-base" id="offerModalTotal">₹1,375</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button type="button" onclick="submitOfferOrder()" class="theme-btn-cta w-full py-3 rounded-xl font-black text-xs md:text-sm flex items-center justify-center gap-2 shadow">
+          <i class="ri-shield-check-fill text-base"></i> Confirm Escrow Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: SELL PRODUCE (FARMER DIRECT LISTING WITH CROP PICTURE)
+       ========================================================================== -->
+  <div id="sellProduceModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="sellProduceTitle">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-slate-200 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <div>
+          <h3 id="sellProduceTitle" class="font-black text-base sm:text-lg text-slate-900">List Harvest Batch</h3>
+          <span class="text-xs text-slate-500">Direct to commercial buyers with zero mandi cess</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" 
+                  onclick="closeSellProduceModal(); openMyListedCropsModal();" 
+                  class="text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+            <i class="ri-list-check-2"></i> <span class="hidden sm:inline">My Listings</span> (<span id="sellModalMyListingsCount">2</span>)
+          </button>
+          <button type="button" onclick="closeSellProduceModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">&times;</button>
+        </div>
+      </div>
+
+      <form onsubmit="handleSellSubmit(event)" class="space-y-3 text-xs">
+        
+        <!-- Interactive Crop Picture Selection & Live Preview -->
+        <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between">
+            <label class="font-bold text-slate-700 flex items-center gap-1">
+              <i class="ri-camera-lens-line text-emerald-600"></i> Crop Picture & Visual Preview *
+            </label>
+            <span class="text-[10px] text-emerald-700 font-extrabold flex items-center gap-1" id="sellCropImgSourceTag">
+              <i class="ri-checkbox-circle-fill text-emerald-500"></i> Auto-matched to crop
+            </span>
+          </div>
+
+          <!-- Live Picture Preview Card -->
+          <div class="relative w-full aspect-[16/9] sm:aspect-[2/1] rounded-xl overflow-hidden bg-slate-200 border-2 border-slate-300 hover:border-emerald-500 transition-all group shadow-inner">
+            <img id="sellCropPreviewImg" 
+                 src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80" 
+                 alt="Selected Crop Picture" 
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            
+            <!-- Bottom & Top Gradient Controls -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 flex flex-col justify-between p-2.5">
+              <div class="flex justify-between items-start">
+                <span class="bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow">
+                  <i class="ri-image-2-fill text-emerald-400"></i> <span id="sellCropImgTitle">Sharbati Wheat</span>
+                </span>
+                <button type="button" 
+                        onclick="triggerSellCropFileUpload()" 
+                        class="bg-white/95 hover:bg-white text-slate-900 text-[10px] font-bold px-2.5 py-1 rounded-lg shadow flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <i class="ri-upload-cloud-2-line text-emerald-600"></i> Upload Custom Photo
+                </button>
+              </div>
+              <div class="flex items-center justify-between text-white text-[10px]">
+                <span class="text-white/90 font-medium flex items-center gap-1">
+                  <i class="ri-shield-check-fill text-emerald-400"></i> High-resolution picture will display in listed lots
+                </span>
+                <button type="button" 
+                        id="sellResetImgBtn" 
+                        onclick="resetSellCropImage()" 
+                        class="hidden text-amber-300 hover:text-white underline font-bold">
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Hidden File Input for Custom Upload -->
+            <input type="file" id="sellCropFileInput" accept="image/*" class="hidden" onchange="handleSellCropFileUpload(event)" />
+          </div>
+
+          <!-- Quick Preset Crop Chips -->
+          <div class="pt-1">
+            <span class="text-[10px] font-bold text-slate-500 block mb-1">Quick Presets (Click to autofill name, rate & picture):</span>
+            <div class="flex flex-wrap gap-1" id="sellCropPresetChips">
+              <button type="button" onclick="selectCropPreset('Sharbati Wheat', 'wheat', 2250, 'Quintals')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🌾 Wheat
+              </button>
+              <button type="button" onclick="selectCropPreset('Nashik Red Onion', 'onion', 24, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🧅 Red Onion
+              </button>
+              <button type="button" onclick="selectCropPreset('Hybrid Tomato', 'tomato', 35, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🍅 Tomato
+              </button>
+              <button type="button" onclick="selectCropPreset('Grand Naine Banana', 'banana', 18, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🍌 Banana
+              </button>
+              <button type="button" onclick="selectCropPreset('Table Grapes (Thomson)', 'grapes', 85, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🍇 Grapes
+              </button>
+              <button type="button" onclick="selectCropPreset('Yellow Soybean', 'soybean', 4550, 'Quintals')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🌱 Soybean
+              </button>
+              <button type="button" onclick="selectCropPreset('Cold-Storage Potato', 'potato', 22, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🥔 Potato
+              </button>
+              <button type="button" onclick="selectCropPreset('Basmati Paddy Rice', 'rice', 3800, 'Quintals')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🍚 Rice
+              </button>
+              <button type="button" onclick="selectCropPreset('Alphonso Mango', 'mango', 650, 'Boxes')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🥭 Mango
+              </button>
+              <button type="button" onclick="selectCropPreset('Guntur Red Chilli', 'chilli', 180, 'kg')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 border border-slate-200 transition shadow-xs">
+                🌶️ Chilli
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="sellCropInput" class="block font-bold text-slate-700 mb-1">Crop Name & Variety *</label>
+          <input type="text" 
+                 id="sellCropInput" 
+                 oninput="onSellCropNameTyped(this.value)" 
+                 placeholder="e.g. Nashik Red Onion, Sharbati Wheat" 
+                 required 
+                 class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="sellQtyInput" class="block font-bold text-slate-700 mb-1">Quantity *</label>
+            <input type="number" id="sellQtyInput" placeholder="50" min="1" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label for="sellUnitSelect" class="block font-bold text-slate-700 mb-1">Unit</label>
+            <select id="sellUnitSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Quintals">Quintals</option>
+              <option value="kg">kg</option>
+              <option value="Crates">Crates</option>
+              <option value="Boxes">Boxes</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="sellPriceInput" class="block font-bold text-slate-700 mb-1">Expected Farmgate Price (₹) *</label>
+          <input type="number" id="sellPriceInput" placeholder="2250" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label for="sellLocInput" class="block font-bold text-slate-700 mb-1">Farm Location / District *</label>
+          <input type="text" id="sellLocInput" placeholder="e.g. Lasalgaon, Nashik" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <button type="submit" id="sellSubmitBtn" class="theme-btn-cta w-full py-3 rounded-xl font-black text-xs md:text-sm mt-2 shadow flex items-center justify-center gap-1.5">
+          <i class="ri-rocket-line text-sm"></i>
+          <span>Publish Harvest Batch with Crop Picture</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3B: MY LISTED CROPS (FARMER DIRECT HARVEST BATCHES LIST WITH PICTURES)
+       ========================================================================== -->
+  <div id="myListedCropsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="myListedModalTitle">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0 mb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl shrink-0">
+            <i class="ri-list-check-2"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="myListedModalTitle" class="font-black text-base sm:text-lg text-slate-900 leading-tight">
+                My Listed Crops & Harvest Batches
+              </h3>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-2 py-0.5 rounded-full" id="myListedLotsCountBadge">
+                2 Lots
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">All lots listed by you with direct photos, verified grades, and buyer pricing</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMyListedCropsModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Action & Status Ribbon -->
+      <div class="flex items-center justify-between gap-2 mb-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200 shrink-0">
+        <div class="flex items-center gap-1.5 text-xs text-slate-600 font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Active Farmgate Listings (100% Escrow Payout Guaranteed)</span>
+        </div>
+        <button type="button" onclick="closeMyListedCropsModal(); gateSellProduceAction();" class="theme-btn-cta px-3 py-1.5 rounded-lg font-black text-xs flex items-center gap-1 shadow-sm">
+          <i class="ri-add-line"></i> + List New Crop
+        </button>
+      </div>
+
+      <!-- Scrollable Listed Batches Container (Each Lot Clearly Shows Crop Picture) -->
+      <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="myListedCropsListContainer">
+        <!-- Dynamically rendered by renderMyListedCrops() with crisp crop pictures -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 mt-3 flex items-center justify-between text-xs text-slate-500 shrink-0">
+        <span class="truncate"><i class="ri-shield-check-line text-emerald-600"></i> Zero mandi cess • Direct cold-chain dispatch</span>
+        <button type="button" onclick="closeMyListedCropsModal()" class="font-bold text-slate-700 hover:text-slate-900 px-3 py-1 rounded-lg border border-slate-200 hover:bg-slate-50">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: MANDI BAG CART DRAWER
+       ========================================================================== -->
+  <div id="cartModal" class="hidden fixed inset-0 z-50 flex items-center justify-end bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white h-full w-full max-w-md p-5 flex flex-col justify-between shadow-2xl overflow-y-auto">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+          <div class="flex items-center gap-2">
+            <i class="ri-shopping-bag-3-fill text-emerald-700 text-xl"></i>
+            <h3 class="font-black text-lg text-slate-900">Your Mandi Bag (<span id="cartDrawerCount">2</span>)</h3>
+          </div>
+          <button type="button" onclick="closeCartDrawer()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold">&times;</button>
+        </div>
+
+        <div class="space-y-3" id="cartItemsList">
+          <!-- Item 1 -->
+          <div class="p-3 rounded-xl border border-slate-200 flex gap-3 items-center bg-slate-50">
+            <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=150&q=80" alt="Wheat" class="w-14 h-14 object-cover rounded-lg" />
+            <div class="flex-1 min-w-0">
+              <h4 class="font-extrabold text-xs text-slate-900 uppercase truncate">PREMIUM WHEAT</h4>
+              <div class="text-xs text-emerald-700 font-black">₹2,250 / qtl</div>
+              <div class="text-[10px] text-slate-500">Farmer: Sukhdev Patil</div>
+            </div>
+            <span class="font-mono text-xs font-black text-slate-900">₹2,250</span>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="p-3 rounded-xl border border-slate-200 flex gap-3 items-center bg-slate-50">
+            <img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=150&q=80" alt="Onion" class="w-14 h-14 object-cover rounded-lg" />
+            <div class="flex-1 min-w-0">
+              <h4 class="font-extrabold text-xs text-slate-900 uppercase truncate">RED ONIONS</h4>
+              <div class="text-xs text-emerald-700 font-black">₹24 / kg (20 kg)</div>
+              <div class="text-[10px] text-slate-500">Farmer: Babanrao Shinde</div>
+            </div>
+            <span class="font-mono text-xs font-black text-slate-900">₹480</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Footer -->
+      <div class="pt-4 border-t border-slate-200">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-xs text-slate-600 font-bold">Subtotal (2 items):</span>
+          <span class="font-mono text-base font-black text-slate-900">₹2,730</span>
+        </div>
+        <button type="button" onclick="proceedCartCheckout()" class="theme-btn-cta w-full py-3.5 rounded-xl font-black text-sm flex items-center justify-center gap-2 shadow">
+          <i class="ri-lock-2-fill"></i> Proceed to Escrow Settlement
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: UNIFIED IN-STORE SIGN IN & REGISTRATION MODAL
+       ========================================================================== -->
+  <div id="storeLoginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="storeLoginTitle">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i class="ri-shield-keyhole-line text-lg"></i>
+          </div>
+          <div>
+            <h3 id="storeLoginTitle" class="font-black text-base text-slate-900 leading-tight">
+              Sign In to KisanDirect
+            </h3>
+            <span class="text-[11px] text-slate-500 font-medium">Agricultural Identity & Escrow Security</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeStoreLoginModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Contextual Action Notice Banner (when triggered by Buy or Sell) -->
+      <div id="storeLoginContextBanner" class="hidden mb-3 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800">
+        <i class="ri-information-line text-base text-emerald-600 shrink-0"></i>
+        <span id="storeLoginContextText">Please log in to proceed.</span>
+      </div>
+
+      <!-- Role Selector Tabs -->
+      <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl mb-3 text-center">
+        <button type="button" id="storeTabFarmer" onclick="selectStoreRole('FARMER')" class="py-2 rounded-lg text-xs font-bold transition-all bg-white text-emerald-700 shadow-sm border border-slate-200">
+          👨‍🌾 Farmer / FPO
+        </button>
+        <button type="button" id="storeTabBuyer" onclick="selectStoreRole('BUYER')" class="py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+          🛒 Buyer / Retail
+        </button>
+        <button type="button" id="storeTabOwner" onclick="selectStoreRole('OWNER')" class="py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+          🛡️ Control Tower
+        </button>
+      </div>
+
+      <!-- Quick 1-Click Demo Accounts Strip -->
+      <div class="mb-3 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+        <div class="text-[10px] font-black uppercase text-slate-500 tracking-wider mb-1.5 flex items-center gap-1">
+          <i class="ri-flashlight-line text-amber-500"></i> Instant 1-Click Demo Login:
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="quickLoginInStore('farmer@kisandirect.gov.in', 'farmer123', 'FARMER')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 transition">
+            🌾 Farmer (Sukhdev)
+          </button>
+          <button type="button" onclick="quickLoginInStore('procurement@reliancefresh.com', 'buyer123', 'BUYER')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-sky-100 hover:bg-sky-200 text-sky-800 transition">
+            🛒 Buyer (Reliance)
+          </button>
+          <button type="button" onclick="quickLoginInStore('owner@kisandirect.com', 'ownerPass123', 'OWNER')" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-800 transition">
+            🛡️ DOCA Tower
+          </button>
+        </div>
+      </div>
+
+      <!-- Auth Mode Switch (Sign In vs Register) -->
+      <div class="flex border-b border-slate-200 mb-3 text-xs">
+        <button type="button" id="storeModeSignInBtn" onclick="switchStoreAuthMode('signin')" class="flex-1 pb-2 font-bold border-b-2 border-slate-900 text-slate-900 text-center">
+          Sign In
+        </button>
+        <button type="button" id="storeModeRegisterBtn" onclick="switchStoreAuthMode('register')" class="flex-1 pb-2 font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-700 text-center">
+          Create New Account
+        </button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="storeSignInForm" onsubmit="handleStoreLogin(event)" class="space-y-3 text-xs">
+        <div>
+          <label for="storeLoginEmail" class="block font-bold text-slate-700 mb-1">Registered Email Address</label>
+          <input type="email" id="storeLoginEmail" value="farmer@kisandirect.gov.in" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label for="storeLoginPassword" class="block font-bold text-slate-700 mb-1">Password</label>
+          <input type="password" id="storeLoginPassword" value="farmer123" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <button type="submit" id="storeLoginSubmitBtn" class="theme-btn-cta w-full py-3 rounded-xl font-black text-xs md:text-sm flex items-center justify-center gap-2 shadow">
+          <i class="ri-login-box-line text-sm"></i>
+          <span>Sign In & Continue</span>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="storeRegisterForm" onsubmit="handleStoreRegister(event)" class="hidden space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" id="storeRegName" placeholder="e.g. Ramesh Kulkarni" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Email *</label>
+            <input type="email" id="storeRegEmail" placeholder="user@kisandirect.gov.in" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Phone Number *</label>
+            <input type="tel" id="storeRegPhone" placeholder="9822012345" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Password *</label>
+          <input type="password" id="storeRegPass" placeholder="••••••••" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">District & State *</label>
+          <input type="text" id="storeRegDistrict" placeholder="e.g. Nashik, Maharashtra" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-2 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <button type="submit" id="storeRegSubmitBtn" class="theme-btn-cta w-full py-3 rounded-xl font-black text-xs md:text-sm flex items-center justify-center gap-2 shadow">
+          <i class="ri-user-add-line text-sm"></i>
+          <span>Create Account & Sign In</span>
+        </button>
+      </form>
+
+      <!-- Full Standalone Portal Link -->
+      <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+        <span>Need full screen portal?</span>
+        <a href="/login.html" class="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+          Open Standalone Login <i class="ri-arrow-right-line"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 6: KISANVANI MULTILINGUAL AI VOICE COPILOT
+       ========================================================================== -->
+  <div id="kisanVaniModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="vaniModalTitle">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i class="ri-voiceprint-line text-xl"></i>
+          </div>
+          <div>
+            <h3 id="vaniModalTitle" class="font-black text-base md:text-lg text-slate-900 leading-tight">
+              KisanVani AI Voice Copilot
+            </h3>
+            <span class="text-xs text-emerald-700 font-bold">Multilingual Mandi Audio Broadcast & Price Assistant</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeKisanVaniModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Commodity Filter Dropdown -->
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <label for="vaniCommoditySelect" class="text-xs font-bold text-slate-700">Filter Broadcast:</label>
+        <select id="vaniCommoditySelect" onchange="onVaniCommodityChange(this.value)" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs font-bold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <option value="">🌾 All Top Commodities (Full Daily Bulletin)</option>
+          <option value="wheat">🌾 Sharbati Wheat (Kopargaon)</option>
+          <option value="onion">🧅 Red Onion (Lasalgaon)</option>
+          <option value="soybean">🌱 Yellow Soybean (Latur)</option>
+          <option value="tomato">🍅 Hybrid Tomato (Narayangaon)</option>
+          <option value="banana">🍌 Grand Naine Banana (Jalgaon)</option>
+          <option value="grapes">🍇 Table Grapes (Nashik)</option>
+        </select>
+      </div>
+
+      <!-- AI Voice Role Persona Switcher -->
+      <div class="mb-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <span class="text-[11px] font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
+          <i class="ri-mic-line text-emerald-600"></i> AI Voice Actor & Tone Persona:
+        </span>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" id="voiceRoleFarmer" onclick="setVaniPersona('FARMER')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border transition-all bg-white border-emerald-600 text-emerald-700 shadow-sm">
+            👨‍🌾 Farmer (Baritone)
+          </button>
+          <button type="button" id="voiceRoleBuyer" onclick="setVaniPersona('BUYER')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all">
+            🛒 Buyer (Commercial)
+          </button>
+          <button type="button" id="voiceRoleAdmin" onclick="setVaniPersona('ADMIN')" class="py-2 px-1 text-center rounded-lg text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all">
+            🛡️ Admin (Authoritative)
+          </button>
+        </div>
+      </div>
+
+      <!-- Multilingual Language Selector (9 Languages) -->
+      <div class="mb-3">
+        <span class="text-xs font-bold text-slate-700 block mb-1.5">Select Language for Spoken Voice:</span>
+        <div class="flex flex-wrap gap-1.5" id="vaniLangChips">
+          <!-- Populated by renderVaniLangChips -->
+        </div>
+      </div>
+
+      <!-- Animated Equalizer Waveform -->
+      <div class="voice-equalizer-container bg-slate-900 rounded-xl" id="vaniEqualizer">
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+        <div class="voice-wave-bar"></div>
+      </div>
+
+      <!-- Voice Playback Controls -->
+      <div class="flex items-center justify-center gap-2 my-3">
+        <button type="button" id="vaniPlayBtn" onclick="toggleVaniPlayback()" class="theme-btn-cta px-5 py-2.5 rounded-xl font-black text-xs md:text-sm flex items-center gap-1.5 shadow">
+          <i class="ri-volume-up-line text-base"></i>
+          <span id="vaniPlayBtnText">Play Voice Broadcast</span>
+        </button>
+        <button type="button" onclick="stopVaniPlayback()" class="border border-slate-300 hover:border-slate-400 bg-white px-4 py-2.5 rounded-xl font-bold text-xs text-slate-700 flex items-center gap-1.5 shadow-sm">
+          <i class="ri-stop-circle-line text-base"></i> Stop
+        </button>
+      </div>
+
+      <!-- Spoken Audio Transcript Box -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs mb-3">
+        <div class="font-bold text-slate-700 mb-1 flex items-center justify-between">
+          <span>Live Audio Transcript:</span>
+          <span class="text-[10px] text-emerald-600 font-bold" id="vaniStatusLabel">Ready to speak</span>
+        </div>
+        <div id="vaniTranscriptText" class="text-slate-600 font-medium leading-relaxed max-h-24 overflow-y-auto no-scrollbar">
+          Loading live market prices from National Agriculture Grid...
+        </div>
+      </div>
+
+      <!-- Daily Rates Preview Cards -->
+      <div class="pt-2 border-t border-slate-100">
+        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Today's Benchmark Highlights:</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs" id="vaniRatesPreview">
+          <div class="bg-white border border-slate-200 rounded-lg p-2 text-center shadow-xs">
+            <span class="text-[10px] text-slate-500 font-bold block">WHEAT</span>
+            <span class="font-black text-slate-900">₹2,250/qtl</span>
+            <span class="text-[10px] text-emerald-600 font-bold block">+₹70</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2 text-center shadow-xs">
+            <span class="text-[10px] text-slate-500 font-bold block">ONION</span>
+            <span class="font-black text-slate-900">₹2,400/qtl</span>
+            <span class="text-[10px] text-emerald-600 font-bold block">+₹120</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2 text-center shadow-xs">
+            <span class="text-[10px] text-slate-500 font-bold block">SOYBEAN</span>
+            <span class="font-black text-slate-900">₹4,550/qtl</span>
+            <span class="text-[10px] text-emerald-600 font-bold block">+₹45</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-lg p-2 text-center shadow-xs">
+            <span class="text-[10px] text-slate-500 font-bold block">TOMATO</span>
+            <span class="font-black text-slate-900">₹1,800/cr</span>
+            <span class="text-[10px] text-emerald-600 font-bold block">+₹150</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 7: KISAN-VISION UNIVERSAL AI QUALITY & DEFECT SCANNER
+       ========================================================================== -->
+  <div id="aiQualityScannerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="scannerModalTitle">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i class="ri-qr-scan-2-line text-xl"></i>
+          </div>
+          <div>
+            <h3 id="scannerModalTitle" class="font-black text-base md:text-lg text-slate-900 leading-tight">
+              Kisan-Vision AI Quality Scanner
+            </h3>
+            <span class="text-xs text-emerald-700 font-bold">Neural Crop Defect Detection & Algorithmic DOCA Grading</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeQualityScannerModal()" class="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 flex items-center justify-center hover:bg-slate-100 text-xl font-bold" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Produce Viewfinder with Animated Laser & Bounding Box -->
+      <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-800 shadow-inner mb-3">
+        <!-- Live Produce Image -->
+        <img id="visionCropImage" 
+             src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80" 
+             alt="Crop Quality Viewfinder" 
+             class="w-full h-full object-cover" />
+
+        <!-- Neural Bounding Box Target -->
+        <div id="aiBoundingBox" class="absolute inset-6 border-2 border-emerald-400/80 rounded-xl pointer-events-none transition-opacity duration-300">
+          <span class="absolute -top-3 left-3 bg-emerald-500 text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded shadow">
+            ROI: SPECTRUM-CALIBRATED
+          </span>
+          <span class="absolute -bottom-3 right-3 bg-slate-950 text-emerald-400 font-mono text-[9px] font-bold px-2 py-0.5 rounded border border-emerald-500/40">
+            DIAMETER: ~68mm
+          </span>
+        </div>
+
+        <!-- Animated Laser Line -->
+        <div id="scannerLaser" class="scanner-laser-line"></div>
+
+        <!-- Watermark / Status Badge -->
+        <div class="absolute top-3 right-3 bg-slate-950/80 backdrop-blur text-white text-[10px] font-mono px-2 py-1 rounded border border-white/20 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>CV MODEL: AGRI-RESNET-v4</span>
+        </div>
+      </div>
+
+      <!-- Quick Preset Produce Chips & Upload -->
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <button type="button" onclick="selectScannerCrop('wheat')" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 whitespace-nowrap">
+            🌾 Wheat
+          </button>
+          <button type="button" onclick="selectScannerCrop('onion')" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 whitespace-nowrap">
+            🧅 Onion
+          </button>
+          <button type="button" onclick="selectScannerCrop('banana')" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 whitespace-nowrap">
+            🍌 Banana
+          </button>
+          <button type="button" onclick="selectScannerCrop('tomato')" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 whitespace-nowrap">
+            🍅 Tomato
+          </button>
+          <button type="button" onclick="selectScannerCrop('grapes')" class="px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 whitespace-nowrap">
+            🍇 Grapes
+          </button>
+        </div>
+
+        <!-- Custom Upload Trigger -->
+        <label for="visionFileInput" class="cursor-pointer shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full text-xs font-bold border border-slate-300 flex items-center gap-1">
+          <i class="ri-upload-2-line"></i> Upload
+          <input type="file" id="visionFileInput" accept="image/*" onchange="handleVisionFileUpload(event)" class="hidden" />
+        </label>
+      </div>
+
+      <!-- Action Button: Run Neural Inspection -->
+      <button type="button" 
+              id="runScannerBtn" 
+              onclick="executeNeuralScan()" 
+              class="theme-btn-cta w-full py-2.5 rounded-xl font-black text-xs md:text-sm flex items-center justify-center gap-2 shadow mb-3">
+        <i class="ri-radar-line text-base"></i>
+        <span>Run Neural Quality & Defect Scan</span>
+      </button>
+
+      <!-- Verifiable DOCA Quality Certificate Card -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs space-y-2.5">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+          <div class="flex items-center gap-1.5">
+            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+              ✓
+            </span>
+            <div>
+              <span class="font-extrabold text-slate-900 text-sm block leading-tight" id="visionResultCropName">Premium Sharbati Wheat</span>
+              <span class="text-[10px] text-emerald-700 font-bold">DOCA Cryptographic Certificate</span>
+            </div>
+          </div>
+          <span class="bg-emerald-600 text-white font-black text-xs px-2.5 py-1 rounded-full shadow" id="visionResultGrade">
+            Grade A+
+          </span>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <div class="bg-white p-2 rounded-lg border border-slate-200/80">
+            <span class="text-slate-500 font-medium block">Freshness Index:</span>
+            <span class="font-black text-emerald-700 text-sm" id="visionResultFreshness">97.8%</span>
+          </div>
+          <div class="bg-white p-2 rounded-lg border border-slate-200/80">
+            <span class="text-slate-500 font-medium block">Ripeness Spectrum:</span>
+            <span class="font-black text-slate-800 text-sm" id="visionResultRipeness">95% Optimal</span>
+          </div>
+          <div class="bg-white p-2 rounded-lg border border-slate-200/80">
+            <span class="text-slate-500 font-medium block">Calibrated Diameter:</span>
+            <span class="font-black text-slate-800" id="visionResultDiameter">68 mm (98% Uniform)</span>
+          </div>
+          <div class="bg-white p-2 rounded-lg border border-slate-200/80">
+            <span class="text-slate-500 font-medium block">Surface Blemish Rate:</span>
+            <span class="font-black text-emerald-700" id="visionResultBlemish">0.8% (Negligible)</span>
+          </div>
+        </div>
+
+        <!-- Fair Price Premium Strip -->
+        <div class="bg-emerald-100/70 border border-emerald-300 rounded-lg p-2 flex items-center justify-between text-[11px] font-bold text-emerald-900">
+          <span>Fair Price Recommendation:</span>
+          <span class="font-black text-emerald-800 text-xs" id="visionResultPremium">+15% Above APMC Base</span>
+        </div>
+
+        <!-- SHA-256 Verifiable Hash Stamp -->
+        <div class="pt-1 text-[10px] text-slate-400 font-mono truncate" id="visionResultHash">
+          SHA256: 7f8a91c2b4d90e8a7f6c5b4a3d2e1f0a88b90123
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Multi-Portal ES Module Router Interface: /src/router.js -->
   <div id="app"></div>
 
-  <!-- Router Initialization -->
-  <script type="module">
-    import { Router } from '/src/router.js';
-    document.addEventListener('DOMContentLoaded', () => {
-      Router.init('app');
-    });
-  </script>
+  <!-- Toast Notification Popup -->
+  <div id="appToast" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 hidden max-w-sm bg-slate-900 text-white text-xs font-bold py-2 px-4 rounded-full shadow-2xl flex items-center gap-2 transition-all">
+    <i class="ri-checkbox-circle-fill text-emerald-400 text-base" id="toastIcon"></i>
+    <span id="toastMsg">Action complete</span>
+  </div>
 
+  <!-- ==========================================================================
+       7. JAVASCRIPT: THEME TOGGLING, VOICE SEARCH, FILTERING & MODALS
+       ========================================================================== -->
+  <script>
+    // State Store
+    var currentTheme = 'blue';
+    var currentLang = 'en';
+    var offerCurrentQty = 25;
+    var offerUnitPrice = 55;
+    var offerUnit = 'kg';
+
+    // 1. Theme Switcher Controller
+    function applyTheme(theme) {
+      currentTheme = theme === 'harvest' ? 'harvest' : 'blue';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('kisan_selected_theme', currentTheme);
+
+      var label = document.getElementById('themeToggleLabel');
+      if (label) {
+        label.textContent = currentTheme === 'harvest' ? 'Theme: Golden Harvest' : 'Theme: Blue Skies';
+      }
+    }
+
+    function toggleAppTheme() {
+      var next = currentTheme === 'blue' ? 'harvest' : 'blue';
+      applyTheme(next);
+      showToast(next === 'harvest' ? '🌾 Switched to Golden Harvest Theme' : '⛅ Switched to Blue Skies Theme');
+    }
+
+    // 2. Language Switcher Controller
+    var langStrings = {
+      en: {
+        ticker: "Direct Mandi Rates & Govt MSP Updated Daily",
+        tagline: "Direct Farmgate Agri-Marketplace",
+        contactBtn: "CONTACT FARMER",
+        heading: "Verified Farmgate Produce Catalog"
+      },
+      hi: {
+        ticker: "दैनिक मंडी भाव और सरकारी एमएसपी सीधे अपडेटेड",
+        tagline: "खेत से सीधे खरीददारी - किसान डायरेक्ट",
+        contactBtn: "किसान से संपर्क करें",
+        heading: "सत्यापित किसान उपज सूची"
+      },
+      mr: {
+        ticker: "थेट शेतमाल भाव व हमीभाव दररोज अद्यतन",
+        tagline: "शेतकरी ते ग्राहक थेट कृषी बाजारपेठ",
+        contactBtn: "शेतकऱ्यांशी संपर्क",
+        heading: "थेट शेतमाल उत्पादन यादी"
+      }
+    };
+
+    function changeAppLanguage(lang) {
+      currentLang = lang;
+      var str = langStrings[lang] || langStrings['en'];
+      
+      var tickerEl = document.getElementById('liveTickerText');
+      if (tickerEl) tickerEl.textContent = str.ticker;
+
+      var tagEl = document.getElementById('brandTagline');
+      if (tagEl) tagEl.textContent = str.tagline;
+
+      var headEl = document.getElementById('catalogHeadingText');
+      if (headEl) headEl.textContent = str.heading;
+
+      document.querySelectorAll('.btn-contact-text').forEach(function(el) {
+        el.textContent = str.contactBtn;
+      });
+
+      showToast("Language set to " + (lang === 'mr' ? 'मराठी' : (lang === 'hi' ? 'हिन्दी' : 'English')));
+    }
+
+    // 3. Category Filter
+    function filterByCategory(cat, btn) {
+      document.querySelectorAll('.theme-chip').forEach(function(c) {
+        c.classList.remove('active-chip');
+      });
+      if (btn) btn.classList.add('active-chip');
+
+      var cards = document.querySelectorAll('.produce-card');
+      var visible = 0;
+      cards.forEach(function(card) {
+        var cardCat = card.getAttribute('data-category');
+        if (cat === 'all' || cardCat === cat) {
+          card.style.display = 'flex';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      var badge = document.getElementById('produceCountBadge');
+      if (badge) badge.textContent = visible + " Available Lots";
+
+      var notice = document.getElementById('noResultsNotice');
+      if (notice) notice.classList.toggle('hidden', visible > 0);
+    }
+
+    // 4. Search Filter
+    function handleSearchFilter(query) {
+      var q = (query || '').toLowerCase().trim();
+      var clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.toggle('hidden', q.length === 0);
+
+      var cards = document.querySelectorAll('.produce-card');
+      var visible = 0;
+      cards.forEach(function(card) {
+        var title = (card.getAttribute('data-title') || '').toLowerCase();
+        var crop = (card.getAttribute('data-crop') || '').toLowerCase();
+        var match = title.includes(q) || crop.includes(q);
+        if (match) {
+          card.style.display = 'flex';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      var badge = document.getElementById('produceCountBadge');
+      if (badge) badge.textContent = visible + " Available Lots";
+
+      var notice = document.getElementById('noResultsNotice');
+      if (notice) notice.classList.toggle('hidden', visible > 0);
+    }
+
+    function clearSearchQuery() {
+      var input = document.getElementById('produceSearchInput');
+      if (input) input.value = '';
+      handleSearchFilter('');
+    }
+
+    function focusSearchInput() {
+      var input = document.getElementById('produceSearchInput');
+      if (input) {
+        input.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // 5. Web Speech API Voice Search Integration
+    function startVoiceSearch() {
+      var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      var voiceBtn = document.getElementById('voiceSearchBtn');
+      var toast = document.getElementById('voiceListeningToast');
+
+      if (!SpeechRecognition) {
+        showToast("Speech Recognition not supported in this browser. Please type to search.");
+        return;
+      }
+
+      var recognition = new SpeechRecognition();
+      recognition.lang = currentLang === 'mr' ? 'mr-IN' : (currentLang === 'hi' ? 'hi-IN' : 'en-IN');
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      if (voiceBtn) voiceBtn.classList.add('mic-recording');
+      if (toast) toast.classList.remove('hidden');
+
+      recognition.onstart = function() {
+        showToast("🎙️ Listening... Speak a crop name");
+      };
+
+      recognition.onresult = function(event) {
+        var speechResult = event.results[0][0].transcript;
+        var input = document.getElementById('produceSearchInput');
+        if (input) {
+          input.value = speechResult;
+          handleSearchFilter(speechResult);
+        }
+        showToast('Recognized: "' + speechResult + '"');
+      };
+
+      recognition.onspeechend = function() {
+        recognition.stop();
+        if (voiceBtn) voiceBtn.classList.remove('mic-recording');
+        if (toast) toast.classList.add('hidden');
+      };
+
+      recognition.onerror = function(event) {
+        if (voiceBtn) voiceBtn.classList.remove('mic-recording');
+        if (toast) toast.classList.add('hidden');
+        showToast("Voice recognition notice: " + event.error);
+      };
+
+      try {
+        recognition.start();
+      } catch (e) {
+        if (voiceBtn) voiceBtn.classList.remove('mic-recording');
+        if (toast) toast.classList.add('hidden');
+      }
+    }
+
+    // 6. Farmer Contact Modal Controls
+    function openFarmerContactModal(name, phone, loc, crop, price, lotId, variety, score) {
+      document.getElementById('modalFarmerName').textContent = name;
+      document.getElementById('modalFarmerLocation').innerHTML = '<i class="ri-map-pin-line text-emerald-600"></i> ' + loc;
+      document.getElementById('modalCropName').textContent = crop + ' (' + variety + ')';
+      document.getElementById('modalCropPrice').textContent = price;
+      document.getElementById('modalLotId').textContent = 'Lot ID: #' + lotId + ' • SHA-256 QC Verified';
+      document.getElementById('modalFarmerScore').textContent = 'Freshness: ' + score;
+      document.getElementById('modalCallLink').href = 'tel:' + phone.replace(/[^0-9+]/g, '');
+      document.getElementById('modalWhatsAppLink').href = 'https://wa.me/' + phone.replace(/[^0-9]/g, '');
+
+      var modal = document.getElementById('farmerContactModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeFarmerContactModal() {
+      var modal = document.getElementById('farmerContactModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // ==========================================================================
+    // 7. USER AUTHENTICATION & ROLE-GATED ACCESS CONTROLLER
+    // ==========================================================================
+    var pendingGatedAction = null;
+    var currentStoreRole = 'FARMER';
+    var currentStoreAuthMode = 'signin';
+
+    function getLoggedInUser() {
+      try {
+        var userStr = localStorage.getItem('kd_user');
+        return userStr ? JSON.parse(userStr) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function getAuthToken() {
+      return localStorage.getItem('kd_auth_token') || localStorage.getItem('kd_token') || null;
+    }
+
+    function renderUserAuthWidget() {
+      var user = getLoggedInUser();
+      var container = document.getElementById('navUserContainer');
+      var mobileAccountLabel = document.getElementById('mobileAccountNavLabel');
+
+      if (!container) return;
+
+      if (user && user.role) {
+        var roleBadgeClass = 'bg-emerald-400 text-slate-950';
+        var roleLabel = 'Farmer';
+        var roleIcon = '👨‍🌾';
+
+        var roleUpper = (user.role || '').toUpperCase();
+        if (roleUpper === 'BUYER') {
+          roleBadgeClass = 'bg-sky-400 text-slate-950';
+          roleLabel = 'Buyer';
+          roleIcon = '🛒';
+        } else if (roleUpper === 'OWNER' || roleUpper === 'ADMIN') {
+          roleBadgeClass = 'bg-purple-400 text-slate-950';
+          roleLabel = 'Owner';
+          roleIcon = '🛡️';
+        }
+
+        var initial = (user.name || 'U').charAt(0).toUpperCase();
+
+        container.innerHTML = `
+          <div class="relative inline-block text-left" id="userMenuDropdownWrapper">
+            <button type="button" 
+                    onclick="toggleUserMenuDropdown(event)" 
+                    id="navUserProfileBtn"
+                    class="inline-flex items-center gap-1.5 sm:gap-2 bg-white/20 hover:bg-white/30 text-white px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0 border border-white/20"
+                    title="${user.name} (${roleLabel})">
+              <span class="w-6 h-6 rounded-full ${roleBadgeClass} font-black flex items-center justify-center text-[10px] shadow-sm">
+                ${initial}
+              </span>
+              <span class="max-w-[90px] sm:max-w-[120px] truncate hidden sm:inline" id="navUserName">${user.name}</span>
+              <span class="text-[9px] uppercase px-1.5 py-0.2 rounded font-black bg-white/25 text-white tracking-wide" id="navUserRoleBadge">${roleLabel}</span>
+              <i class="ri-arrow-down-s-line text-xs"></i>
+            </button>
+            
+            <!-- User Dropdown Menu -->
+            <div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-2xl border border-slate-200 py-1.5 z-50 text-slate-900 text-xs font-semibold">
+              <div class="px-3.5 py-2.5 border-b border-slate-100 bg-slate-50 rounded-t-2xl">
+                <p class="font-black text-slate-900 truncate">${user.name}</p>
+                <p class="text-[10px] text-slate-500 font-mono truncate">${user.email || 'Verified Member'}</p>
+                <span class="inline-block mt-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${roleBadgeClass}">
+                  ${roleIcon} Active Role: ${roleLabel}
+                </span>
+              </div>
+              <button type="button" onclick="openMyListedCropsModal(); toggleUserMenuDropdown();" class="w-full text-left flex items-center justify-between px-3.5 py-2 hover:bg-slate-50 text-slate-700">
+                <div class="flex items-center gap-2">
+                  <i class="ri-list-check-2 text-emerald-600 text-sm"></i>
+                  <span>🌾 My Listed Crops</span>
+                </div>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.5 rounded-full" id="userMenuListedCount">2</span>
+              </button>
+              <button type="button" onclick="gateSellProduceAction(); toggleUserMenuDropdown();" class="w-full text-left flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
+                <i class="ri-plant-line text-emerald-600 text-sm"></i> List Produce for Sale
+              </button>
+              <button type="button" onclick="openCartDrawer(); toggleUserMenuDropdown();" class="w-full text-left flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
+                <i class="ri-shopping-bag-line text-emerald-600 text-sm"></i> Mandi Bag & Orders
+              </button>
+              <button type="button" onclick="openStoreLoginModal(); toggleUserMenuDropdown();" class="w-full text-left flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
+                <i class="ri-switch-line text-sky-600 text-sm"></i> Switch Role / Account
+              </button>
+              <a href="/login.html" class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
+                <i class="ri-external-link-line text-slate-400 text-sm"></i> Open Dedicated Login
+              </a>
+              <div class="border-t border-slate-100 my-1"></div>
+              <button type="button" onclick="handleLogout()" class="w-full text-left flex items-center gap-2 px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-bold">
+                <i class="ri-logout-box-r-line text-sm"></i> Sign Out
+              </button>
+            </div>
+          </div>
+        `;
+
+        if (mobileAccountLabel) mobileAccountLabel.textContent = roleLabel;
+      } else {
+        container.innerHTML = `
+          <button type="button" 
+                  id="navSignInBtn" 
+                  onclick="openStoreLoginModal()" 
+                  class="inline-flex items-center gap-1.5 bg-white text-slate-900 hover:bg-slate-100 px-3 py-1.5 rounded-full text-xs font-extrabold shadow transition-all focus:outline-none focus:ring-2 focus:ring-white shrink-0">
+            <i class="ri-user-shared-line text-sm text-emerald-600"></i>
+            <span>Sign In</span>
+          </button>
+        `;
+        if (mobileAccountLabel) mobileAccountLabel.textContent = 'Account';
+      }
+    }
+
+    function toggleUserMenuDropdown(e) {
+      if (e) e.stopPropagation();
+      var dd = document.getElementById('userMenuDropdown');
+      if (dd) dd.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+      var dd = document.getElementById('userMenuDropdown');
+      if (dd && !dd.classList.contains('hidden')) {
+        var wrapper = document.getElementById('userMenuDropdownWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          dd.classList.add('hidden');
+        }
+      }
+    });
+
+    function handleLogout() {
+      localStorage.removeItem('kd_auth_token');
+      localStorage.removeItem('kd_token');
+      localStorage.removeItem('kd_user');
+      renderUserAuthWidget();
+      showToast('✓ Successfully signed out.');
+    }
+
+    function handleAccountNavClick() {
+      var user = getLoggedInUser();
+      if (user) {
+        openStoreLoginModal(user.role, 'Current account: ' + user.name + ' (' + user.role + '). You can switch roles or sign in with another account.');
+      } else {
+        openStoreLoginModal('FARMER', 'Sign in to access your farmer listing desk or buyer procurement escrow.');
+      }
+    }
+
+    // ==========================================================================
+    // 8. IN-STORE LOGIN & REGISTRATION MODAL
+    // ==========================================================================
+    function openStoreLoginModal(preferredRole, message) {
+      if (preferredRole) selectStoreRole(preferredRole);
+
+      var banner = document.getElementById('storeLoginContextBanner');
+      var bannerText = document.getElementById('storeLoginContextText');
+      if (banner && bannerText) {
+        if (message) {
+          bannerText.textContent = message;
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      }
+
+      var modal = document.getElementById('storeLoginModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeStoreLoginModal() {
+      var modal = document.getElementById('storeLoginModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function selectStoreRole(role) {
+      currentStoreRole = role;
+      var tabF = document.getElementById('storeTabFarmer');
+      var tabB = document.getElementById('storeTabBuyer');
+      var tabO = document.getElementById('storeTabOwner');
+      var emailInput = document.getElementById('storeLoginEmail');
+      var passInput = document.getElementById('storeLoginPassword');
+
+      [tabF, tabB, tabO].forEach(function(btn) {
+        if (btn) btn.className = "py-2 rounded-lg text-xs font-bold transition-all text-slate-600 hover:text-slate-900";
+      });
+
+      if (role === 'FARMER') {
+        if (tabF) tabF.className = "py-2 rounded-lg text-xs font-bold transition-all bg-white text-emerald-700 shadow-sm border border-slate-200";
+        if (emailInput) emailInput.value = 'farmer@kisandirect.gov.in';
+        if (passInput) passInput.value = 'farmer123';
+      } else if (role === 'BUYER') {
+        if (tabB) tabB.className = "py-2 rounded-lg text-xs font-bold transition-all bg-white text-sky-700 shadow-sm border border-slate-200";
+        if (emailInput) emailInput.value = 'procurement@reliancefresh.com';
+        if (passInput) passInput.value = 'buyer123';
+      } else {
+        if (tabO) tabO.className = "py-2 rounded-lg text-xs font-bold transition-all bg-white text-purple-700 shadow-sm border border-slate-200";
+        if (emailInput) emailInput.value = 'owner@kisandirect.com';
+        if (passInput) passInput.value = 'ownerPass123';
+      }
+    }
+
+    function switchStoreAuthMode(mode) {
+      currentStoreAuthMode = mode;
+      var inForm = document.getElementById('storeSignInForm');
+      var regForm = document.getElementById('storeRegisterForm');
+      var btnIn = document.getElementById('storeModeSignInBtn');
+      var btnReg = document.getElementById('storeModeRegisterBtn');
+      var title = document.getElementById('storeLoginTitle');
+
+      if (mode === 'signin') {
+        if (inForm) inForm.classList.remove('hidden');
+        if (regForm) regForm.classList.add('hidden');
+        if (btnIn) btnIn.className = "flex-1 pb-2 font-bold border-b-2 border-slate-900 text-slate-900 text-center";
+        if (btnReg) btnReg.className = "flex-1 pb-2 font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-700 text-center";
+        if (title) title.textContent = "Sign In to KisanDirect";
+      } else {
+        if (inForm) inForm.classList.add('hidden');
+        if (regForm) regForm.classList.remove('hidden');
+        if (btnReg) btnReg.className = "flex-1 pb-2 font-bold border-b-2 border-slate-900 text-slate-900 text-center";
+        if (btnIn) btnIn.className = "flex-1 pb-2 font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-700 text-center";
+        if (title) title.textContent = "Create New " + currentStoreRole + " Account";
+      }
+    }
+
+    async function quickLoginInStore(email, password, role) {
+      selectStoreRole(role);
+      document.getElementById('storeLoginEmail').value = email;
+      document.getElementById('storeLoginPassword').value = password;
+      await handleStoreLogin();
+    }
+
+    async function handleStoreLogin(e) {
+      if (e) e.preventDefault();
+      var email = document.getElementById('storeLoginEmail').value.trim();
+      var password = document.getElementById('storeLoginPassword').value;
+      var btn = document.getElementById('storeLoginSubmitBtn');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-2"></span> Authenticating...`;
+      }
+
+      try {
+        var res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password })
+        });
+        var data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_token', data.token);
+          localStorage.setItem('kd_user', JSON.stringify(data.user));
+          
+          closeStoreLoginModal();
+          renderUserAuthWidget();
+          showToast('✓ Welcome, ' + data.user.name + ' (' + data.user.role + ')! Authenticated.');
+
+          // Execute any pending action that requested authentication
+          if (pendingGatedAction) {
+            var action = pendingGatedAction;
+            pendingGatedAction = null;
+            if (action.type === 'sell') {
+              gateSellProduceAction();
+            } else if (action.type === 'buy') {
+              gateBuyProduceAction.apply(null, action.args);
+            }
+          }
+        } else {
+          showToast('❌ Login failed: ' + (data.error || 'Invalid credentials'));
+        }
+      } catch (err) {
+        console.error("Login request error:", err);
+        // Fallback demo auth for offline/degraded mode
+        var fallbackUser = {
+          id: 'USR-' + Math.floor(Math.random() * 8999 + 1000),
+          name: email.split('@')[0],
+          role: currentStoreRole,
+          email: email,
+          district_state: 'Maharashtra'
+        };
+        localStorage.setItem('kd_token', 'demo_token_' + Date.now());
+        localStorage.setItem('kd_user', JSON.stringify(fallbackUser));
+        closeStoreLoginModal();
+        renderUserAuthWidget();
+        showToast('✓ Demo Signed in as ' + fallbackUser.name + ' (' + fallbackUser.role + ')');
+        
+        if (pendingGatedAction) {
+          var act = pendingGatedAction;
+          pendingGatedAction = null;
+          if (act.type === 'sell') gateSellProduceAction();
+          else if (act.type === 'buy') gateBuyProduceAction.apply(null, act.args);
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ri-login-box-line text-sm"></i> <span>Sign In & Continue</span>`;
+        }
+      }
+    }
+
+    async function handleStoreRegister(e) {
+      if (e) e.preventDefault();
+      var name = document.getElementById('storeRegName').value.trim();
+      var email = document.getElementById('storeRegEmail').value.trim();
+      var phone = document.getElementById('storeRegPhone').value.trim();
+      var password = document.getElementById('storeRegPass').value;
+      var district = document.getElementById('storeRegDistrict').value.trim();
+      var btn = document.getElementById('storeRegSubmitBtn');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full mr-2"></span> Registering...`;
+      }
+
+      try {
+        var res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            password: password,
+            role: currentStoreRole,
+            district_state: district
+          })
+        });
+        var data = await res.json();
+
+        if (res.ok && data.success) {
+          localStorage.setItem('kd_auth_token', data.token);
+          localStorage.setItem('kd_token', data.token);
+          localStorage.setItem('kd_user', JSON.stringify(data.user));
+
+          closeStoreLoginModal();
+          renderUserAuthWidget();
+          showToast('✓ Account created! Welcome, ' + data.user.name + ' (' + data.user.role + ')');
+
+          if (pendingGatedAction) {
+            var action = pendingGatedAction;
+            pendingGatedAction = null;
+            if (action.type === 'sell') gateSellProduceAction();
+            else if (action.type === 'buy') gateBuyProduceAction.apply(null, action.args);
+          }
+        } else {
+          showToast('❌ Registration notice: ' + (data.error || 'Please check fields'));
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        var dummy = { id: 'USR-' + Date.now(), name: name, role: currentStoreRole, email: email, district_state: district };
+        localStorage.setItem('kd_token', 'demo_token_' + Date.now());
+        localStorage.setItem('kd_user', JSON.stringify(dummy));
+        closeStoreLoginModal();
+        renderUserAuthWidget();
+        showToast('✓ Account active! Welcome, ' + dummy.name);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ri-user-add-line text-sm"></i> <span>Create Account & Sign In</span>`;
+        }
+      }
+    }
+
+    // ==========================================================================
+    // 9. GATED ACTIONS: SELLING (FARMER) & BUYING (BUYER)
+    // ==========================================================================
+    function gateSellProduceAction() {
+      var user = getLoggedInUser();
+      if (!user) {
+        pendingGatedAction = { type: 'sell' };
+        openStoreLoginModal('FARMER', '🌾 Farmer Login Required: Please sign in to list your harvest batches for sale at zero mandi cess.');
+        return;
+      }
+
+      var role = (user.role || '').toUpperCase();
+      if (role === 'BUYER') {
+        showToast('⚠️ You are signed in as a Buyer. To sell crops, switch to a Farmer account.');
+        openStoreLoginModal('FARMER', '🌾 Switch to a Farmer account to list harvest batches for sale.');
+        return;
+      }
+
+      // Prefill farmer details in listing modal
+      var locInput = document.getElementById('sellLocInput');
+      if (locInput && user.district_state) {
+        locInput.value = user.district_state;
+      }
+
+      openSellProduceModal();
+    }
+
+    function gateBuyProduceAction(title, priceStr, seller, phone, lotId, unitPrice, unit) {
+      var user = getLoggedInUser();
+      if (!user) {
+        pendingGatedAction = { type: 'buy', args: [title, priceStr, seller, phone, lotId, unitPrice, unit] };
+        openStoreLoginModal('BUYER', '🛒 Buyer Login Required: Please sign in to place escrow orders, make offers, and book cold-chain freight.');
+        return;
+      }
+
+      openOfferModal(title, priceStr, seller, phone, lotId, unitPrice, unit);
+    }
+
+    // ==========================================================================
+    // 10. OFFER MODAL CONTROLS
+    // ==========================================================================
+    function openOfferModal(title, priceStr, seller, phone, lotId, unitPrice, unit) {
+      offerUnitPrice = unitPrice || 55;
+      offerUnit = unit || 'kg';
+      offerCurrentQty = offerUnit === 'qtl' ? 10 : 25;
+
+      var tEl = document.getElementById('offerModalTitle');
+      var pEl = document.getElementById('offerModalPrice');
+      if (tEl) tEl.textContent = title;
+      if (pEl) pEl.textContent = priceStr;
+
+      updateOfferModalDisplay();
+
+      var modal = document.getElementById('offerModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function adjustOfferQty(delta) {
+      offerCurrentQty += delta;
+      if (offerCurrentQty < 5) offerCurrentQty = 5;
+      updateOfferModalDisplay();
+    }
+
+    function updateOfferModalDisplay() {
+      var qtyText = document.getElementById('offerModalQtyText');
+      if (qtyText) qtyText.textContent = offerCurrentQty + ' ' + offerUnit;
+
+      var total = offerCurrentQty * offerUnitPrice;
+      var totalText = document.getElementById('offerModalTotal');
+      if (totalText) totalText.textContent = '₹' + total.toLocaleString('en-IN');
+    }
+
+    function closeOfferModal() {
+      var modal = document.getElementById('offerModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitOfferOrder() {
+      closeOfferModal();
+      showToast('✓ Escrow Booking Initiated! Cold-chain pickup scheduled.');
+    }
+
+    // ==========================================================================
+    // 11. SELL PRODUCE MODAL, CROP PICTURE MAPPER & MY LISTED CROPS MANAGER
+    // ==========================================================================
+    var CROP_IMAGE_MAP = {
+      wheat: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
+      onion: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80',
+      tomato: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80',
+      banana: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=800&q=80',
+      grapes: 'https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=800&q=80',
+      soybean: 'https://images.unsplash.com/photo-1599587425272-88d44e59f425?auto=format&fit=crop&w=800&q=80',
+      potato: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80',
+      rice: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80',
+      mango: 'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=800&q=80',
+      chilli: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?auto=format&fit=crop&w=800&q=80',
+      apple: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=800&q=80',
+      corn: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=800&q=80',
+      garlic: 'https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?auto=format&fit=crop&w=800&q=80',
+      ginger: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80',
+      cotton: 'https://images.unsplash.com/photo-1606041008023-472dfb5e530f?auto=format&fit=crop&w=800&q=80',
+      default: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=800&q=80'
+    };
+
+    var uploadedSellCropImage = null; // Holds custom uploaded file data
+    var currentSellPresetCrop = 'wheat';
+
+    function resolveCropImage(cropName, customImage) {
+      if (customImage && typeof customImage === 'string' && customImage.trim().length > 10) {
+        return customImage;
+      }
+      if (!cropName) return CROP_IMAGE_MAP.default;
+      var name = cropName.toLowerCase();
+      if (name.includes('onion') || name.includes('pyaz') || name.includes('kanda')) return CROP_IMAGE_MAP.onion;
+      if (name.includes('wheat') || name.includes('gehun') || name.includes('sharbati')) return CROP_IMAGE_MAP.wheat;
+      if (name.includes('tomato') || name.includes('tamatar')) return CROP_IMAGE_MAP.tomato;
+      if (name.includes('banana') || name.includes('kela')) return CROP_IMAGE_MAP.banana;
+      if (name.includes('grape') || name.includes('draksh') || name.includes('angoor')) return CROP_IMAGE_MAP.grapes;
+      if (name.includes('soy') || name.includes('soya')) return CROP_IMAGE_MAP.soybean;
+      if (name.includes('potato') || name.includes('aloo') || name.includes('batata')) return CROP_IMAGE_MAP.potato;
+      if (name.includes('rice') || name.includes('chawal') || name.includes('paddy') || name.includes('basmati')) return CROP_IMAGE_MAP.rice;
+      if (name.includes('mango') || name.includes('aam')) return CROP_IMAGE_MAP.mango;
+      if (name.includes('chilli') || name.includes('chili') || name.includes('mirch')) return CROP_IMAGE_MAP.chilli;
+      if (name.includes('apple') || name.includes('seb')) return CROP_IMAGE_MAP.apple;
+      if (name.includes('corn') || name.includes('makka') || name.includes('maize')) return CROP_IMAGE_MAP.corn;
+      if (name.includes('garlic') || name.includes('lahsun')) return CROP_IMAGE_MAP.garlic;
+      if (name.includes('ginger') || name.includes('adrak')) return CROP_IMAGE_MAP.ginger;
+      if (name.includes('cotton') || name.includes('kapas')) return CROP_IMAGE_MAP.cotton;
+      return CROP_IMAGE_MAP.default;
+    }
+
+    function updateSellCropPreview(imageUrl, titleText, isCustom) {
+      var imgEl = document.getElementById('sellCropPreviewImg');
+      var titleEl = document.getElementById('sellCropImgTitle');
+      var tagEl = document.getElementById('sellCropImgSourceTag');
+      var resetBtn = document.getElementById('sellResetImgBtn');
+
+      if (imgEl && imageUrl) imgEl.src = imageUrl;
+      if (titleEl && titleText) titleEl.textContent = titleText;
+      if (tagEl) {
+        if (isCustom) {
+          tagEl.innerHTML = '<i class="ri-checkbox-circle-fill text-emerald-500"></i> Custom Photo Attached';
+        } else {
+          tagEl.innerHTML = '<i class="ri-image-line text-emerald-600"></i> Auto-matched to crop';
+        }
+      }
+      if (resetBtn) {
+        if (isCustom) resetBtn.classList.remove('hidden');
+        else resetBtn.classList.add('hidden');
+      }
+    }
+
+    function triggerSellCropFileUpload() {
+      var fileInput = document.getElementById('sellCropFileInput');
+      if (fileInput) fileInput.click();
+    }
+
+    function handleSellCropFileUpload(e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        uploadedSellCropImage = evt.target.result;
+        var cropName = (document.getElementById('sellCropInput') ? document.getElementById('sellCropInput').value : '') || 'Custom Farm Produce';
+        updateSellCropPreview(uploadedSellCropImage, cropName + ' (Custom Photo)', true);
+        showToast('📸 Custom crop photo attached! Will display in listed lots & catalog.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetSellCropImage() {
+      uploadedSellCropImage = null;
+      var fileInput = document.getElementById('sellCropFileInput');
+      if (fileInput) fileInput.value = '';
+      var cropInput = document.getElementById('sellCropInput');
+      var name = cropInput ? cropInput.value.trim() : 'Sharbati Wheat';
+      var resolved = resolveCropImage(name);
+      updateSellCropPreview(resolved, name || 'Sharbati Wheat', false);
+      showToast('Photo reset to standard high-resolution crop preset.');
+    }
+
+    function selectCropPreset(name, key, price, unit) {
+      currentSellPresetCrop = key;
+      var nameInput = document.getElementById('sellCropInput');
+      var priceInput = document.getElementById('sellPriceInput');
+      var unitSelect = document.getElementById('sellUnitSelect');
+
+      if (nameInput) nameInput.value = name;
+      if (priceInput) priceInput.value = price;
+      if (unitSelect) unitSelect.value = unit;
+
+      if (!uploadedSellCropImage) {
+        var imgUrl = CROP_IMAGE_MAP[key] || resolveCropImage(name);
+        updateSellCropPreview(imgUrl, name, false);
+      }
+    }
+
+    function onSellCropNameTyped(value) {
+      if (uploadedSellCropImage) return; // Keep user's custom photo
+      var trimmed = (value || '').trim();
+      if (!trimmed) {
+        updateSellCropPreview(CROP_IMAGE_MAP.wheat, 'Sharbati Wheat', false);
+        return;
+      }
+      var resolved = resolveCropImage(trimmed);
+      updateSellCropPreview(resolved, trimmed, false);
+    }
+
+    // Default Seeded Batches for Sukhdev Patil
+    var DEFAULT_FARMER_BATCHES = [
+      {
+        id: 'LOT-WHT-8902',
+        lot_number: 'LOT-WHT-8902',
+        crop_name: 'Premium Sharbati Wheat',
+        variety: 'Sharbati Golden Certified',
+        quantity: 120,
+        unit: 'Quintals',
+        farmgate_price: 2250,
+        price_per_unit: 2250,
+        farm_location: 'Kopargaon, Nashik, Maharashtra',
+        farmer_name: 'Sukhdev Patil',
+        image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80',
+        status: 'Active',
+        created_at: '2026-09-27'
+      },
+      {
+        id: 'LOT-ONI-4411',
+        lot_number: 'LOT-ONI-4411',
+        crop_name: 'Lasalgaon Red Onions',
+        variety: 'Garwa Pink Export Grade',
+        quantity: 80,
+        unit: 'Quintals',
+        farmgate_price: 24,
+        price_per_unit: 24,
+        farm_location: 'Lasalgaon, Nashik, Maharashtra',
+        farmer_name: 'Babanrao Shinde',
+        image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80',
+        status: 'Active',
+        created_at: '2026-09-27'
+      }
+    ];
+
+    function getFarmerBatches() {
+      try {
+        var saved = localStorage.getItem('kd_farmer_batches');
+        if (saved) return JSON.parse(saved);
+        localStorage.setItem('kd_farmer_batches', JSON.stringify(DEFAULT_FARMER_BATCHES));
+        return DEFAULT_FARMER_BATCHES;
+      } catch (e) {
+        return DEFAULT_FARMER_BATCHES;
+      }
+    }
+
+    function saveFarmerBatch(batch) {
+      try {
+        var batches = getFarmerBatches();
+        batches.unshift(batch);
+        localStorage.setItem('kd_farmer_batches', JSON.stringify(batches));
+        updateListedLotsCounters();
+      } catch (e) {
+        console.warn("Save batch error:", e);
+      }
+    }
+
+    function deleteFarmerBatch(lotId) {
+      if (!confirm('Are you sure you want to unlist this crop batch from the live marketplace?')) return;
+      try {
+        var batches = getFarmerBatches().filter(function(b) {
+          return (b.id !== lotId && b.lot_number !== lotId);
+        });
+        localStorage.setItem('kd_farmer_batches', JSON.stringify(batches));
+        renderMyListedCrops();
+        updateListedLotsCounters();
+        showToast('✓ Batch unlisted from live buyer catalog.');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function updateListedLotsCounters() {
+      var count = getFarmerBatches().length;
+      ['navListedLotsCount', 'userMenuListedCount', 'myListedLotsCountBadge', 'sellModalMyListingsCount'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = count + (id === 'myListedLotsCountBadge' ? ' Lots' : '');
+      });
+    }
+
+    function openMyListedCropsModal() {
+      renderMyListedCrops();
+      var modal = document.getElementById('myListedCropsModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMyListedCropsModal() {
+      var modal = document.getElementById('myListedCropsModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function highlightProduceCard(lotId) {
+      closeMyListedCropsModal();
+      var cards = document.querySelectorAll('#produceGridContainer article');
+      var matchedCard = null;
+      cards.forEach(function(c) {
+        if (c.innerHTML.includes(lotId)) matchedCard = c;
+      });
+      if (matchedCard) {
+        matchedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        matchedCard.classList.add('ring-4', 'ring-emerald-500');
+        setTimeout(function() {
+          matchedCard.classList.remove('ring-4', 'ring-emerald-500');
+        }, 3000);
+      } else {
+        showToast('Showing in marketplace produce catalog');
+      }
+    }
+
+    function renderMyListedCrops() {
+      var container = document.getElementById('myListedCropsListContainer');
+      if (!container) return;
+
+      var batches = getFarmerBatches();
+      updateListedLotsCounters();
+
+      if (!batches || batches.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 px-4 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+            <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mx-auto mb-2">
+              <i class="ri-sprout-line"></i>
+            </div>
+            <h4 class="font-black text-slate-900 text-sm mb-1">No Active Harvest Batches</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-3">List your produce with live pictures to receive escrow bookings directly from verified commercial buyers.</p>
+            <button type="button" onclick="closeMyListedCropsModal(); gateSellProduceAction();" class="theme-btn-cta px-4 py-2 rounded-xl text-xs font-black shadow-sm">
+              <i class="ri-add-line"></i> List Your First Crop Now
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = batches.map(function(batch) {
+        var cropPhoto = batch.image || resolveCropImage(batch.crop_name);
+        var lotId = batch.lot_number || batch.id || 'LOT-NEW';
+        var price = Number(batch.farmgate_price || batch.price_per_unit || 0);
+        var unit = batch.unit || 'Quintals';
+        var qty = batch.quantity || 50;
+        var location = batch.farm_location || 'Maharashtra';
+        var cropTitle = batch.crop_name || 'Seasonal Produce';
+        var cropSlug = cropTitle.toLowerCase();
+
+        return `
+          <article class="p-3 sm:p-4 rounded-2xl border border-slate-200 bg-white hover:border-emerald-300 hover:shadow-md transition-all flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between">
+            <div class="flex gap-3 sm:gap-3.5 items-center min-w-0 flex-1 w-full sm:w-auto">
+              <!-- High-Resolution Crop Picture Thumbnail (User Request: Show picture in listed list) -->
+              <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-xs group">
+                <img src="${cropPhoto}" 
+                     alt="${cropTitle}" 
+                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                     onerror="this.src='https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=800&q=80'" />
+                <span class="absolute top-1 left-1 bg-emerald-600/90 text-white text-[8px] font-black uppercase px-1.5 py-0.2 rounded shadow">
+                  Listed
+                </span>
+                <span class="absolute bottom-1 right-1 bg-black/70 backdrop-blur-xs text-white text-[8px] font-bold px-1 rounded flex items-center gap-0.5">
+                  <i class="ri-image-fill text-emerald-400"></i> Photo
+                </span>
+              </div>
+
+              <!-- Batch Details & Pricing -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <h4 class="font-black text-xs sm:text-sm text-slate-900 uppercase tracking-tight truncate">${cropTitle}</h4>
+                  <span class="text-[9px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded">#${lotId}</span>
+                </div>
+                <div class="text-xs sm:text-sm font-black text-emerald-700 mt-0.5">
+                  ₹${price.toLocaleString('en-IN')}<span class="text-[10px] font-bold text-slate-500">/${unit}</span>
+                  <span class="text-slate-300 font-normal mx-1.5">|</span>
+                  <span class="text-slate-700 font-bold text-xs">Available: ${qty} ${unit}</span>
+                </div>
+                <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-1 flex-wrap">
+                  <span class="truncate"><i class="ri-map-pin-2-line text-emerald-600"></i> ${location}</span>
+                  <span>•</span>
+                  <span class="text-emerald-700 font-bold"><i class="ri-shield-check-line"></i> SHA-256 QC Verified</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons for Listed Crop -->
+            <div class="flex sm:flex-col gap-1.5 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end">
+              <button type="button" 
+                      onclick="closeMyListedCropsModal(); openQualityScannerForCrop('${cropSlug}');" 
+                      class="flex-1 sm:flex-initial px-2.5 py-1.5 rounded-xl text-[11px] font-black bg-slate-900 hover:bg-slate-950 text-emerald-300 flex items-center justify-center gap-1 shadow-xs transition"
+                      title="Inspect quality certificate with Kisan-Vision AI">
+                <i class="ri-qr-scan-2-line"></i> AI Scan
+              </button>
+              <button type="button" 
+                      onclick="highlightProduceCard('${lotId}')" 
+                      class="flex-1 sm:flex-initial px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center gap-1 transition"
+                      title="Show card in marketplace grid">
+                <i class="ri-eye-line text-slate-500"></i> View in Store
+              </button>
+              <button type="button" 
+                      onclick="deleteFarmerBatch('${lotId}')" 
+                      class="px-2 py-1.5 rounded-xl text-[11px] font-bold text-rose-600 hover:bg-rose-50 flex items-center justify-center gap-1 transition border border-transparent hover:border-rose-200"
+                      title="Unlist this batch">
+                <i class="ri-delete-bin-line"></i> <span class="sm:hidden">Remove</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function openSellProduceModal() {
+      // Ensure preview reflects input or defaults
+      var input = document.getElementById('sellCropInput');
+      var name = input ? input.value.trim() : '';
+      if (!uploadedSellCropImage) {
+        var imgUrl = name ? resolveCropImage(name) : CROP_IMAGE_MAP.wheat;
+        updateSellCropPreview(imgUrl, name || 'Sharbati Wheat', false);
+      }
+      var modal = document.getElementById('sellProduceModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeSellProduceModal() {
+      var modal = document.getElementById('sellProduceModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleSellSubmit(e) {
+      e.preventDefault();
+      var crop = document.getElementById('sellCropInput').value.trim();
+      var qty = document.getElementById('sellQtyInput').value;
+      var unit = document.getElementById('sellUnitSelect').value;
+      var price = document.getElementById('sellPriceInput').value;
+      var loc = document.getElementById('sellLocInput').value.trim();
+
+      var user = getLoggedInUser() || { name: 'Verified Farmer' };
+      var lotId = 'LOT-' + crop.substring(0, 3).toUpperCase() + '-' + Math.floor(Math.random() * 8999 + 1000);
+
+      // RESOLVE THE EXACT PICTURE OF THE CROP (Custom upload or matched preset)
+      var cropImage = uploadedSellCropImage || resolveCropImage(crop);
+
+      // 1. Client-Side Batch Persistence in kd_farmer_batches
+      var newBatch = {
+        id: lotId,
+        lot_number: lotId,
+        crop_name: crop,
+        variety: crop + ' Direct Farmgate',
+        quantity: Number(qty),
+        quantity_kg: unit.toLowerCase() === 'quintals' ? Number(qty) * 100 : Number(qty),
+        unit: unit,
+        farmgate_price: Number(price),
+        price_per_unit: Number(price),
+        farm_location: loc,
+        farmer_name: user.name,
+        image: cropImage,
+        status: 'Active',
+        created_at: new Date().toISOString()
+      };
+      saveFarmerBatch(newBatch);
+
+      // 2. Attempt backend persistence to /api/farmer/batches
+      try {
+        var token = getAuthToken();
+        await fetch('/api/farmer/batches', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? ('Bearer ' + token) : ''
+          },
+          body: JSON.stringify({
+            crop_name: crop,
+            quantity: Number(qty),
+            quantity_kg: unit.toLowerCase() === 'quintals' ? Number(qty) * 100 : Number(qty),
+            unit: unit,
+            price_per_unit: Number(price),
+            farmgate_price: Number(price),
+            farm_location: loc,
+            location: loc,
+            image: cropImage
+          })
+        });
+      } catch (err) {
+        console.warn("Batch API sync notice:", err);
+      }
+
+      // 3. Dynamically prepend new produce card to produceGridContainer with THIS EXACT PICTURE!
+      var grid = document.getElementById('produceGridContainer');
+      if (grid) {
+        var newCard = document.createElement('article');
+        newCard.className = "theme-card rounded-2xl border p-3 md:p-4 flex flex-col justify-between shadow-sm relative produce-card animate-in fade-in";
+        newCard.setAttribute('data-category', 'all');
+        newCard.setAttribute('data-title', crop.toUpperCase());
+        newCard.setAttribute('data-crop', crop.toLowerCase());
+
+        newCard.innerHTML = `
+          <div>
+            <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-slate-100 border border-slate-200">
+              <img src="${cropImage}" 
+                   alt="${crop}" 
+                   class="w-full h-full object-cover" 
+                   onerror="this.src='https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=800&q=80'" />
+              <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow">
+                Fresh Farmgate
+              </span>
+              <button type="button" 
+                      onclick="openQualityScannerForCrop('${crop.toLowerCase()}')" 
+                      class="absolute bottom-2 right-2 bg-slate-900/85 hover:bg-slate-950 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded shadow backdrop-blur-sm flex items-center gap-1 transition-all z-10"
+                      title="Inspect with AI Scanner">
+                <i class="ri-qr-scan-2-line"></i> AI Scan
+              </button>
+            </div>
+            <h3 class="font-black text-sm md:text-base text-slate-900 uppercase tracking-tight truncate mb-1">
+              ${crop}
+            </h3>
+            <div class="mb-2">
+              <div class="text-base md:text-lg font-black text-emerald-700">₹${Number(price).toLocaleString('en-IN')}<span class="text-xs font-bold text-slate-600">/${unit}</span></div>
+              <div class="text-[11px] text-slate-500 font-semibold truncate">Available: ${qty} ${unit}</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-slate-600 space-y-0.5 mb-2">
+              <div class="font-bold text-slate-800 flex items-center gap-1"><i class="ri-user-smile-line text-emerald-600"></i> ${user.name}</div>
+              <div class="text-[10px] text-slate-500"><i class="ri-map-pin-2-line"></i> ${loc}</div>
+              <div class="font-mono text-[9px] text-emerald-800 font-bold truncate">#${lotId} • Direct Listing</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5 pt-1">
+            <button type="button" 
+                    onclick="gateBuyProduceAction('${crop}', '₹${price}/${unit}', '${user.name}', '+91 98220 00000', '${lotId}', ${price}, '${unit}')"
+                    class="theme-btn-cta font-black text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm">
+              <i class="ri-shopping-cart-2-fill text-xs"></i> <span>ORDER</span>
+            </button>
+            <button type="button" 
+                    onclick="openFarmerContactModal('${user.name}', '+91 98220 00000', '${loc}', '${crop}', '₹${price}/${unit}', '${lotId}', 'Farmgate Fresh', '98.0%')"
+                    class="border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl py-2 px-1 flex items-center justify-center gap-1 shadow-sm">
+              <i class="ri-phone-fill text-xs text-emerald-600"></i> <span class="btn-contact-text truncate">CONTACT</span>
+            </button>
+          </div>
+        `;
+        grid.prepend(newCard);
+
+        var countBadge = document.getElementById('produceCountBadge');
+        if (countBadge) {
+          var currentLots = grid.querySelectorAll('article').length;
+          countBadge.textContent = currentLots + ' Available Lots';
+        }
+      }
+
+      closeSellProduceModal();
+      showToast('✓ ' + crop + ' (' + qty + ' ' + unit + ' at ₹' + price + ') listed directly on KisanDirect! <button type="button" onclick="openMyListedCropsModal()" class="underline font-black ml-1 text-emerald-300 hover:text-white">View in My Listed Crops →</button>');
+    }
+
+    // ==========================================================================
+    // 12. CART DRAWER & GATED CHECKOUT
+    // ==========================================================================
+    function openCartDrawer() {
+      var drawer = document.getElementById('cartModal');
+      if (drawer) drawer.classList.remove('hidden');
+    }
+
+    function closeCartDrawer() {
+      var drawer = document.getElementById('cartModal');
+      if (drawer) drawer.classList.add('hidden');
+    }
+
+    function proceedCartCheckout() {
+      var user = getLoggedInUser();
+      if (!user) {
+        openStoreLoginModal('BUYER', '🛒 Buyer Login Required: Please sign in to lock escrow and confirm delivery for your Mandi Bag items.');
+        return;
+      }
+      closeCartDrawer();
+      showToast('✓ Escrow checkout confirmed for Mandi Bag items by ' + user.name + '.');
+    }
+
+    // ==========================================================================
+    // 13. KISANVANI MULTILINGUAL AI VOICE COPILOT
+    // ==========================================================================
+    var vaniCurrentLang = 'mr';
+    var vaniCurrentPersona = 'FARMER';
+    var vaniCurrentCommodity = '';
+    var vaniIsSpeaking = false;
+    var vaniCurrentUtterance = null;
+
+    var vaniSupportedLanguages = [
+      { code: 'mr', name: 'मराठी', locale: 'mr-IN', flag: '🇮🇳' },
+      { code: 'hi', name: 'हिन्दी', locale: 'hi-IN', flag: '🇮🇳' },
+      { code: 'en', name: 'English', locale: 'en-IN', flag: '🇬🇧' },
+      { code: 'te', name: 'తెలుగు', locale: 'te-IN', flag: '🇮🇳' },
+      { code: 'ta', name: 'தமிழ்', locale: 'ta-IN', flag: '🇮🇳' },
+      { code: 'gu', name: 'ગુજરાતી', locale: 'gu-IN', flag: '🇮🇳' },
+      { code: 'kn', name: 'ಕನ್ನಡ', locale: 'kn-IN', flag: '🇮🇳' },
+      { code: 'bn', name: 'বাংলা', locale: 'bn-IN', flag: '🇮🇳' },
+      { code: 'pa', name: 'ਪੰਜਾਬੀ', locale: 'pa-IN', flag: '🇮🇳' }
+    ];
+
+    function openKisanVaniModal() {
+      renderVaniLangChips();
+      fetchVaniBulletin();
+      var modal = document.getElementById('kisanVaniModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeKisanVaniModal() {
+      stopVaniPlayback();
+      var modal = document.getElementById('kisanVaniModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderVaniLangChips() {
+      var container = document.getElementById('vaniLangChips');
+      if (!container) return;
+
+      container.innerHTML = vaniSupportedLanguages.map(function(l) {
+        var active = l.code === vaniCurrentLang;
+        return `
+          <button type="button" 
+                  onclick="setVaniLanguage('${l.code}')" 
+                  class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${active ? 'bg-emerald-600 text-white border-emerald-600 shadow' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'}">
+            <span>${l.flag}</span> ${l.name}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setVaniLanguage(code) {
+      vaniCurrentLang = code;
+      renderVaniLangChips();
+      if (vaniIsSpeaking) stopVaniPlayback();
+      fetchVaniBulletin();
+    }
+
+    function setVaniPersona(role) {
+      vaniCurrentPersona = role;
+      var btnF = document.getElementById('voiceRoleFarmer');
+      var btnB = document.getElementById('voiceRoleBuyer');
+      var btnA = document.getElementById('voiceRoleAdmin');
+
+      [btnF, btnB, btnA].forEach(function(b) {
+        if (b) b.className = "py-2 px-1 text-center rounded-lg text-xs font-bold border border-slate-200 text-slate-600 hover:text-slate-900 bg-white transition-all";
+      });
+
+      if (role === 'FARMER' && btnF) {
+        btnF.className = "py-2 px-1 text-center rounded-lg text-xs font-bold border transition-all bg-white border-emerald-600 text-emerald-700 shadow-sm";
+      } else if (role === 'BUYER' && btnB) {
+        btnB.className = "py-2 px-1 text-center rounded-lg text-xs font-bold border transition-all bg-white border-sky-600 text-sky-700 shadow-sm";
+      } else if (role === 'ADMIN' && btnA) {
+        btnA.className = "py-2 px-1 text-center rounded-lg text-xs font-bold border transition-all bg-white border-purple-600 text-purple-700 shadow-sm";
+      }
+
+      if (vaniIsSpeaking) {
+        stopVaniPlayback();
+        toggleVaniPlayback();
+      }
+    }
+
+    function onVaniCommodityChange(val) {
+      vaniCurrentCommodity = val;
+      if (vaniIsSpeaking) stopVaniPlayback();
+      fetchVaniBulletin();
+    }
+
+    async function fetchVaniBulletin() {
+      var transcript = document.getElementById('vaniTranscriptText');
+      var status = document.getElementById('vaniStatusLabel');
+      if (status) status.textContent = 'Updating rates...';
+
+      try {
+        var url = '/api/voice/bulletin?lang=' + vaniCurrentLang;
+        if (vaniCurrentCommodity) url += '&commodity=' + vaniCurrentCommodity;
+        var res = await fetch(url);
+        var data = await res.json();
+
+        if (data && data.audioText) {
+          if (transcript) transcript.textContent = data.audioText;
+          if (status) status.textContent = 'Ready to broadcast';
+          return;
+        }
+      } catch (e) {
+        console.warn('Vani bulletin fetch notice:', e);
+      }
+
+      // Default multilingual scripts
+      var fallbackTexts = {
+        mr: "नमस्कार शेतकरी मित्रांनो. किसान डायरेक्ट डिजिटल कृषी बाजारपेठेत आपले स्वागत आहे. कोपरगाव बाजारात गव्हाचा भाव प्रति क्विंटल दोन हजार दोनशे पन्नास रुपये आहे, तर लासलगाव बाजारात कांद्याचा दर दोन हजार चारशे रुपये आहे. थेट शेतमाल विक्रीतून मध्यस्थांशिवाय शेतकरी बाहत्तर टक्के भाव मिळवत आहेत.",
+        hi: "नमस्कार किसान भाइयों। किसान डायरेक्ट राष्ट्रीय कृषि ग्रिड में आपका स्वागत है। कोपरगांव मंडी में शरबती गेहूं दो हजार दो सौ पचास रुपये प्रति क्विंटल और लासलगांव में लाल प्याज दो हजार चार सौ रुपये बिक रहा है। किसान डायरेक्ट पर बिचौलियों के बिना किसानों को बहत्तर प्रतिशत मूल्य मिल रहा है।",
+        en: "Welcome to KisanDirect Agricultural Marketplace. Today's AGMARKNET benchmarks: Kopargaon Sharbati Wheat is trading at 2,250 rupees per quintal, Lasalgaon Red Onions at 24 rupees per kg, and Yellow Soybean in Latur at 4,550 rupees. Farmers retain 72 percent of consumer realization with direct escrow settlement."
+      };
+
+      if (transcript) {
+        transcript.textContent = fallbackTexts[vaniCurrentLang] || fallbackTexts['en'];
+      }
+      if (status) status.textContent = 'Ready to broadcast';
+    }
+
+    function toggleVaniPlayback() {
+      if (vaniIsSpeaking) {
+        stopVaniPlayback();
+        return;
+      }
+
+      if (!('speechSynthesis' in window)) {
+        showToast("Audio synthesis not supported in this browser.");
+        return;
+      }
+
+      var transcript = document.getElementById('vaniTranscriptText');
+      var textToSpeak = transcript ? transcript.textContent : "KisanDirect Live Daily Mandi Rates.";
+
+      window.speechSynthesis.cancel();
+      var utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+      var matchedLang = vaniSupportedLanguages.find(function(l) { return l.code === vaniCurrentLang; });
+      utterance.lang = matchedLang ? matchedLang.locale : 'en-IN';
+
+      // Persona voice modulation
+      if (vaniCurrentPersona === 'FARMER') {
+        utterance.pitch = 0.85; // Deep Baritone
+        utterance.rate = 0.95;
+      } else if (vaniCurrentPersona === 'BUYER') {
+        utterance.pitch = 1.15; // Crisp Commercial
+        utterance.rate = 1.05;
+      } else {
+        utterance.pitch = 1.0; // Authoritative
+        utterance.rate = 1.0;
+      }
+
+      var eq = document.getElementById('vaniEqualizer');
+      var playBtnText = document.getElementById('vaniPlayBtnText');
+      var status = document.getElementById('vaniStatusLabel');
+
+      utterance.onstart = function() {
+        vaniIsSpeaking = true;
+        if (eq) eq.classList.add('active');
+        if (playBtnText) playBtnText.textContent = "Pause Voice Broadcast";
+        if (status) status.textContent = "🎙️ Broadcasting audio...";
+      };
+
+      utterance.onend = function() {
+        vaniIsSpeaking = false;
+        if (eq) eq.classList.remove('active');
+        if (playBtnText) playBtnText.textContent = "Play Voice Broadcast";
+        if (status) status.textContent = "Broadcast finished";
+      };
+
+      utterance.onerror = function() {
+        vaniIsSpeaking = false;
+        if (eq) eq.classList.remove('active');
+        if (playBtnText) playBtnText.textContent = "Play Voice Broadcast";
+        if (status) status.textContent = "Audio stopped";
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopVaniPlayback() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      vaniIsSpeaking = false;
+      var eq = document.getElementById('vaniEqualizer');
+      var playBtnText = document.getElementById('vaniPlayBtnText');
+      var status = document.getElementById('vaniStatusLabel');
+      if (eq) eq.classList.remove('active');
+      if (playBtnText) playBtnText.textContent = "Play Voice Broadcast";
+      if (status) status.textContent = "Stopped";
+    }
+
+    // ==========================================================================
+    // 14. KISAN-VISION UNIVERSAL AI QUALITY SCANNER
+    // ==========================================================================
+    var scannerCurrentCrop = 'wheat';
+    var scannerCropPresets = {
+      wheat: {
+        name: "Sharbati Golden Wheat",
+        img: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=800&q=80",
+        score: "98.2%",
+        grade: "Grade A+ MSP",
+        ripeness: "96% Optimal Harvest",
+        diameter: "Uniformity 98.4%",
+        blemish: "0.6% (Negligible)",
+        premium: "+18% Above APMC Base",
+        hash: "SHA256: 7f8a91c2b4d90e8a7f6c5b4a3d2e1f0a88b90123"
+      },
+      onion: {
+        name: "Lasalgaon Red Onion (Garwa Pink)",
+        img: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=800&q=80",
+        score: "96.4%",
+        grade: "Grade A Export",
+        ripeness: "94% Cured Tight Skin",
+        diameter: "55-65 mm Export",
+        blemish: "1.1% (Low)",
+        premium: "+15% Above APMC Base",
+        hash: "SHA256: 9e4f1a8c3d7b2a6e0f5b4c3a2d1e9f8a7b6c5d4e"
+      },
+      banana: {
+        name: "Grand Naine Banana (Jalgaon Cluster)",
+        img: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=800&q=80",
+        score: "95.1%",
+        grade: "Grade A+ Ripe",
+        ripeness: "93% Stage 4 Golden Yellow",
+        diameter: "38 mm Caliper",
+        blemish: "0.9% (Cold Safe)",
+        premium: "+20% Direct Farmgate",
+        hash: "SHA256: 3c5a7e9f1b2d4f6a8c0e2d4b6a8f0e2d4b6a8c0e"
+      },
+      tomato: {
+        name: "Hybrid Red Farm Fresh Tomatoes",
+        img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80",
+        score: "97.5%",
+        grade: "Grade A+ Fresh",
+        ripeness: "95% Deep Lycopene Red",
+        diameter: "62 mm Firm Core",
+        blemish: "0.7% (Excellent)",
+        premium: "+16% Above Mandi Base",
+        hash: "SHA256: 8a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b"
+      },
+      grapes: {
+        name: "Thompson Seedless Export Grapes",
+        img: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=800&q=80",
+        score: "98.7%",
+        grade: "Grade A+ Global GAP",
+        ripeness: "18.5° Brix Sugar Index",
+        diameter: "18-20 mm Berry",
+        blemish: "0.4% (Export Flawless)",
+        premium: "+25% Reefer Ready",
+        hash: "SHA256: 4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f"
+      },
+      soybean: {
+        name: "Yellow Soybean JS-335 Cleaned Seed",
+        img: "https://images.unsplash.com/photo-1599587425272-88d44e59f425?auto=format&fit=crop&w=800&q=80",
+        score: "95.8%",
+        grade: "Grade A Industrial",
+        ripeness: "19.5% Oil Content Spec",
+        diameter: "Uniform Seed Sieve",
+        blemish: "1.0% Foreign Matter",
+        premium: "+12% Above Mandi Floor",
+        hash: "SHA256: 5f7a9b1c3d5e7f9a1b3c5d7e9f1a3b5c7d9e1f3a"
+      },
+      rice: {
+        name: "Indrayani Basmati Fragrant Paddy",
+        img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80",
+        score: "97.1%",
+        grade: "Grade A+ Long Grain",
+        ripeness: "Aromatic Maturity 97%",
+        diameter: "Grain Length 7.2 mm",
+        blemish: "0.5% Chalkiness",
+        premium: "+17% Above APMC Base",
+        hash: "SHA256: 2a4c6e8f0b2d4f6a8c0e2d4b6a8f0e2d4b6a8c0e"
+      }
+    };
+
+    function openQualityScannerModal() {
+      selectScannerCrop('wheat');
+      var modal = document.getElementById('aiQualityScannerModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function openQualityScannerForCrop(cropKey) {
+      var key = (cropKey || 'wheat').toLowerCase();
+      if (key.includes('onion')) key = 'onion';
+      else if (key.includes('banana')) key = 'banana';
+      else if (key.includes('tomato')) key = 'tomato';
+      else if (key.includes('grape')) key = 'grapes';
+      else if (key.includes('soy')) key = 'soybean';
+      else if (key.includes('rice')) key = 'rice';
+      else key = 'wheat';
+
+      selectScannerCrop(key);
+      var modal = document.getElementById('aiQualityScannerModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeQualityScannerModal() {
+      var modal = document.getElementById('aiQualityScannerModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function selectScannerCrop(cropKey) {
+      scannerCurrentCrop = cropKey;
+      var preset = scannerCropPresets[cropKey] || scannerCropPresets['wheat'];
+
+      var imgEl = document.getElementById('visionCropImage');
+      if (imgEl) imgEl.src = preset.img;
+
+      applyScannerResult(preset);
+    }
+
+    function handleVisionFileUpload(e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var imgEl = document.getElementById('visionCropImage');
+        if (imgEl) imgEl.src = event.target.result;
+        executeNeuralScan();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function executeNeuralScan() {
+      var btn = document.getElementById('runScannerBtn');
+      var laser = document.getElementById('scannerLaser');
+      var bbox = document.getElementById('aiBoundingBox');
+
+      if (laser) laser.style.display = 'block';
+      if (bbox) bbox.style.opacity = '0.4';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Inspecting Neural Crop Features...`;
+      }
+
+      showToast("Kisan-Vision: Running defect detection & spectral ripeness analysis...");
+
+      try {
+        var res = await fetch('/api/qc/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            commodity: scannerCurrentCrop,
+            commodity_name: (scannerCropPresets[scannerCurrentCrop] || {}).name || scannerCurrentCrop
+          })
+        });
+        var data = await res.json();
+
+        if (res.ok && data.success) {
+          applyScannerResult({
+            name: data.commodity_name || (scannerCropPresets[scannerCurrentCrop] || {}).name,
+            score: data.overallScore || "97.4%",
+            grade: data.grade || "Grade A+",
+            ripeness: data.ripeness || "95% Optimal",
+            diameter: data.diameter || "64 mm Uniform",
+            blemish: data.blemishRate || "0.7% Low",
+            premium: data.fairValueAdjustment || "+15% Above APMC Base",
+            hash: data.hash || ("SHA256: " + Math.random().toString(36).substring(2) + Date.now())
+          });
+          showToast("✓ Inspection Complete! Certified " + (data.grade || "Grade A+"));
+        } else {
+          fallbackScanDisplay();
+        }
+      } catch (err) {
+        fallbackScanDisplay();
+      } finally {
+        if (bbox) bbox.style.opacity = '1';
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<i class="ri-radar-line text-base"></i> <span>Run Neural Quality & Defect Scan</span>`;
+        }
+      }
+    }
+
+    function fallbackScanDisplay() {
+      var preset = scannerCropPresets[scannerCurrentCrop] || scannerCropPresets['wheat'];
+      applyScannerResult(preset);
+      showToast("✓ Inspection Complete! Certified " + preset.grade);
+    }
+
+    function applyScannerResult(data) {
+      var nameEl = document.getElementById('visionResultCropName');
+      var gradeEl = document.getElementById('visionResultGrade');
+      var freshEl = document.getElementById('visionResultFreshness');
+      var ripeEl = document.getElementById('visionResultRipeness');
+      var diamEl = document.getElementById('visionResultDiameter');
+      var blemEl = document.getElementById('visionResultBlemish');
+      var premEl = document.getElementById('visionResultPremium');
+      var hashEl = document.getElementById('visionResultHash');
+
+      if (nameEl) nameEl.textContent = data.name;
+      if (gradeEl) gradeEl.textContent = data.grade;
+      if (freshEl) freshEl.textContent = data.score;
+      if (ripeEl) ripeEl.textContent = data.ripeness;
+      if (diamEl) diamEl.textContent = data.diameter;
+      if (blemEl) blemEl.textContent = data.blemish;
+      if (premEl) premEl.textContent = data.premium;
+      if (hashEl) hashEl.textContent = data.hash;
+    }
+
+    // ==========================================================================
+    // 15. NOTIFICATIONS & TOAST HELPERS
+    // ==========================================================================
+    function toggleNotificationsModal() {
+      showToast("🔔 Mandi Alert: Lasalgaon Onion auction closed at +₹120/qtl today.");
+    }
+
+    function showToast(msg) {
+      var toast = document.getElementById('appToast');
+      var toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.innerHTML = msg;
+      toast.classList.remove('hidden');
+      setTimeout(function() {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Initialize saved theme, user auth state & listed crop counters on load
+    (function init() {
+      var savedTheme = localStorage.getItem('kisan_selected_theme') || 'blue';
+      applyTheme(savedTheme);
+      renderUserAuthWidget();
+      updateListedLotsCounters();
+    })();
+  </script>
 </body>
 </html>

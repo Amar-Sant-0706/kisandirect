@@ -31,6 +31,7 @@
     /* Zero-Scrollbar Utility */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    #app:empty { display: none !important; }
 
     /* ==========================================================================
        THEME DESIGN TOKENS
@@ -1942,8 +1943,8 @@
     </div>
   </div>
 
-  <!-- Hidden Test Container for SPA compliance -->
-  <div id="app" style="display: none;" aria-hidden="true"></div>
+  <!-- Multi-Portal ES Module Router Interface: /src/router.js -->
+  <div id="app"></div>
 
   <!-- Toast Notification Popup -->
   <div id="appToast" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 hidden max-w-sm bg-slate-900 text-white text-xs font-bold py-2 px-4 rounded-full shadow-2xl flex items-center gap-2 transition-all">

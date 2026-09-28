@@ -39,11 +39,16 @@ const voiceBriefings = {
 
 exports.getVoiceBriefing = (req, res) => {
   try {
-    const lang = req.query.lang || 'mr-IN';
+    let lang = req.query.lang || 'mr-IN';
+    if (lang === 'mr') lang = 'mr-IN';
+    if (lang === 'hi') lang = 'hi-IN';
+    if (lang === 'en') lang = 'en-IN';
     const briefing = voiceBriefings[lang] || voiceBriefings['mr-IN'];
 
     return res.json({
       success: true,
+      audioText: briefing.script,
+      bulletin: briefing.script,
       briefing: {
         ...briefing,
         timestamp: new Date().toISOString(),

@@ -34,10 +34,21 @@ if (fs.existsSync(distDir)) {
 }
 fs.mkdirSync(distDir, { recursive: true });
 
-// 2. Copy index.html from public to dist
+// 2. Copy store.html and primary web assets to dist
+if (fs.existsSync(path.join(rootDir, 'store.html'))) {
+  fs.copyFileSync(path.join(rootDir, 'store.html'), path.join(distDir, 'store.html'));
+  fs.copyFileSync(path.join(rootDir, 'store.html'), path.join(distDir, 'index.html'));
+  console.log('[BUILD] Copied store.html as primary application to dist/index.html & dist/store.html');
+} else if (fs.existsSync(path.join(rootDir, 'index.html'))) {
+  fs.copyFileSync(path.join(rootDir, 'index.html'), path.join(distDir, 'index.html'));
+}
+
+if (fs.existsSync(path.join(rootDir, 'login.html'))) {
+  fs.copyFileSync(path.join(rootDir, 'login.html'), path.join(distDir, 'login.html'));
+}
+
 if (fs.existsSync(path.join(publicDir, 'index.html'))) {
-  fs.copyFileSync(path.join(publicDir, 'index.html'), path.join(distDir, 'index.html'));
-  console.log('[BUILD] Copied index.html to dist/index.html');
+  fs.copyFileSync(path.join(publicDir, 'index.html'), path.join(distDir, 'portal.html'));
 }
 
 // 3. Copy src (styles, views, components, router) to dist/src

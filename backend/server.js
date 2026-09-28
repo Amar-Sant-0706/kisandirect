@@ -29,6 +29,9 @@ app.use('/api/buyer', buyerRoutes);
 app.use('/api/owner', ownerRoutes);
 app.use('/api/voice', voiceRoutes);
 
+const qcRoutes = require('./routes/qcRoutes');
+app.use('/api/qc', qcRoutes);
+
 // Top-Level Aliases for Marketplace, Orders, and Logistics
 const buyerController = require('./controllers/buyerController');
 const { requireAuth } = require('./middleware/requireAuth');
@@ -60,31 +63,31 @@ const publicDir = path.join(__dirname, '..', 'frontend', 'public');
 const srcDir = path.join(__dirname, '..', 'frontend', 'src');
 const rootDir = path.join(__dirname, '..');
 
-// Primary SPA HTML shell for Multi-Portal Architecture
-const spaIndexHtml = fs.existsSync(path.join(distDir, 'index.html'))
-  ? path.join(distDir, 'index.html')
-  : path.join(publicDir, 'index.html');
+// Multi-Portal Role Shell (for /farmer/dashboard, /buyer/marketplace, /owner/control-room)
+const spaIndexHtml = fs.existsSync(path.join(distDir, 'portal.html'))
+  ? path.join(distDir, 'portal.html')
+  : (fs.existsSync(path.join(publicDir, 'index.html')) ? path.join(publicDir, 'index.html') : path.join(rootDir, 'store.html'));
 
 // Storefront (KisanDirect Mobile-First Agri-Marketplace)
 const rootStoreHtml = fs.existsSync(path.join(rootDir, 'store.html'))
   ? path.join(rootDir, 'store.html')
   : path.join(rootDir, 'index.html');
 
-// 1. Explicit SPA Multi-Portal Routes
-app.get('/', (req, res) => res.sendFile(spaIndexHtml));
-app.get('/index.html', (req, res) => res.sendFile(spaIndexHtml));
-app.get('/auth/login', (req, res) => res.sendFile(spaIndexHtml));
-app.get('/farmer/dashboard', (req, res) => res.sendFile(spaIndexHtml));
-app.get('/buyer/marketplace', (req, res) => res.sendFile(spaIndexHtml));
-app.get('/owner/control-room', (req, res) => res.sendFile(spaIndexHtml));
-
-// 2. Direct Storefront & Classic Multi-Page Routes
+// 1. Primary Marketplace Storefront (Always serves store.html as the primary application)
+app.get('/', (req, res) => res.sendFile(rootStoreHtml));
+app.get('/index.html', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/store', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/store.html', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/shop', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/mandi', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/storefront', (req, res) => res.sendFile(rootStoreHtml));
 app.get('/marketplace-classic', (req, res) => res.sendFile(rootStoreHtml));
+
+// 2. Explicit Multi-Portal Routes (For role dashboards)
+app.get('/auth/login', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/farmer/dashboard', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/buyer/marketplace', (req, res) => res.sendFile(spaIndexHtml));
+app.get('/owner/control-room', (req, res) => res.sendFile(spaIndexHtml));
 
 // Standalone Portal Pages
 app.get('/login', (req, res) => res.sendFile(path.join(rootDir, 'login.html')));
@@ -157,7 +160,7 @@ app.use(express.static(publicDir, { index: false }));
 app.use('/src', express.static(srcDir));
 app.use(express.static(srcDir));
 
-// 6. Client-Side Catch-All Fallback (Serves SPA shell so Router handles with zero 404s)
+// 6. Client-Side Catch-All Fallback
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({
@@ -165,7 +168,10 @@ app.use((req, res) => {
       message: `API route ${req.method} ${req.path} not found`
     });
   }
-  res.sendFile(spaIndexHtml);
+  if (req.path.startsWith('/farmer') || req.path.startsWith('/buyer') || req.path.startsWith('/owner') || req.path.startsWith('/auth')) {
+    return res.sendFile(spaIndexHtml);
+  }
+  res.sendFile(rootStoreHtml);
 });
 
 const HOST = process.env.HOST || '0.0.0.0';
